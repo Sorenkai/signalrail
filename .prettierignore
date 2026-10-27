@@ -1,0 +1,8 @@
+dist
+node_modules
+data/raw
+data/datasets/**/infrastructure.json
+data/previews
+package-lock.json
+data/datasets/**/timetables
+data/datasets/**/timing-points.json

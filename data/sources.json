@@ -1,0 +1,146 @@
+{
+  "$comment": "Source registry. Every provenance sourceId must appear here. Only list retrievals that actually happened. Human-readable detail: docs/DATA_SOURCES.md.",
+  "sources": [
+    {
+      "id": "openstreetmap",
+      "name": "OpenStreetMap (via Overpass API)",
+      "publisher": "OpenStreetMap contributors / OpenStreetMap Foundation",
+      "url": "https://www.openstreetmap.org/",
+      "access": "public",
+      "accessNotes": "Queried through the public Overpass API (https://overpass-api.de/api/interpreter); no account. Usage policy: under 10,000 queries and 1 GB per day; run tools/fetch-osm.ts rarely and commit snapshots.",
+      "licence": {
+        "name": "Open Data Commons Open Database License (ODbL) 1.0",
+        "url": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "confirmed": true
+      },
+      "attribution": "© OpenStreetMap contributors. Data available under the Open Database License (https://www.openstreetmap.org/copyright).",
+      "obligations": [
+        "Display the attribution wherever the data or anything produced from it is shown.",
+        "Derived databases that are publicly used or distributed must be offered under ODbL (share-alike).",
+        "Crowd-sourced: completeness and accuracy are not guaranteed; signal and switch tagging is partial."
+      ],
+      "status": "in-use",
+      "retrievals": [
+        {
+          "date": "2026-10-27",
+          "version": "2026-10-27T16:38:36Z",
+          "description": "Railway extract for the shrewsbury bbox (52.695-52.745 N, 2.770-2.725 W), including named junctions, yards and level crossings (data/raw/osm/shrewsbury-2026-10-27.json), overpass-api.de. Supersedes an earlier same-day extract (base 2026-10-27T16:01:40Z) with a smaller bbox."
+        }
+      ]
+    },
+    {
+      "id": "nr-open-data-feeds",
+      "name": "Network Rail Open Data Feeds (SCHEDULE, CORPUS, SMART, BPLAN, TD, TRUST, VSTP)",
+      "publisher": "Network Rail Infrastructure Limited",
+      "url": "https://publicdatafeeds.networkrail.co.uk/",
+      "access": "registration",
+      "accessNotes": "Free account required; first come first served, capped at 1,000 users. Static files (SCHEDULE CIF/JSON, CORPUS, SMART) are downloaded with authenticated HTTP GET. The user must register and download files; this project does not hold credentials. SMART: supplied by the owner on 2026-10-27 (data/private/SMARTExtract.json).",
+      "licence": {
+        "name": "Network Rail Infrastructure Limited Data Feeds Licence: use under the Open Government Licence (version not stated on the licence page; OGL v3.0 is current)",
+        "url": "https://www.networkrail.co.uk/who-we-are/transparency-and-ethics/transparency/open-data-feeds/network-rail-infrastructure-limited-data-feeds-licence/",
+        "confirmed": false
+      },
+      "attribution": "Contains public sector information licensed under the Open Government Licence v3.0.",
+      "obligations": [
+        "Do not use the Network Rail brand or logo, or those of National Rail or train companies.",
+        "Do not describe the application as 'official'.",
+        "Attribution uses the OGL v3.0 default statement because the licence page gives no specific wording (decision D-009); replace it if Network Rail specifies one.",
+        "Raw extracts stay in git-ignored data/private/; only derived study-area snapshots are committed."
+      ],
+      "status": "in-use",
+      "retrievals": [
+        {
+          "date": "2026-10-27",
+          "version": "SCHEDULE full CIF, header DFROC1F, extracted 2026-10-23T20:01, valid 2026-10-23..2027-10-23",
+          "description": "toc-full.CIF downloaded by the project owner into data/private/ (date derived from the local file timestamp, not from a download record; correct only on reliable evidence)."
+        },
+        {
+          "date": "2026-10-27",
+          "version": "CORPUSExtract.json (no version field in file)",
+          "description": "CORPUS downloaded by the project owner into data/private/ (date derived from the local file timestamp, not from a download record; correct only on reliable evidence)."
+        },
+        {
+          "date": "2026-10-27",
+          "version": "SMARTExtract.json, 34,298 berth rows (no extract date in the file; per-row COMMENT dates are free text and include an obvious typo, 28/06/2206)",
+          "description": "SMART downloaded by the project owner into data/private/ (date derived from the local file timestamp, not from a download record; correct only on reliable evidence)."
+        }
+      ],
+      "notes": "Primary candidate for timetable (SCHEDULE full CIF extract, weekly on Fridays) and for TIPLOC/STANOX/CRS (CORPUS) and TD berth-to-location reference data (SMART)."
+    },
+    {
+      "id": "rdg-timetable-feed",
+      "name": "Rail Delivery Group timetable feed (CIF, passenger services only)",
+      "publisher": "Rail Delivery Group",
+      "url": "https://www.raildeliverygroup.com/our-services/rail-data/timetable-data.html",
+      "access": "registration",
+      "accessNotes": "Weekly timetable via the National Rail Data Portal for development use; regular feeds require an RSP data licence and fee.",
+      "licence": {
+        "name": "RSP data licence / portal terms (not reviewed)",
+        "confirmed": false
+      },
+      "attribution": null,
+      "obligations": ["Licence not reviewed; do not import until terms are read."],
+      "status": "candidate",
+      "retrievals": [],
+      "notes": "Excludes non-passenger (freight, ECS) services, which matter for signalling gameplay. Fallback only."
+    },
+    {
+      "id": "openrailwaymap",
+      "name": "OpenRailwayMap",
+      "publisher": "OpenRailwayMap project",
+      "url": "https://www.openrailwaymap.org/",
+      "access": "reference-only",
+      "accessNotes": "Rendered map of OSM railway data. Used by humans to cross-check OSM tagging; nothing is imported from it.",
+      "licence": {
+        "name": "Underlying data ODbL (OpenStreetMap); tile licence not reviewed",
+        "confirmed": false
+      },
+      "attribution": null,
+      "obligations": ["Do not embed tiles without reviewing the tile licence and usage policy."],
+      "status": "candidate",
+      "retrievals": []
+    },
+    {
+      "id": "nr-sectional-appendix",
+      "name": "Network Rail National Electronic Sectional Appendix",
+      "publisher": "Network Rail Infrastructure Limited",
+      "url": "https://www.networkrail.co.uk/",
+      "access": "reference-only",
+      "accessNotes": "Published as PDFs on the Network Rail website. Not yet located or downloaded by this project.",
+      "licence": {
+        "name": "Copyright Network Rail; reuse terms not reviewed",
+        "confirmed": false
+      },
+      "attribution": null,
+      "obligations": [
+        "Treat as reference to corroborate line names, speeds and signal box limits; do not republish extracts until terms are reviewed."
+      ],
+      "status": "candidate",
+      "retrievals": []
+    },
+    {
+      "id": "wikipedia",
+      "name": "Wikipedia (English)",
+      "publisher": "Wikimedia Foundation / contributors",
+      "url": "https://en.wikipedia.org/",
+      "access": "public",
+      "licence": {
+        "name": "Creative Commons Attribution-ShareAlike 4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "confirmed": false
+      },
+      "attribution": "Wikipedia contributors, CC BY-SA 4.0",
+      "obligations": [
+        "Facts only; no text copied. Use as corroboration, not as an authoritative railway source."
+      ],
+      "status": "in-use",
+      "retrievals": [
+        {
+          "date": "2026-10-27",
+          "version": "Severn Bridge Junction; Shrewsbury railway station (live pages as read on 2026-10-27)",
+          "description": "Signal box names and status in Shrewsbury, used to corroborate OSM signal_box features."
+        }
+      ]
+    }
+  ]
+}

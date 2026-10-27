@@ -1,0 +1,12 @@
+{
+  "$comment": "Phase 0 study area. See docs/DECISION_LOG.md (D-003). The bbox is a project choice, not a railway boundary.",
+  "datasetId": "shrewsbury",
+  "name": "Shrewsbury (Crewe Jn - Severn Bridge Jn - Abbey Foregate - Sutton Bridge Jn)",
+  "bbox": {
+    "south": 52.695,
+    "west": -2.77,
+    "north": 52.745,
+    "east": -2.725
+  },
+  "osmSnapshot": "data/raw/osm/shrewsbury-2026-10-27.json"
+}

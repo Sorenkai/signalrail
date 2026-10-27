@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #0b0f14;
+  color: #dde3ea;
+}
+main {
+  padding: 12px 16px;
+}
+h1 {
+  font-size: 1.2rem;
+  margin: 0 0 4px;
+}
+.note {
+  color: #9aa6b2;
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+}
+.layout {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.canvas {
+  flex: 3 1 600px;
+  min-width: 0;
+}
+.scroll {
+  overflow: auto;
+  max-height: 80vh;
+  border: 1px solid #263140;
+}
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.toolbar button {
+  width: 2rem;
+}
+aside {
+  flex: 1 1 300px;
+  font-size: 0.85rem;
+}
+aside table td {
+  padding: 1px 8px 1px 0;
+}
+.issues {
+  padding-left: 1rem;
+  max-height: 40vh;
+  overflow: auto;
+}
+.issues .error {
+  color: #ff7b7b;
+}
+.issues .warning {
+  color: #ffcf6b;
+}
+.issues .info {
+  color: #9aa6b2;
+}
+.legend {
+  list-style: none;
+  padding: 0;
+}
+footer {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: #9aa6b2;
+}

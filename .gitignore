@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+# Restricted-licence source files supplied manually by the user (see docs/DATA_SOURCES.md)
+data/private/

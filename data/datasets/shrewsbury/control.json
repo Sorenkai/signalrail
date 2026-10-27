@@ -1,0 +1,126 @@
+{
+  "datasetId": "shrewsbury",
+  "areas": [
+    {
+      "id": "area-sbj",
+      "name": "Severn Bridge Junction",
+      "basis": "real_signal_box",
+      "signalBoxLocationId": "osm-loc-w202800726",
+      "signalIds": [],
+      "pointsIds": [],
+      "membershipProvenance": {
+        "evidence": "unknown",
+        "sources": [],
+        "note": "Which signals and points each box works is not in any source imported so far. OSM signal refs carry box-like prefixes (SBJ, CJ, AF, SUB) but that is not yet treated as evidence."
+      },
+      "provenance": {
+        "evidence": "verified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/202800726",
+            "version": "2026-10-27T16:01:40Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "wikipedia",
+            "recordId": "Severn_Bridge_Junction",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Box exists and is listed as operational on Wikipedia (read 2026-10-27)."
+      }
+    },
+    {
+      "id": "area-cj",
+      "name": "Crewe Junction",
+      "basis": "real_signal_box",
+      "signalBoxLocationId": "osm-loc-w234909312",
+      "signalIds": [],
+      "pointsIds": [],
+      "membershipProvenance": {
+        "evidence": "unknown",
+        "sources": [],
+        "note": "Which signals and points each box works is not in any source imported so far. OSM signal refs carry box-like prefixes (SBJ, CJ, AF, SUB) but that is not yet treated as evidence."
+      },
+      "provenance": {
+        "evidence": "verified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/234909312",
+            "version": "2026-10-27T16:01:40Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "wikipedia",
+            "recordId": "Severn_Bridge_Junction",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Box exists and is listed as operational on Wikipedia (read 2026-10-27)."
+      }
+    },
+    {
+      "id": "area-af",
+      "name": "Abbey Foregate",
+      "basis": "real_signal_box",
+      "signalBoxLocationId": "osm-loc-w291826230",
+      "signalIds": [],
+      "pointsIds": [],
+      "membershipProvenance": {
+        "evidence": "unknown",
+        "sources": [],
+        "note": "Which signals and points each box works is not in any source imported so far. OSM signal refs carry box-like prefixes (SBJ, CJ, AF, SUB) but that is not yet treated as evidence."
+      },
+      "provenance": {
+        "evidence": "verified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/291826230",
+            "version": "2026-10-27T16:01:40Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "wikipedia",
+            "recordId": "Severn_Bridge_Junction",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Box exists and is listed as operational on Wikipedia (read 2026-10-27)."
+      }
+    },
+    {
+      "id": "area-sub",
+      "name": "Sutton Bridge Junction",
+      "basis": "real_signal_box",
+      "signalBoxLocationId": "osm-loc-w307051141",
+      "signalIds": [],
+      "pointsIds": [],
+      "membershipProvenance": {
+        "evidence": "unknown",
+        "sources": [],
+        "note": "Which signals and points each box works is not in any source imported so far. OSM signal refs carry box-like prefixes (SBJ, CJ, AF, SUB) but that is not yet treated as evidence."
+      },
+      "provenance": {
+        "evidence": "verified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/307051141",
+            "version": "2026-10-27T16:01:40Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "wikipedia",
+            "recordId": "Severn_Bridge_Junction",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Box exists and is listed as operational on Wikipedia (read 2026-10-27)."
+      }
+    }
+  ],
+  "boundaries": []
+}

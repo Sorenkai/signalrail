@@ -35,8 +35,8 @@ Capture the real output of each command. If a check can't run (the tool isn't in
 
 End with a table:
 
-| Check | Command | Result | Notes |
-|---|---|---|---|
+| Check      | Command           | Result                    | Notes                                       |
+| ---------- | ----------------- | ------------------------- | ------------------------------------------- |
 | Unit tests | `<exact command>` | passed / failed / not run | counts, failing tests, or why it didn't run |
 
 Then list:

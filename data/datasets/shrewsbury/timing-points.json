@@ -1,0 +1,763 @@
+{
+  "$comment": "Study-area TIPLOCs (project scope, described from Network Rail CORPUS) and their links to infrastructure. TIPLOCs are never guessed; unmapped ones need a sourced position.",
+  "areaTiplocs": [
+    {
+      "tiploc": "SHRWBY",
+      "description": "SHREWSBURY",
+      "stanox": "64224",
+      "crs": "SHR",
+      "nlc": "438700",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438700",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWBCJ",
+      "description": "SHREWSBURY CREWE JN S.B.",
+      "stanox": "64225",
+      "crs": null,
+      "nlc": "438704",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438704",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWEBJ",
+      "description": "ENGLISH BRIDGE JUNCTION",
+      "stanox": "64230",
+      "crs": null,
+      "nlc": "438703",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438703",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWSBJ",
+      "description": "SUTTON BRIDGE JUNCTION",
+      "stanox": "64231",
+      "crs": null,
+      "nlc": "439101",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439101",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWBAF",
+      "description": "SHREWSBURY ABBEY",
+      "stanox": "64229",
+      "crs": "XSY",
+      "nlc": "438800",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438800",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWAFS",
+      "description": "SHREWSBURY ABBEY FOREGATE CS",
+      "stanox": "64232",
+      "crs": null,
+      "nlc": "438718",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438718",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRW15",
+      "description": "SUTTON BRIDGE JN SIG 15",
+      "stanox": "64236",
+      "crs": null,
+      "nlc": "438731",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438731",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRW34",
+      "description": "SUTTON BRIDGE JN SIG 34",
+      "stanox": "64238",
+      "crs": null,
+      "nlc": "438732",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438732",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWCSS",
+      "description": "COLEHAM SHUNT NECK",
+      "stanox": "64226",
+      "crs": null,
+      "nlc": "438707",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438707",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "SHRWBCB",
+      "description": "CREWE BANK R S",
+      "stanox": "64222",
+      "crs": null,
+      "nlc": "439303",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439303",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "HRLSCTX",
+      "description": "HARLESCOTT CROSSING",
+      "stanox": "64219",
+      "crs": null,
+      "nlc": "439302",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439302",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "COTONH",
+      "description": "COTON HILL T C",
+      "stanox": "64200",
+      "crs": null,
+      "nlc": "438702",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438702",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "COTOGBR",
+      "description": "COTON HILL TC GBRF",
+      "stanox": "64202",
+      "crs": null,
+      "nlc": "438738",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438738",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "COTONDB",
+      "description": "COTON HILL (DBC)",
+      "stanox": "64201",
+      "crs": null,
+      "nlc": "438733",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438733",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "COTOCLS",
+      "description": "COTON HILL COLAS",
+      "stanox": "64203",
+      "crs": null,
+      "nlc": "438746",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438746",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "tiploc": "SHRWBY",
+      "locationId": "osm-loc-n5071836748",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438700",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/5071836748",
+            "version": "2026-10-27T16:01:40Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Joined on CRS SHR: CORPUS gives SHRWBY -> SHR; the location's CRS is from its own source."
+      }
+    }
+  ],
+  "inferredPositions": [
+    {
+      "tiploc": "SHRWEBJ",
+      "position": {
+        "lat": 52.7073064,
+        "lon": -2.7457338
+      },
+      "trackNodeIds": [
+        "osm-n7177289405",
+        "osm-n2428399162"
+      ],
+      "confidence": "high",
+      "method": "Name match to OSM railway=junction label, anchored to the switch on each running line within 3 m of it; topology checked by graph paths.",
+      "basis": [
+        "CORPUS NLCDESC \"ENGLISH BRIDGE JUNCTION\"",
+        "OSM railway=junction \"English Bridge Junction\" (node/7479546685), 2-3 m from both anchor switches",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWBY>SHRWEBJ>SHRWSBJ and SHRWBAF>SHRWEBJ>SHRWSBJ; on the graph, osm-n7177289405 lies on station->Sutton Bridge paths and osm-n2428399162 on Abbey Foregate->Sutton Bridge paths"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438703",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7177289405",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2428399162",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7479546685",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (high confidence) from OSM geometry and the timetable; not verified. Name match to OSM railway=junction label, anchored to the switch on each running line within 3 m of it; topology checked by graph paths."
+      }
+    },
+    {
+      "tiploc": "SHRWSBJ",
+      "position": {
+        "lat": 52.7005563,
+        "lon": -2.7433632
+      },
+      "trackNodeIds": [
+        "osm-n20957304"
+      ],
+      "confidence": "high",
+      "method": "Name match to OSM railway=junction label, anchored to the adjacent switch; topology checked by graph paths.",
+      "basis": [
+        "CORPUS NLCDESC \"SUTTON BRIDGE JUNCTION\"",
+        "OSM railway=junction \"Sutton Bridge Junction\" (node/7489901827), 2 m from the anchor switch",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWSBJ separates DORNGTN (Hereford line) and WELSHPL/WELSWBU (Cambrian line) traffic; the anchor lies on graph paths from the station to both southern boundaries"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439101",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/20957304",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7489901827",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (high confidence) from OSM geometry and the timetable; not verified. Name match to OSM railway=junction label, anchored to the adjacent switch; topology checked by graph paths."
+      }
+    },
+    {
+      "tiploc": "HRLSCTX",
+      "position": {
+        "lat": 52.7379457,
+        "lon": -2.728542
+      },
+      "trackNodeIds": [
+        "osm-n1581276955",
+        "osm-n262539161"
+      ],
+      "confidence": "high",
+      "method": "Name match to OSM railway=level_crossing \"Harlescott Crossing\", which is mapped on both running lines.",
+      "basis": [
+        "CORPUS NLCDESC \"HARLESCOTT CROSSING\"",
+        "OSM level crossings named \"Harlescott Crossing\" (node/1581276955, node/262539161) are track nodes on the Crewe line",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWBY<>HRLSCTX<>WEMM/YORTON (Crewe line); both anchors lie on graph paths from the station to the northern boundary",
+        "SMART (TD area C3) has berth steps at STANOX 64219 HARLESCOT on the Up (8330->8316) and Down (8325->8361) lines, which corroborates a double-track reporting point on the Crewe line; SMART gives no coordinates"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439302",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1581276955",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/262539161",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1581276955",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "SMART:TD=C3;8330->8316",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "SMART:TD=C3;8325->8361",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (high confidence) from OSM geometry and the timetable; not verified. Name match to OSM railway=level_crossing \"Harlescott Crossing\", which is mapped on both running lines."
+      }
+    },
+    {
+      "tiploc": "SHRWBAF",
+      "position": {
+        "lat": 52.7095562,
+        "lon": -2.7408446
+      },
+      "trackNodeIds": [
+        "osm-n2953336748",
+        "osm-n2953336761"
+      ],
+      "confidence": "medium",
+      "method": "Timetable role matched to OSM railway=junction \"Abbey Foregate Junction\"; anchored to the switch on each Wolverhampton-line track ~10 m from it.",
+      "basis": [
+        "CORPUS NLCDESC is \"SHREWSBURY ABBEY\" (CRS XSY), not \"Abbey Foregate Junction\"; the name does not match directly",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWBAF sits between WELNGTN and SHRWBY, and is where SHRWAFS (Abbey Foregate CS) and the curve to SHRWEBJ diverge",
+        "OSM railway=junction \"Abbey Foregate Junction\" (node/7479546686) is 10 m from both anchors; each anchor lies on a graph path from the station to an eastern boundary track"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438800",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2953336748",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2953336761",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7479546686",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (medium confidence) from OSM geometry and the timetable; not verified. Timetable role matched to OSM railway=junction \"Abbey Foregate Junction\"; anchored to the switch on each Wolverhampton-line track ~10 m from it."
+      }
+    },
+    {
+      "tiploc": "SHRWBCJ",
+      "position": {
+        "lat": 52.712432,
+        "lon": -2.7502557
+      },
+      "trackNodeIds": [
+        "osm-n1725224640"
+      ],
+      "confidence": "medium",
+      "method": "Placed at the switch where graph paths to the Crewe and Chester boundaries diverge, 10 m from the OSM \"Crewe Junction\" label.",
+      "basis": [
+        "CORPUS NLCDESC \"SHREWSBURY CREWE JN S.B.\" (names the signal box, not a track point)",
+        "OSM railway=junction \"Crewe Junction\" (node/7479546688) is 10 m from the anchor",
+        "All station->northern-boundary and station->north-western-boundary paths diverge at the anchor",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): GOBOWEN>SHRWBCJ>SHRWBY (Chester line)"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438704",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1725224640",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7479546688",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (medium confidence) from OSM geometry and the timetable; not verified. Placed at the switch where graph paths to the Crewe and Chester boundaries diverge, 10 m from the OSM \"Crewe Junction\" label."
+      }
+    },
+    {
+      "tiploc": "SHRWAFS",
+      "position": {
+        "lat": 52.709709,
+        "lon": -2.7419429
+      },
+      "trackNodeIds": [
+        "osm-n2953336802"
+      ],
+      "confidence": "medium",
+      "method": "Placed at the first switch of the OSM siding way named \"Abbey Foregate Yard\" on the path from the yard to the main line.",
+      "basis": [
+        "CORPUS NLCDESC \"SHREWSBURY ABBEY FOREGATE CS\" (carriage sidings)",
+        "OSM siding ways named \"Abbey Foregate Yard\" (e.g. way/23790018), railway=yard node/10209247164",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWAFS only connects to SHRWBAF (17 starts and 17 terminations)",
+        "Which siding the CS refers to is not known; the yard throat is used"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438718",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2953336802",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/10209247164",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (medium confidence) from OSM geometry and the timetable; not verified. Placed at the first switch of the OSM siding way named \"Abbey Foregate Yard\" on the path from the yard to the main line."
+      }
+    },
+    {
+      "tiploc": "SHRWBCB",
+      "position": {
+        "lat": 52.7228871,
+        "lon": -2.7433916
+      },
+      "trackNodeIds": [
+        "osm-n1581276888"
+      ],
+      "confidence": "low",
+      "method": "Topology only: the only siding connection on the Crewe line between Crewe Junction and Harlescott Crossing.",
+      "basis": [
+        "CORPUS NLCDESC \"CREWE BANK R S\"",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): HRLSCTX>SHRWBCB>SHRWBY (6 services)",
+        "No OSM feature is named Crewe Bank; the former Crewe Bank signal box is reported closed (Wikipedia)"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=439303",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1581276888",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Topology only: the only siding connection on the Crewe line between Crewe Junction and Harlescott Crossing."
+      }
+    },
+    {
+      "tiploc": "COTONH",
+      "position": {
+        "lat": 52.713899,
+        "lon": -2.7512
+      },
+      "trackNodeIds": [
+        "osm-n2430325550"
+      ],
+      "confidence": "low",
+      "method": "Topology only: the main-line connection of the siding group north-west of the station, assumed to be Coton Hill yard.",
+      "basis": [
+        "CORPUS NLCDESC \"COTON HILL T C\"",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): COTONH starts/terminates services to and from SHRWBY",
+        "No OSM feature is named Coton Hill; the siding group at about 52.717-52.722 N, 2.753 W is the only yard north of the station on that side"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438702",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2430325550",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Topology only: the main-line connection of the siding group north-west of the station, assumed to be Coton Hill yard."
+      }
+    },
+    {
+      "tiploc": "COTOGBR",
+      "position": {
+        "lat": 52.713899,
+        "lon": -2.7512
+      },
+      "trackNodeIds": [
+        "osm-n2430325550"
+      ],
+      "confidence": "low",
+      "method": "Same as COTONH: a separate operator's code for the same yard. The specific siding is unknown, so the shared yard connection is used.",
+      "basis": [
+        "CORPUS NLCDESC \"COTON HILL TC GBRF\"",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): COTOGBR starts/terminates services to and from SHRWBY",
+        "No OSM feature is named Coton Hill"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438738",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2430325550",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Same as COTONH: a separate operator's code for the same yard. The specific siding is unknown, so the shared yard connection is used."
+      }
+    },
+    {
+      "tiploc": "SHRWCSS",
+      "position": {
+        "lat": 52.7019836,
+        "lon": -2.7427725
+      },
+      "trackNodeIds": [
+        "osm-n3120937280"
+      ],
+      "confidence": "low",
+      "method": "Topology only: the first siding switch inside the Coleham depot connection, on the route between the main line and the depot.",
+      "basis": [
+        "CORPUS NLCDESC \"COLEHAM SHUNT NECK\"",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRW34>SHRWCSS>COLHLMD (Coleham depot) and COLHLMD>SHRWCSS>SHRWEBJ",
+        "OSM landuse \"Shrewsbury Coleham Depot\" (way/350314924); OSM stop boards (no refs) stand on the sidings between the anchor and the depot"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438707",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/3120937280",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Topology only: the first siding switch inside the Coleham depot connection, on the route between the main line and the depot."
+      }
+    },
+    {
+      "tiploc": "SHRW34",
+      "position": {
+        "lat": 52.7025231,
+        "lon": -2.7426516
+      },
+      "trackNodeIds": [
+        "osm-n2953313939"
+      ],
+      "confidence": "low",
+      "method": "Topology only: the main-line switch giving access to Coleham depot, which both northbound and southbound movements to the shunt neck must use.",
+      "basis": [
+        "CORPUS NLCDESC \"SUTTON BRIDGE JN SIG 15\"/\"SIG 34\" confirm that signals 15 and 34 exist; their positions are not published in any source used",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRW15>SHRW34>SHRWCSS and SHRWSBJ>SHRW34>SHRWCSS",
+        "The anchor is the switch where the depot line leaves the main line between English Bridge Jn and Sutton Bridge Jn"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438732",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2953313939",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Topology only: the main-line switch giving access to Coleham depot, which both northbound and southbound movements to the shunt neck must use."
+      }
+    },
+    {
+      "tiploc": "SHRW15",
+      "position": {
+        "lat": 52.7054468,
+        "lon": -2.7439488
+      },
+      "trackNodeIds": [
+        "osm-n14124562089"
+      ],
+      "confidence": "low",
+      "method": "Topology only: a track node on the main line between English Bridge Junction and the Coleham depot connection, where an OSM main signal (no ref) stands.",
+      "basis": [
+        "CORPUS NLCDESC \"SUTTON BRIDGE JN SIG 15\"",
+        "Timetable 2026-11-04 (NR SCHEDULE DFROC1F): SHRWEBJ>SHRW15>SHRW34 (4 services)",
+        "OSM main semaphore osm-sig14124562089 has no ref; it is NOT claimed to be signal 15, only that signal 15 lies on this stretch"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=438731",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/14124562089",
+            "version": "2026-10-27T16:38:36Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Position inferred (low confidence) from OSM geometry and the timetable; not verified. Topology only: a track node on the main line between English Bridge Junction and the Coleham depot connection, where an OSM main signal (no ref) stands."
+      }
+    }
+  ]
+}

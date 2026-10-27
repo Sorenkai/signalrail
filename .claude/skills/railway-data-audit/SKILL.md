@@ -9,7 +9,7 @@ Audit the real-world data for correctness and honesty. The rules in CLAUDE.md un
 
 ## 1. Establish scope and provenance
 
-- Read `docs/data-sources.md` (the source registry), `docs/data-gaps.md` and `docs/inferred-behaviour.md`. If any of them is missing, record that as a finding.
+- Read `data/sources.json` (the source registry), `docs/DATA_SOURCES.md`, `docs/DATA_GAPS.md` and `docs/INFERRED_BEHAVIOUR.md`. If any of them is missing, record that as a finding.
 - Locate the data and importers. Search the repo for infrastructure, timetable and interlocking data files and the code that loads them; do not assume paths.
 - If the user named an area, line or date, limit the audit to it. Otherwise audit everything.
 - Check that every dataset traces back to a registered source with licence, attribution and retrieval date.
@@ -30,7 +30,7 @@ For each item, confirm it has an evidence label (`sourced`, `verified`, `inferre
 - **Timetable locations:** every TIPLOC or location code in a schedule maps to an infrastructure location. List any that are unmapped.
 - **Train paths:** each scheduled path can be routed over the graph: lines, platforms and running directions all exist.
 - **Service timings:** times are monotonic, dwells are plausible and dates are valid. Running times must be achievable over the path, or else be flagged.
-- **Interlocking:** list every route and locking rule that is not backed by a control table or source. Make sure each one is labelled `inferred` and documented in `docs/inferred-behaviour.md`.
+- **Interlocking:** list every route and locking rule that is not backed by a control table or source. Make sure each one is labelled `inferred` and documented in `docs/INFERRED_BEHAVIOUR.md`.
 - **Unsupported assumptions:** look for hard-coded values, defaults or fallbacks in code that stand in for missing real data without a `placeholder` or `unknown` label.
 
 ## 4. Corrections
@@ -41,7 +41,7 @@ Correct something only when **all** of these hold:
 - The fix is minimal and local.
 - The evidence label is preserved, or upgraded only on new evidence. Note the source reference in the change.
 
-Otherwise, do not change the data. Record the issue in `docs/data-gaps.md` (or `docs/inferred-behaviour.md`) and in the report. Add a regression test or validator case for each correction if a test setup exists.
+Otherwise, do not change the data. Record the issue in `docs/DATA_GAPS.md` (or `docs/INFERRED_BEHAVIOUR.md`) and in the report. Add a regression test or validator case for each correction if a test setup exists.
 
 ## 5. Report
 

@@ -14,13 +14,13 @@ Signal Network is a multiplayer, browser-based UK railway signalling and dispatc
 
 Every infrastructure and timetable record carries one of these evidence labels:
 
-| Label | Meaning |
-|---|---|
-| `sourced` | Taken directly from a named, attributable source |
-| `verified` | Sourced and independently confirmed by a second source |
-| `inferred` | Derived by reasoning from sourced data; the reasoning is documented |
-| `placeholder` | A deliberate stand-in so the game can run; must be replaced |
-| `unknown` | Not known; consumers must handle it explicitly |
+| Label         | Meaning                                                             |
+| ------------- | ------------------------------------------------------------------- |
+| `sourced`     | Taken directly from a named, attributable source                    |
+| `verified`    | Sourced and independently confirmed by a second source              |
+| `inferred`    | Derived by reasoning from sourced data; the reasoning is documented |
+| `placeholder` | A deliberate stand-in so the game can run; must be replaced         |
+| `unknown`     | Not known; consumers must handle it explicitly                      |
 
 Labels must survive the whole pipeline from import to runtime. Do not drop or upgrade a label without new evidence.
 
@@ -33,23 +33,30 @@ Keep these four layers separate in both modules and types. A lower layer never d
 3. **Simulated interlocking**: route definitions, locking, and conflicts, built from infrastructure. Where real control tables are not available, the logic is `inferred` and must be documented.
 4. **Runtime simulation state**: train positions, occupancy, signal aspects, point positions, and player sessions. Mutable and server-owned.
 
+Code map: `src/model/` (zod schemas, the single source of truth), `src/import/{osm,cif,corpus,smart}/` (source → canonical), `src/validation/` (graph + dataset checks), `src/schematic/` (SVG preview model), `src/server/`, `src/client/`, `tools/` (CLIs), `fixtures/synthetic/` (test-only, labelled synthetic). Each dataset in `data/datasets/<id>/` stores one file per layer: `infrastructure.json` (generated from `data/raw/`, never hand-edited), `signalling.json`, `control.json`, `timing-points.json` (study-area TIPLOCs, sourced mappings, inferred positions), `timetables/<date>.json`.
+
 ## Stack
 
 TypeScript (strict) throughout, React + Vite for the client, Node.js + Socket.IO for the server, SVG for the schematic diagram, and Vitest for tests. Do not depart from this without recording the reason in an ADR (see Documentation).
 
 ## Multiplayer model
 
-The server is authoritative. Clients send action *requests* (set route, cancel route, move points, accept train, and so on). The server checks every request against interlocking rules, track occupancy, point detection/locking, and the requesting player's control-area permissions before it changes state. It then broadcasts the resulting state. Clients never mutate simulation state themselves. Client-side checks are only for UX.
+The server is authoritative. Clients send action _requests_ (set route, cancel route, move points, accept train, and so on). The server checks every request against interlocking rules, track occupancy, point detection/locking, and the requesting player's control-area permissions before it changes state. It then broadcasts the resulting state. Clients never mutate simulation state themselves. Client-side checks are only for UX.
 
 ## Testing and checks
 
 - Every bug fix and every behaviour change to interlocking or simulation logic gets a regression test.
 - Before reporting work as done, run the relevant tests, the type check, and lint. Report any check that failed or could not be run, and say why.
-- Build/test/lint commands go here once `package.json` exists.
+- Commands (npm, Node ≥ 20):
+  - `npm run check`: typecheck, lint, format check, tests, data validation (run before reporting done)
+  - `npm test` (Vitest); single file `npx vitest run tests/cif.test.ts`; single test `npx vitest run -t "applies overlays"`
+  - `npm run typecheck`, `npm run lint`, `npm run format`, `npm run build`
+  - `npm run dev` (client preview, Vite), `npm run server` (read-only dataset API on :3001)
+  - `npm run data:validate`, `data:import-osm`, `data:preview`, `data:import-corpus`, `data:import-cif`, `data:smart-coverage`, `data:fetch-osm` (network; rarely): see `docs/IMPORTING.md`
 
 ## Data sources and licensing
 
-- Record every external data source in `docs/data-sources.md` with its name, URL, licence, required attribution text, retrieval date, and usage restrictions.
+- Record every external data source in `data/sources.json` (machine-readable, enforced by the validator) and `docs/DATA_SOURCES.md` with its name, URL, licence, required attribution text, retrieval date, and usage restrictions.
 - Check a source's licence before importing it. Do not commit data whose licence forbids redistribution. Fetch it at build or run time instead.
 - Show the required attributions in the app.
 
@@ -57,9 +64,10 @@ The server is authoritative. Clients send action *requests* (set route, cancel r
 
 Detailed technical facts belong in `docs/`, not in this file:
 
-- `docs/adr/`: architecture decision records, one per significant decision, including any departure from the stack above.
-- `docs/data-gaps.md`: known missing or `placeholder`/`unknown` data, by area.
-- `docs/inferred-behaviour.md`: every piece of railway behaviour or interlocking logic that is `inferred` rather than sourced, with its reasoning.
+- `docs/DECISION_LOG.md`: numbered decisions (D-nnn) with reasons and how to reverse them, including any departure from the stack above.
+- `docs/DATA_MODEL.md`: schemas, evidence rules, validation codes. `docs/FEASIBILITY_REPORT.md`: what the data can credibly support. `docs/IMPORTING.md`: import formats and data commands.
+- `docs/DATA_GAPS.md`: known missing or `placeholder`/`unknown` data, by area.
+- `docs/INFERRED_BEHAVIOUR.md`: every piece of railway behaviour or interlocking logic that is `inferred` rather than sourced, with its reasoning.
 
 Update these in the same change that introduces the decision, gap, or inference. Reusable multi-step workflows (for example, importing a new area or adding a data source) belong in `.claude/skills/`.
 
