@@ -28,6 +28,13 @@ export const DataSource = z.object({
   /** Restrictions such as share-alike, no branding, no endorsement. */
   obligations: z.array(z.string()).default([]),
   status: SourceStatus,
+  /**
+   * True only for a source that states interlocking behaviour (routes, overlaps, conflicts,
+   * point requirements): a control table, a signalling plan with route tables, or equivalent.
+   * Track layout (OSM) and train-movement observations (SMART, TD) do not qualify. Route and
+   * overlap provenance labelled sourced/verified must cite such a source (D-024).
+   */
+  interlockingAuthority: z.boolean().default(false),
   /** Dates this project actually retrieved data from the source (never planned dates). */
   retrievals: z
     .array(z.object({ date: IsoDate, version: z.string(), description: z.string() }))

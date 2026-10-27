@@ -11,7 +11,14 @@ import { Provenance } from "./evidence.ts";
 export const PointsRequirement = z.object({
   pointsId: z.string(),
   position: z.enum(["normal", "reverse"]),
+  /**
+   * path: the points lie on the route/overlap and set its course (checked against the path);
+   * flank: the points lie off the path and are held for flank protection (checked only for
+   * consistency, never derived). Defaults to path (D-024).
+   */
+  role: z.enum(["path", "flank"]).default("path"),
 });
+export type PointsRequirement = z.infer<typeof PointsRequirement>;
 
 export const Overlap = z.object({
   id: z.string().min(1),

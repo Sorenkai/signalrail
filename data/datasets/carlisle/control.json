@@ -1,0 +1,909 @@
+{
+  "$comment": "Carlisle control configuration (R5, DECISION_LOG D-027). Real-world claims are unknown unless a source states them; the game area and its boundaries are game-design statements (labelled simplified); membership lists are computed by `npm run data:control-membership -- --dataset carlisle --area carlisle-ws-1`.",
+  "datasetId": "carlisle",
+  "controlCentres": [
+    {
+      "id": "cc-carlisle-psb",
+      "name": "Carlisle Power Signal Box",
+      "locationId": "osm-loc-w1131695849",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/1131695849",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "OSM maps a railway=signal_box feature with this name. This establishes the mapped building, not its current use or what it controls."
+      },
+      "operationalStatus": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states whether the box is in use or whether its work has moved to another centre."
+        ]
+      },
+      "controlMethod": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "The name says 'Power'; equipment is not inferred from a name (R5). No source describes its panel or workstations."
+        ]
+      },
+      "methodsOfWorking": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Not in any imported source; the Sectional Appendix (nr-sectional-appendix) has not been obtained."
+        ]
+      },
+      "signallingPrinciples": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "OSM maps colour-light signals here (D-022): that describes the signals, not the principles they are worked to."
+        ]
+      },
+      "extent": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "OSM signal refs share the CE prefix and SMART TD area CL covers the area, but neither establishes control limits (D-008)."
+        ]
+      }
+    }
+  ],
+  "areas": [
+    {
+      "id": "carlisle-ws-1",
+      "name": "Carlisle playable area (one proposed workstation)",
+      "basis": "game_design",
+      "signalBoxLocationId": null,
+      "signalIds": [
+        "osm-sig10288174",
+        "osm-sig2464246559",
+        "osm-sig7683254201",
+        "osm-sig7683254213",
+        "osm-sig11954024796",
+        "osm-sig11954024797",
+        "osm-sig11954024798",
+        "osm-sig11955498419",
+        "osm-sig11955498420",
+        "osm-sig11955498421",
+        "osm-sig11955498422",
+        "osm-sig12587515316",
+        "osm-sig12587515317",
+        "osm-sig12587515318",
+        "osm-sig13520580931",
+        "osm-sig13520580932",
+        "osm-sig13520580933",
+        "osm-sig13520580934",
+        "osm-sig13520580935",
+        "osm-sig13520580936",
+        "osm-sig13520580937",
+        "osm-sig13520580938",
+        "osm-sig13520580939",
+        "osm-sig13520580941",
+        "osm-sig13520580942",
+        "osm-sig13915496833",
+        "osm-sig13915496834",
+        "osm-sig13915496835",
+        "osm-sig13915496839",
+        "osm-sig13915496840",
+        "osm-sig13915496841",
+        "osm-sig13915496846",
+        "osm-sig13915496847",
+        "osm-sig13915496848",
+        "osm-sig13915496849",
+        "osm-sig13915496850",
+        "osm-sig13915496851",
+        "osm-sig13929785498",
+        "osm-sig13929815203",
+        "osm-sig13929815204",
+        "osm-sig13956027901",
+        "osm-sig13956027902",
+        "osm-sig13956027903",
+        "osm-sig13956027904",
+        "osm-sig13956027905",
+        "osm-sig13956027906",
+        "osm-sig13956027907"
+      ],
+      "pointsIds": [
+        "osm-pts10288162",
+        "osm-pts10288170",
+        "osm-pts10288175",
+        "osm-pts20966586",
+        "osm-pts314950822",
+        "osm-pts798798788",
+        "osm-pts798798791",
+        "osm-pts1460409471",
+        "osm-pts1460422856",
+        "osm-pts1460503981",
+        "osm-pts1460503992",
+        "osm-pts1460504004",
+        "osm-pts1460504014",
+        "osm-pts1460504022",
+        "osm-pts1460504024",
+        "osm-pts1460504049",
+        "osm-pts1460504059",
+        "osm-pts2374086071",
+        "osm-pts2374086078",
+        "osm-pts2463960379",
+        "osm-pts2463960398",
+        "osm-pts2463960408",
+        "osm-pts2463966630",
+        "osm-pts2463966647",
+        "osm-pts2463966656",
+        "osm-pts2463966659",
+        "osm-pts2463966660",
+        "osm-pts2463966661",
+        "osm-pts2463966669",
+        "osm-pts2463966671",
+        "osm-pts2463966673",
+        "osm-pts2463969926",
+        "osm-pts2463969927",
+        "osm-pts2464246583",
+        "osm-pts2464246595",
+        "osm-pts2464246606",
+        "osm-pts2464246608",
+        "osm-pts2464246609",
+        "osm-pts2464246616",
+        "osm-pts2464246628",
+        "osm-pts2464251373",
+        "osm-pts2464330257",
+        "osm-pts2464330297",
+        "osm-pts2464330299",
+        "osm-pts2464330300",
+        "osm-pts2464330302",
+        "osm-pts2464330304",
+        "osm-pts2464330315",
+        "osm-pts2464330319",
+        "osm-pts2464330331",
+        "osm-pts2464330352",
+        "osm-pts2464330363",
+        "osm-pts2464330389",
+        "osm-pts2464330439",
+        "osm-pts2464366011",
+        "osm-pts2464424123",
+        "osm-pts2464424127",
+        "osm-pts2464424150",
+        "osm-pts2814195214",
+        "osm-pts2814195215",
+        "osm-pts2814195221",
+        "osm-pts2814195222",
+        "osm-pts2814195229",
+        "osm-pts2814195231",
+        "osm-pts2814195233",
+        "osm-pts2814195235",
+        "osm-pts3057659452",
+        "osm-pts3057659453",
+        "osm-pts3057659454",
+        "osm-pts3057659455",
+        "osm-pts3057659456",
+        "osm-pts3057659457",
+        "osm-pts3407192549",
+        "osm-pts3720819849",
+        "osm-pts5235157290",
+        "osm-pts7185463919",
+        "osm-pts7185463921",
+        "osm-pts7185463923",
+        "osm-pts7185463924",
+        "osm-pts7185463926",
+        "osm-pts7185463928",
+        "osm-pts7253833743",
+        "osm-pts7253833744",
+        "osm-pts7261456039",
+        "osm-pts7261456040",
+        "osm-pts7683158430",
+        "osm-pts7683158431",
+        "osm-pts7683158436",
+        "osm-pts7683158453",
+        "osm-pts7683158454",
+        "osm-pts7683158456",
+        "osm-pts7683254202",
+        "osm-pts7683254205",
+        "osm-pts7683254206",
+        "osm-pts7683254214",
+        "osm-pts8572043224",
+        "osm-pts10069394082",
+        "osm-pts10069394083",
+        "osm-pts12179086002",
+        "osm-pts12179086003",
+        "osm-pts13520521846",
+        "osm-pts13520521847",
+        "osm-pts13520580929",
+        "osm-pts13520580930"
+      ],
+      "platformIds": [
+        "osm-plat-w132760247",
+        "osm-plat-w132753331",
+        "osm-plat-w132753334",
+        "osm-plat-w132753332",
+        "osm-plat-w132753329",
+        "osm-plat-w132752066",
+        "osm-plat-w132760229",
+        "osm-plat-w371575256",
+        "osm-plat-w132760232"
+      ],
+      "membershipProvenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Members are the OSM signals and points on track reached from the playable cuts' inside nodes without crossing a cut (playable-area.json; src/validation/control.ts nodesInPlay). This follows the game-design playable area, not the real box's control limits."
+      },
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game design, proposed: one control area for the whole playable area. Whether play is split between several players or AI operators, and where, is undecided. A split will be a game-design choice unless a source establishes a real operational division."
+      },
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Carlisle Power Signal Box is mapped inside the playable area (OSM way/1131695849), but no imported source states which signals or points it controls, or whether control has moved elsewhere."
+        ]
+      },
+      "operator": {
+        "value": "human_or_ai",
+        "status": "proposed",
+        "rationale": "Human and AI operators use the same control area and the same commands (R6); which one operates it is a session setting.",
+        "provenance": {
+          "evidence": "simplified",
+          "sources": [],
+          "note": "Game design: either a human or an AI signaller may operate this area."
+        }
+      }
+    }
+  ],
+  "externalAreas": [
+    {
+      "id": "ext-wcml-south",
+      "name": "WCML south, towards Penrith",
+      "kind": "outside_play",
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states which signal box or operating centre controls this track."
+        ]
+      },
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Track continues beyond the playable-area cut(s); where it leads is the cut's connectsTo (\"Penrith (WCML south)\"), inferred from OSM track refs and CIF flows (INFERRED_BEHAVIOUR I-006)."
+      }
+    },
+    {
+      "id": "ext-newcastle",
+      "name": "Tyne Valley line, towards Wetheral",
+      "kind": "outside_play",
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states which signal box or operating centre controls this track."
+        ]
+      },
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Track continues beyond the playable-area cut(s); where it leads is the cut's connectsTo (\"Wetheral (Tyne Valley to Newcastle)\"), inferred from OSM track refs and CIF flows (INFERRED_BEHAVIOUR I-006)."
+      }
+    },
+    {
+      "id": "ext-midland",
+      "name": "Settle-Carlisle line, towards Cumwhinton",
+      "kind": "outside_play",
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states which signal box or operating centre controls this track."
+        ]
+      },
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Track continues beyond the playable-area cut(s); where it leads is the cut's connectsTo (\"Cumwhinton (Settle-Carlisle line)\"), inferred from OSM track refs and CIF flows (INFERRED_BEHAVIOUR I-006)."
+      }
+    },
+    {
+      "id": "ext-cumbrian-coast",
+      "name": "Cumbrian Coast line, towards Dalston",
+      "kind": "outside_play",
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states which signal box or operating centre controls this track."
+        ]
+      },
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Track continues beyond the playable-area cut(s); where it leads is the cut's connectsTo (\"Dalston (Cumbrian Coast line)\"), inferred from OSM track refs and CIF flows (INFERRED_BEHAVIOUR I-006)."
+      }
+    },
+    {
+      "id": "ext-kingmoor",
+      "name": "Kingmoor (deferred part of the playable area)",
+      "kind": "deferred_play_area",
+      "controlCentre": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No imported source states which signal box or operating centre controls this track."
+        ]
+      },
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z"
+          }
+        ],
+        "note": "Track continues beyond the playable-area cut(s); where it leads is the cut's connectsTo (\"Kingmoor (optional area), then the WCML north and the Glasgow & South Western line\"), inferred from OSM track refs and CIF flows (INFERRED_BEHAVIOUR I-006). Kingmoor is an optional area deferred in playable-area.json; whether it is added is a game-design decision."
+      }
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "bd-wcml-south-down",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-wcml-south",
+      "edgeId": "osm-w342066398-0",
+      "cutId": "cut-wcml-south-down",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-wcml-south-down (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-wcml-south-up",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-wcml-south",
+      "edgeId": "osm-w342066400-1",
+      "cutId": "cut-wcml-south-up",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-wcml-south-up (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-newcastle-down",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-newcastle",
+      "edgeId": "osm-w276843194-0",
+      "cutId": "cut-newcastle-down",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-newcastle-down (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-newcastle-up",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-newcastle",
+      "edgeId": "osm-w435428569-2",
+      "cutId": "cut-newcastle-up",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-newcastle-up (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-midland-down",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-midland",
+      "edgeId": "osm-w452937035-0",
+      "cutId": "cut-midland-down",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-midland-down (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-midland-up",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-midland",
+      "edgeId": "osm-w452937034-0",
+      "cutId": "cut-midland-up",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-midland-up (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-cumbrian-coast-a",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-cumbrian-coast",
+      "edgeId": "osm-w541385484-1",
+      "cutId": "cut-cumbrian-coast-a",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-cumbrian-coast-a (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-cumbrian-coast-b",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-cumbrian-coast",
+      "edgeId": "osm-w223342519-0",
+      "cutId": "cut-cumbrian-coast-b",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-cumbrian-coast-b (extract_boundary): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-north-down-main",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-kingmoor",
+      "edgeId": "osm-w238611570-0",
+      "cutId": "cut-north-down-main",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-north-down-main (gameplay_cut): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-north-up-main",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-kingmoor",
+      "edgeId": "osm-w238611571-0",
+      "cutId": "cut-north-up-main",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-north-up-main (gameplay_cut): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-north-down-goods",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-kingmoor",
+      "edgeId": "osm-w238611573-0",
+      "cutId": "cut-north-down-goods",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-north-down-goods (gameplay_cut): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    },
+    {
+      "id": "bd-north-up-goods",
+      "fromAreaId": "carlisle-ws-1",
+      "toAreaId": "ext-kingmoor",
+      "edgeId": "osm-w238613009-0",
+      "cutId": "cut-north-up-goods",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game-design boundary at playable-area cut cut-north-up-goods (gameplay_cut): where play stops. Not a real control limit."
+      },
+      "boundarySignalIds": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "No source identifies the signals at this boundary; OSM signals near the cut have not been assessed for this purpose."
+        ]
+      },
+      "trafficDirections": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": []
+        },
+        "limitations": [
+          "Which cut each timetabled train uses needs the area TIPLOCs mapped to track (28 of 29 unmapped, DATA_GAPS); not derived.",
+          "An OSM track ref such as 'Down Main' is a line name, not evidence of the direction trains cross here."
+        ]
+      },
+      "handover": null,
+      "status": "incomplete",
+      "unresolved": [
+        "signals protecting or ending at the boundary",
+        "directions real trains cross it",
+        "game handover direction and responsibility (undecided, R6)",
+        "the real control centre beyond the boundary"
+      ]
+    }
+  ]
+}

@@ -20,11 +20,27 @@
         "Crowd-sourced: completeness and accuracy are not guaranteed; signal and switch tagging is partial."
       ],
       "status": "in-use",
+      "interlockingAuthority": false,
       "retrievals": [
         {
           "date": "2026-10-27",
           "version": "2026-10-27T16:38:36Z",
           "description": "Railway extract for the shrewsbury bbox (52.695-52.745 N, 2.770-2.725 W), including named junctions, yards and level crossings (data/raw/osm/shrewsbury-2026-10-27.json), overpass-api.de. Supersedes an earlier same-day extract (base 2026-10-27T16:01:40Z) with a smaller bbox."
+        },
+        {
+          "date": "2026-10-27",
+          "version": "2026-10-27T16:59:21Z",
+          "description": "Carlisle PILOT extract, bbox 54.870-54.940 N, 2.985-2.895 W, standard query (data/raw/osm/carlisle-2026-10-27.json), overpass-api.de. See docs/pilots/CARLISLE_PILOT.md."
+        },
+        {
+          "date": "2026-10-27",
+          "version": "2026-10-27T18:47:20Z",
+          "description": "Carlisle Phase 2 MAIN refresh (data/raw/osm/carlisle-20261027T184451Z.json, sha256 e6c49d21b6fe95b1dc4f7bd2b44bf709feff5e87efd4d5ccd2ee2d3a32cddc9e). Purpose: like-for-like refresh. Query byte-identical to the pilot extract (bbox 54.870-54.940 N, 2.985-2.895 W; railway=rail ways with all nodes; platform/station/halt/signal_box; signal/switch/buffer_stop/railway_crossing nodes; named junction/yard/level_crossing; named landuse=railway; out body center), https://overpass-api.de/api/interpreter, retrieved 2026-10-27T18:48:40Z after two HTTP 502 'server at capacity' responses (18:44Z, 18:45Z). 2,014 elements, identical in content to the pilot extract. Used for the carlisle infrastructure.json from Phase 2 (D-019)."
+        },
+        {
+          "date": "2026-10-27",
+          "version": "2026-10-27T18:46:17Z",
+          "description": "Carlisle Phase 2 SUPPLEMENT (data/raw/osm/carlisle-20261027T184451Z-supplement.json, 4.5 MB, sha256 c75cb89ac709a8e074aa3b828d41794b88dbde3f0148585f11161d5ef6e91f3c; kept local and git-ignored by owner decision, see D-019; the recorded hash identifies the input but does not guarantee its availability or redistribution rights). Purpose: additions to the main query's scope, same bbox: railway=platform|platform_edge and public_transport=platform with full geometry (out geom); railway=construction|disused|abandoned|proposed|narrow_gauge|light_rail|miniature|preserved ways (out geom); nodes with railway:signal:* tags but no railway=signal; railway=derail|stop|milestone|crossing_box|owner_change|switch_heater|train_protection|vacancy_detection nodes; relations containing the bbox's railway=rail ways and stop_area relations. https://overpass-api.de/api/interpreter, retrieved 2026-10-27T18:47:40Z after one HTTP 502. 130 elements. Committed derivative: data/raw/osm/carlisle-20261027T184451Z-supplement-slim.json (tools/slim-osm-supplement.ts; 82 elements; 48 route=train/historic relations omitted and listed; 4 route=railway relations kept with members filtered to in-extract ways)."
         }
       ]
     },
@@ -48,6 +64,7 @@
         "Raw extracts stay in git-ignored data/private/; only derived study-area snapshots are committed."
       ],
       "status": "in-use",
+      "interlockingAuthority": false,
       "retrievals": [
         {
           "date": "2026-10-27",
@@ -81,6 +98,7 @@
       "attribution": null,
       "obligations": ["Licence not reviewed; do not import until terms are read."],
       "status": "candidate",
+      "interlockingAuthority": false,
       "retrievals": [],
       "notes": "Excludes non-passenger (freight, ECS) services, which matter for signalling gameplay. Fallback only."
     },
@@ -98,6 +116,7 @@
       "attribution": null,
       "obligations": ["Do not embed tiles without reviewing the tile licence and usage policy."],
       "status": "candidate",
+      "interlockingAuthority": false,
       "retrievals": []
     },
     {
@@ -116,6 +135,7 @@
         "Treat as reference to corroborate line names, speeds and signal box limits; do not republish extracts until terms are reviewed."
       ],
       "status": "candidate",
+      "interlockingAuthority": false,
       "retrievals": []
     },
     {
@@ -134,6 +154,7 @@
         "Facts only; no text copied. Use as corroboration, not as an authoritative railway source."
       ],
       "status": "in-use",
+      "interlockingAuthority": false,
       "retrievals": [
         {
           "date": "2026-10-27",
@@ -141,6 +162,34 @@
           "description": "Signal box names and status in Shrewsbury, used to corroborate OSM signal_box features."
         }
       ]
+    },
+    {
+      "id": "govuk-bank-holidays",
+      "name": "UK bank holidays (GOV.UK bank-holidays.json)",
+      "publisher": "Government Digital Service (GOV.UK)",
+      "url": "https://www.gov.uk/bank-holidays.json",
+      "access": "public",
+      "accessNotes": "Public JSON, no account. Fetched once with curl and committed as a dated snapshot (data/raw/govuk/).",
+      "licence": {
+        "name": "Open Government Licence v3.0",
+        "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+        "confirmed": true
+      },
+      "attribution": "Contains public sector information licensed under the Open Government Licence v3.0.",
+      "obligations": [
+        "Attribute the source (OGL v3.0); GOV.UK's terms give no specific wording, so the OGL default statement is used.",
+        "GOV.UK's terms page footer states OGL v3.0, while its body text links to OGL v1; v3.0 is used."
+      ],
+      "status": "in-use",
+      "interlockingAuthority": false,
+      "retrievals": [
+        {
+          "date": "2026-10-27",
+          "version": "bank-holidays.json fetched 2026-10-27 (2019-01-01..2028-12-26)",
+          "description": "England and Wales, Scotland and Northern Ireland bank holidays (data/raw/govuk/bank-holidays-2026-10-27.json). Used only to decide whether a snapshot window holds a bank holiday (D-026)."
+        }
+      ],
+      "notes": "Says which dates are bank holidays. It does not say how a CIF bank-holiday running flag applies to a train."
     }
   ]
 }

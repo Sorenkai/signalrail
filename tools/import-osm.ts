@@ -1,5 +1,6 @@
 /**
- * Builds data/datasets/<id>/infrastructure.json from the raw OSM snapshot named in area.json.
+ * Builds data/datasets/<id>/infrastructure.json from the raw OSM snapshot named in area.json,
+ * plus the optional osmSupplement (platform outlines and stop_area relations).
  *
  *   npm run data:import-osm -- --dataset shrewsbury
  */
@@ -17,11 +18,24 @@ if (!area.osmSnapshot) {
   process.exit(1);
 }
 const raw = readJson(path(area.osmSnapshot)) as OverpassResponse & { retrieved: string };
+const supplement = area.osmSupplement
+  ? (readJson(path(area.osmSupplement)) as OverpassResponse & { retrieved: string })
+  : null;
 const { infrastructure, report } = importOsm(raw, {
   datasetId,
   bbox: area.bbox,
   retrieved: raw.retrieved,
   generated: raw.retrieved,
+  ...(supplement && area.osmSupplement
+    ? {
+        supplement: {
+          elements: supplement.elements,
+          version: supplement.osm3s.timestamp_osm_base,
+          retrieved: supplement.retrieved,
+          file: area.osmSupplement,
+        },
+      }
+    : {}),
 });
 Infrastructure.parse(infrastructure);
 writeJson(path(datasetDir(datasetId), "infrastructure.json"), infrastructure);
@@ -34,5 +48,8 @@ console.log(
 );
 console.log(
   `  skipped ways ${report.skippedWays.length}, off-track signals ${report.offTrackSignals}, ` +
-    `platforms without track link ${report.platformsWithoutTrackLink}`,
+    `platforms without track link ${report.platformsWithoutTrackLink}` +
+    (report.platformTrackStatus
+      ? ` (association: ${JSON.stringify(report.platformTrackStatus)})`
+      : ""),
 );

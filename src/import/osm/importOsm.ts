@@ -1,15 +1,23 @@
-import type {
-  Infrastructure,
-  LatLon,
-  Location,
-  Platform,
-  Points,
-  Provenance,
-  Signal,
-  TrackEdge,
-  TrackNode,
+import {
+  classifySignal,
+  type Infrastructure,
+  type LatLon,
+  type Location,
+  type Platform,
+  type Points,
+  type Provenance,
+  type Signal,
+  type SignalComponent,
+  type SignalMounting,
+  type TrackEdge,
+  type TrackNode,
 } from "../../model/index.ts";
 import type { BBox, OsmNode, OsmWay, OverpassResponse } from "./overpass.ts";
+import {
+  associatePlatformTracks,
+  type PlatformTrackInput,
+  type SupplementElement,
+} from "./platformTracks.ts";
 
 export const OSM_SOURCE_ID = "openstreetmap";
 
@@ -20,12 +28,20 @@ export interface OsmImportOptions {
   retrieved: string;
   /** Date written into the output's `generated` field. */
   generated: string;
+  /**
+   * Optional supplement extract (same bbox, `out geom`) with platform outlines and stop_area
+   * relations. When given, platforms are linked to track (src/import/osm/platformTracks.ts);
+   * without it, platform edges stay unknown as before.
+   */
+  supplement?: { elements: SupplementElement[]; version: string; retrieved: string; file: string };
 }
 
 export interface OsmImportReport {
   skippedWays: { id: number; reason: string }[];
   offTrackSignals: number;
   platformsWithoutTrackLink: number;
+  /** Platform association status counts, when a supplement was given. */
+  platformTrackStatus?: Record<string, number>;
 }
 
 const nodeId = (osmId: number) => `osm-n${osmId}`;
@@ -74,40 +90,56 @@ function edgeUsage(tags: Record<string, string>): TrackEdge["usage"] {
   return tags.usage ? "other" : "unknown";
 }
 
-function signalClass(tags: Record<string, string>): Pick<Signal, "type" | "function"> {
-  const form = (key: string) => tags[`railway:signal:${key}:form`];
-  const has = (key: string) => tags[`railway:signal:${key}`] !== undefined;
-  const fn: Signal["function"] = has("main")
-    ? "main"
-    : has("distant")
-      ? "distant"
-      : has("shunting") || has("minor")
-        ? "shunting"
-        : has("main_repeated") || has("distant_repeated")
-          ? "repeater"
-          : has("stop")
-            ? "stop_board"
-            : "unknown";
-  const rawForm =
-    form("main") ??
-    form("distant") ??
-    form("shunting") ??
-    form("minor") ??
-    form("main_repeated") ??
-    form("stop");
-  const type: Signal["type"] =
-    rawForm === "semaphore"
-      ? "semaphore"
-      : rawForm === "light"
-        ? fn === "shunting"
-          ? "ground"
-          : "colour_light"
-        : rawForm === "sign"
-          ? "sign"
-          : rawForm
-            ? "other"
-            : "unknown";
-  return { type, function: fn };
+/** `railway:signal:*` keys that are properties of the whole node, not signal categories. */
+const NODE_PROPERTY_KEYS = new Set(["direction", "position"]);
+
+/**
+ * Signal components exactly as tagged: one per `railway:signal:<category>` key, with its
+ * `:form`, `:design`, `:states` and `:height` verbatim. Nothing is inferred from the category.
+ */
+export function signalComponents(tags: Record<string, string>): SignalComponent[] {
+  const components: SignalComponent[] = [];
+  for (const [key, value] of Object.entries(tags)) {
+    const m = /^railway:signal:([a-z_]+)$/.exec(key);
+    if (!m || NODE_PROPERTY_KEYS.has(m[1]!)) continue;
+    const prop = (p: string) => tags[`${key}:${p}`] ?? null;
+    const states = prop("states")
+      ?.split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    components.push({
+      category: m[1]!,
+      sourceType: value,
+      form: prop("form"),
+      design: prop("design"),
+      states: states && states.length > 0 ? states : null,
+      height: prop("height"),
+    });
+  }
+  return components;
+}
+
+const MOUNTING_BY_POSITION: Record<string, SignalMounting> = {
+  bridge: "gantry",
+  overhead: "overhead_line",
+  in_track: "in_track",
+};
+
+/** Mounting from OSM `railway:signal:position`; left/right is a side of the track, not a mounting. */
+function signalMounting(tags: Record<string, string>, sourced: Provenance): Signal["mounting"] {
+  const raw = tags["railway:signal:position"];
+  const mounting = raw ? MOUNTING_BY_POSITION[raw] : undefined;
+  if (mounting) return { value: mounting, provenance: sourced };
+  return {
+    value: null,
+    provenance: {
+      evidence: "unknown",
+      sources: [],
+      note: raw
+        ? `OSM railway:signal:position=${raw} gives no mounting (post, ground or other)`
+        : "OSM does not state the mounting",
+    },
+  };
 }
 
 function switchType(raw: string | undefined): Points["switchType"] {
@@ -132,7 +164,8 @@ function switchType(raw: string | undefined): Points["switchType"] {
  * Converts an Overpass extract to the canonical infrastructure layer.
  *
  * Every element carries OSM provenance. Facts OSM does not express (points normal/reverse
- * lie, platform-to-track links, interlocking) are emitted as `unknown`, never guessed.
+ * lie, platform-to-track links, signal mounting, interlocking) are emitted as `unknown`, never
+ * guessed. Signal components are copied verbatim from the tags.
  * The only inference made is that a dangling track end outside the bbox is an area boundary.
  */
 export function importOsm(
@@ -274,6 +307,7 @@ export function importOsm(
       const nb = wayNeighbours.get(n.id);
       const towards =
         dir === "forward" ? nb?.forward : dir === "backward" ? nb?.backward : undefined;
+      const components = signalComponents(tags);
       signals.push({
         id: `osm-sig${n.id}`,
         ref: tags.ref ?? null,
@@ -290,7 +324,10 @@ export function importOsm(
                     : "OSM signal has no railway:signal:direction",
               ),
             },
-        ...signalClass(tags),
+        ...classifySignal(components),
+        components,
+        mounting: signalMounting(tags, prov("node", n.id)),
+        sourceTags: { ...tags },
         position,
         provenance: prov("node", n.id),
       });
@@ -322,6 +359,7 @@ export function importOsm(
     return null;
   };
 
+  const platformInputs: PlatformTrackInput[] = [];
   for (const e of data.elements) {
     const tags = e.tags ?? {};
     const rw = tags.railway;
@@ -333,7 +371,14 @@ export function importOsm(
     if (!position || !inBBox(position, opts.bbox)) continue;
     const ref = `${e.type[0]}${e.id}`;
     if (rw === "platform") {
-      report.platformsWithoutTrackLink++;
+      platformInputs.push({
+        platform: {
+          id: `osm-plat-${ref}`,
+          ref: tags.ref ?? tags["railway:platform:ref"] ?? null,
+          provenance: prov(e.type, e.id),
+        },
+        osm: { type: e.type, id: e.id },
+      });
       platforms.push({
         id: `osm-plat-${ref}`,
         ref: tags.ref ?? tags["railway:platform:ref"] ?? null,
@@ -358,6 +403,32 @@ export function importOsm(
       provenance: prov(e.type, e.id),
     });
   }
+  if (opts.supplement) {
+    const links = associatePlatformTracks(platformInputs, {
+      osmNodes,
+      nodes,
+      edges,
+      main: { sourceId: OSM_SOURCE_ID, version, retrieved: opts.retrieved },
+      supplement: {
+        elements: opts.supplement.elements,
+        ref: {
+          sourceId: OSM_SOURCE_ID,
+          version: opts.supplement.version,
+          retrieved: opts.supplement.retrieved,
+        },
+      },
+    });
+    report.platformTrackStatus = {};
+    for (const p of platforms) {
+      const link = links.get(p.id);
+      if (!link) continue;
+      p.edgeIds = link.edgeIds;
+      p.trackAssociation = link.trackAssociation;
+      const st = link.trackAssociation!.status;
+      report.platformTrackStatus[st] = (report.platformTrackStatus[st] ?? 0) + 1;
+    }
+  }
+  report.platformsWithoutTrackLink = platforms.filter((p) => p.edgeIds.value === null).length;
   const byId = <T extends { id: string }>(a: T, b: T) => a.id.localeCompare(b.id);
   locations.sort(byId);
   platforms.sort(byId);

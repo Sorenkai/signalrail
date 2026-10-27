@@ -138,3 +138,157 @@ describe("parseMaxSpeedMph", () => {
     expect(parseMaxSpeedMph(undefined)).toBeNull();
   });
 });
+
+/**
+ * SYNTHETIC signals (ids, refs and positions invented) covering audit M1/M2: one way 200
+ * through nodes 20-27, each a signal with a different OSM tag combination.
+ */
+describe("importOsm signal classification (audit M1, M2)", () => {
+  const sig = (id: number, tags: Record<string, string>) => ({
+    type: "node" as const,
+    id,
+    lat: 52.0,
+    lon: -2.0 + id / 10000,
+    tags: { railway: "signal", "railway:signal:direction": "forward", ...tags },
+  });
+  const signals = [
+    sig(21, {
+      ref: "SY21",
+      "railway:signal:shunting": "GB-NR:shunting",
+      "railway:signal:shunting:form": "light",
+      "railway:signal:position": "left",
+    }),
+    sig(22, {
+      ref: "SY22",
+      "railway:signal:main": "GB-NR:main",
+      "railway:signal:main:form": "light",
+      "railway:signal:main:design": "individual",
+      "railway:signal:shunting": "GB-NR:shunting",
+      "railway:signal:shunting:form": "light",
+      "railway:signal:route": "GB-NR:junction",
+      "railway:signal:route:form": "light",
+      "railway:signal:route:design": "feather",
+      "railway:signal:route:states": "position_4;position_6;off",
+      route_ref: "synthetic_line",
+    }),
+    sig(23, {
+      ref: "SY23",
+      "railway:signal:main": "GB-NR:main",
+      "railway:signal:main:form": "light",
+      "railway:signal:route": "GB-NR:junction",
+      "railway:signal:route:form": "light",
+      "railway:signal:route:design": "theatre",
+    }),
+    sig(24, {
+      ref: "SY24",
+      "railway:signal:main": "GB-NR:main",
+      "railway:signal:main:form": "light",
+      "railway:signal:position": "bridge",
+    }),
+    sig(25, {
+      ref: "SY25",
+      "railway:signal:main_repeated": "GB-NR:banner",
+      "railway:signal:main_repeated:form": "light",
+    }),
+    sig(26, { ref: "SY26" }),
+    sig(27, {
+      ref: "SY27",
+      "railway:signal:shunting": "GB-NR:shunting",
+      "railway:signal:shunting:form": "light",
+      "railway:signal:shunting:height": "dwarf",
+    }),
+  ];
+  const data: OverpassResponse = {
+    ...synthetic,
+    elements: [
+      { type: "node", id: 20, lat: 52.0, lon: -1.999 },
+      ...signals,
+      { type: "node", id: 28, lat: 52.0, lon: -1.997 },
+      {
+        type: "way",
+        id: 200,
+        nodes: [20, 21, 22, 23, 24, 25, 26, 27, 28],
+        tags: { railway: "rail" },
+      },
+    ],
+  };
+  const { infrastructure } = importOsm(data, opts);
+  const byRef = (ref: string) => infrastructure.signals.find((s) => s.ref === ref)!;
+
+  it("does not classify a light shunting signal as ground-mounted", () => {
+    const s = byRef("SY21");
+    expect(s).toMatchObject({ type: "light", function: "shunting" });
+    expect(infrastructure.signals.map((x) => x.type)).not.toContain("ground");
+  });
+
+  it("keeps mounting unknown unless the source states it", () => {
+    expect(byRef("SY21").mounting).toEqual({
+      value: null,
+      provenance: {
+        evidence: "unknown",
+        sources: [],
+        note: "OSM railway:signal:position=left gives no mounting (post, ground or other)",
+      },
+    });
+    expect(byRef("SY22").mounting.value).toBeNull();
+    expect(byRef("SY22").mounting.provenance.evidence).toBe("unknown");
+    // A dwarf height is kept verbatim on the component, not turned into a mounting.
+    expect(byRef("SY27").mounting.value).toBeNull();
+    expect(byRef("SY27").components[0]!.height).toBe("dwarf");
+    const gantry = byRef("SY24").mounting;
+    expect(gantry.value).toBe("gantry");
+    expect(gantry.provenance).toMatchObject({
+      evidence: "sourced",
+      sources: [{ sourceId: "openstreetmap", recordId: "node/24" }],
+    });
+  });
+
+  it("preserves subsidiary and route-indicator components verbatim", () => {
+    const s = byRef("SY22");
+    expect(s).toMatchObject({ type: "colour_light", function: "main" });
+    expect(s.components).toEqual([
+      {
+        category: "main",
+        sourceType: "GB-NR:main",
+        form: "light",
+        design: "individual",
+        states: null,
+        height: null,
+      },
+      {
+        category: "shunting",
+        sourceType: "GB-NR:shunting",
+        form: "light",
+        design: null,
+        states: null,
+        height: null,
+      },
+      {
+        category: "route",
+        sourceType: "GB-NR:junction",
+        form: "light",
+        design: "feather",
+        states: ["position_4", "position_6", "off"],
+        height: null,
+      },
+    ]);
+    expect(s.sourceTags).toMatchObject({ route_ref: "synthetic_line", ref: "SY22" });
+  });
+
+  it("survives serialization and schema parsing unchanged", () => {
+    const roundTrip = Infrastructure.parse(JSON.parse(JSON.stringify(infrastructure)));
+    expect(roundTrip.signals).toEqual(infrastructure.signals);
+  });
+
+  it("does not invent capabilities the tags do not state", () => {
+    // A theatre indicator with no states tag: the indications stay unknown, not an empty list.
+    const theatre = byRef("SY23").components.find((c) => c.category === "route")!;
+    expect(theatre.states).toBeNull();
+    // A main signal with no shunting tag gets no shunting component.
+    expect(byRef("SY23").components.map((c) => c.category)).toEqual(["main", "route"]);
+    // A banner repeater is lit but not a colour-light signal.
+    expect(byRef("SY25")).toMatchObject({ type: "light", function: "repeater" });
+    // No category tag: nothing is classified.
+    expect(byRef("SY26")).toMatchObject({ type: "unknown", function: "unknown", components: [] });
+  });
+});

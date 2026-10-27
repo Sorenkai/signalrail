@@ -4,6 +4,8 @@ export * from "./infrastructure.ts";
 export * from "./signalling.ts";
 export * from "./timetable.ts";
 export * from "./control.ts";
+export * from "./signalEvidence.ts";
+export * from "./playableArea.ts";
 
 import { z } from "zod";
 import { Infrastructure } from "./infrastructure.ts";

@@ -2,15 +2,19 @@
 
 All commands run from the repo root. `--dataset` defaults to `shrewsbury`.
 
-| Command                                                                                                                   | What it does                                                                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run data:fetch-osm -- --dataset <id> [--endpoint URL]`                                                               | Downloads an OSM extract for `area.json`'s bbox to `data/raw/osm/<id>-<date>.json` and records it in `area.json`. Network access; use sparingly.                        |
-| `npm run data:import-osm -- --dataset <id>`                                                                               | Rebuilds `infrastructure.json` from the recorded raw snapshot. Deterministic.                                                                                           |
-| `npm run data:import-cif -- --dataset <id> --file <CIF> --date YYYY-MM-DD --source <id> [--retrieved YYYY-MM-DD] [--all]` | Writes `timetables/<date>.json` from a manually downloaded CIF file. Streams the file. Keeps services touching `areaTiplocs` (whole journeys) unless `--all` is passed. |
-| `npm run data:import-corpus -- --dataset <id> --file <CORPUS JSON> [--retrieved YYYY-MM-DD] [--tiplocs A,B,...]`          | Records CORPUS details for the study-area TIPLOCs in `timing-points.json` and maps those that join exactly on CRS.                                                      |
-| `npm run data:smart-coverage -- --dataset <id> --file <SMART JSON> [--json]`                                              | Read-only report of SMART berth steps at each study-area TIPLOC's STANOX.                                                                                               |
-| `npm run data:validate [-- --dataset <id>] [--verbose] [--json]`                                                          | Validates all layers. Exits 1 on errors.                                                                                                                                |
-| `npm run data:preview -- --dataset <id>`                                                                                  | Writes `data/previews/<id>.svg`.                                                                                                                                        |
+| Command                                                                                                                                                                          | What it does                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm run data:fetch-osm -- --dataset <id> [--endpoint URL]`                                                                                                                      | Downloads an OSM extract for `area.json`'s bbox to `data/raw/osm/<id>-<date>.json` and records it in `area.json`. Network access; use sparingly. **Warning:** it writes without checking for an existing file, so a second fetch on the same day overwrites that day's snapshot, and it rewrites `area.json` (D-019). For a refresh beside an existing same-day snapshot, write to a new timestamped name instead. |
+| `npm run data:import-osm -- --dataset <id>`                                                                                                                                      | Rebuilds `infrastructure.json` from the recorded raw snapshot and, if `area.json` names one, the `osmSupplement` (platform-to-track association, D-020). Deterministic.                                                                                                                                                                                                                                            |
+| `npm run data:import-cif -- --dataset <id> --file <CIF> --date YYYY-MM-DD --source <id> [--retrieved YYYY-MM-DD] [--bank-holidays <json>] [--window-start HH:MM] [--out <path>]` | Writes `timetables/<date>.json` from a manually downloaded CIF file under the operating-day convention (D-026). Streams the file. Keeps services with an area time in the window (whole journeys); lists the rest in `excluded`.                                                                                                                                                                                   |
+| `npm run data:control-membership -- --dataset <id> --area <control area id>`                                                                                                     | Sets a game-design control area's `signalIds`/`pointsIds` to every OSM signal and points inside the playable area (D-027). Rewrites only that area; the rest of `control.json` is hand-authored. Deterministic.                                                                                                                                                                                                    |
+| `npm run data:import-corpus -- --dataset <id> --file <CORPUS JSON> [--retrieved YYYY-MM-DD] [--tiplocs A,B,...] [--deferred A,B,... --deferred-reason <text>]`                   | Records CORPUS details for the study-area TIPLOCs in `timing-points.json` and maps those that join exactly on CRS.                                                                                                                                                                                                                                                                                                 |
+| `npm run data:smart-coverage -- --dataset <id> --file <SMART JSON> [--json]`                                                                                                     | Read-only report of SMART berth steps at each study-area TIPLOC's STANOX.                                                                                                                                                                                                                                                                                                                                          |
+| `npm run data:reconcile-signals -- --dataset <id> [--generated YYYY-MM-DD]`                                                                                                      | Writes `signal-evidence.json`: OSM signals reconciled with SMART berths and CORPUS signal timing points, per-claim evidence (see DATA_MODEL). Needs `data/private/` SMART and CORPUS. Deterministic for a fixed `--generated`.                                                                                                                                                                                     |
+| `npm run data:assess-geography -- --dataset <id> [--generated YYYY-MM-DD]`                                                                                                       | Read-only check of `playable-area.json`: platform roads, connectivity, topology issues, survey backlog. Writes `docs/pilots/<id>-phase1-geography.json`.                                                                                                                                                                                                                                                           |
+| `npx tsx tools/slim-osm-supplement.ts --in <raw supplement> --main <main extract> --out <slim>`                                                                                  | Writes a deterministic slimmed copy of a raw Overpass supplement. It keeps nodes, ways and non-route relations, filters `route=railway` members to the main extract's ways, and lists omitted route relations. The raw file is only read; the tool refuses `--out` equal to `--in` (D-019).                                                                                                                        |
+| `npm run data:validate [-- --dataset <id>] [--verbose] [--json]`                                                                                                                 | Validates all layers. Exits 1 on errors.                                                                                                                                                                                                                                                                                                                                                                           |
+| `npm run data:preview -- --dataset <id>`                                                                                                                                         | Writes `data/previews/<id>.svg`.                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ## Inputs
 
@@ -21,17 +25,36 @@ The query is built by `buildRailwayQuery` in `src/import/osm/overpass.ts`. It fe
 Tag mapping:
 
 - `railway=switch` → switch node + `Points`
-- `railway=signal` → `Signal`; `ref` copied verbatim; form/function from `railway:signal:{main,distant,shunting,minor,main_repeated,stop}[:form]`; direction from `railway:signal:direction`
+- `railway=signal` → `Signal`; `ref` copied verbatim; every `railway:signal:<category>` tag becomes a verbatim `component` (`:form`, `:design`, `:states`, `:height`); type and function are derived from the components by `classifySignal`; `mounting` only from `railway:signal:position=bridge|overhead|in_track`, otherwise `unknown`; all node tags kept as `sourceTags`; direction from `railway:signal:direction` (D-022)
 - `railway=buffer_stop` / `railway_crossing` → node kinds
 - `service=*` / `usage=*` → edge usage; `maxspeed` → mph
 - `railway=station|halt|signal_box` with `name` → `Location`; `ref:crs`, `ref:tiploc` and `ref:stanox` are copied only if present
-- `railway=platform` → `Platform`
+- `railway=platform` → `Platform`. With an `osmSupplement`, it is linked to track through `railway=stop` / `public_transport=stop_position` nodes with the same `ref` (preferably in a shared stop_area relation) and the platform outline from the supplement (`src/import/osm/platformTracks.ts`, D-020).
+- `railway:switch` → `Points.switchType` (`single_slip`, `double_slip`, `three_way`; `default`/`wye` → `simple`).
+
+**Supplement extract (optional):** a second Overpass query for the same bbox that returns platform outlines (`out geom`) and stop_area relations, which the main query (`out body center`) does not. For Carlisle, the raw supplement and its documented additions are described in `data/sources.json` and D-019. The committed form is the slim derivative named in `area.json` `osmSupplement`.
 
 ### CIF (timetable)
 
-A fixed-width, 80-column CIF file. Records used: `HD`, `BS`, `BX`, `LO`, `LI`, `LT`; others are counted and skipped. The column offsets are in `src/import/cif/parseCif.ts`, and the test builder `fixtures/synthetic/cif.ts` documents them by example. Files are read as Latin-1.
+A fixed-width, 80-column CIF file, read as Latin-1. The column offsets are in `src/import/cif/parseCif.ts`, and the test builder `fixtures/synthetic/cif.ts` documents them by example.
 
-The snapshot for a date keeps, per train UID, the applicable schedule with the strongest STP indicator (C > O > N > P). Cancelled trains are dropped.
+- **Records read:** `HD`, `BS`, `BX`, `LO`, `LI`, `LT`, `CR` (change en route, attached to the location that follows it) and `AA` (associations).
+- **Not imported, but counted and reported:** `TI`/`TA`/`TD`, which are TIPLOC master records. Any unknown type is also flagged.
+- **Positions:** the `AA` and `CR` positions were checked against all 79,404 AA and 104,589 CR records of the real extract DFROC1F (D-026).
+- **Malformed input is a parse error, and the tool then refuses to write:** a bad association date, category or UID; a CR outside a schedule or not followed by its location; a schedule with no `LT`; an `LO` after other locations.
+
+Per train UID and origin date, the applicable schedule with the strongest STP indicator (C > O > N > P) applies, and cancelled trains are dropped. The parser indexes every schedule's dating fields, so that a stronger overlay elsewhere in the extract is detected even when only area schedules are kept (`superseded_outside_area`).
+
+**Operating day (D-026):** see DATA_MODEL "Operating day". The tool evaluates origin dates D−1 and D (and D+1 if `--window-start` is after 00:00). Bank holidays come from the committed GOV.UK snapshot (`--bank-holidays`). `--out` writes elsewhere, e.g. for a reproducibility check.
+
+**Carlisle snapshot (2026-11-04):**
+
+```
+npm run data:import-cif -- --dataset carlisle --file data/private/toc-full.CIF \
+    --date 2026-11-04 --source nr-open-data-feeds --retrieved 2026-10-27
+```
+
+It reads `timing-points.json` `areaTiplocs` (29) and `deferredTiplocs` (27, Kingmoor). It is deterministic: a second import to `--out` is byte-identical.
 
 ### CORPUS (Network Rail JSON)
 
@@ -40,6 +63,8 @@ The snapshot for a date keeps, per train UID, the applicable schedule with the s
 ### SMART (Network Rail JSON)
 
 `{"BERTHDATA": [{TD, FROMBERTH, TOBERTH, STANOX, STANME, STEPTYPE, EVENT, PLATFORM, FROMLINE, TOLINE, BERTHOFFSET, ROUTE, COMMENT}]}`. Parsed by `src/import/smart/smart.ts`. Matching is by STANOX from CORPUS. The `COMMENT` field is free text and not a reliable date.
+
+`EVENT` codes, per the Open Rail Data wiki SMART reference: `A` arrive Up, `B` depart Up, `C` arrive Down, `D` depart Down (decoded by `decodeEvent` in `src/reconcile/berthSteps.ts`; raw values are kept). Up/Down are the line's designated directions and can change along a route. `STEPTYPE` `B` is a step between adjacent berths; the other step types are kept raw and not interpreted. A berth is a train-describer position, not a signal: SMART never names signals.
 
 ### Timing-point mappings (authored)
 

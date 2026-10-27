@@ -103,3 +103,50 @@ export const SYNTHETIC_CIF = [
   bs({ uid: "Z90002", from: "261105", to: "261105", days: "0001000", headcode: "    ", stp: "C" }),
   record("ZZ", []),
 ].join("\n");
+
+/** SYNTHETIC association record (AA), at the column offsets verified on the real extract. */
+export const aa = (o: {
+  main: string;
+  assoc: string;
+  from: string;
+  to?: string;
+  days?: string;
+  category?: string;
+  dateInd?: string;
+  location: string;
+  baseSuffix?: string;
+  assocSuffix?: string;
+  type?: string;
+  stp: string;
+  tx?: string;
+}) =>
+  record("AA", [
+    [2, o.tx ?? "N"],
+    [3, o.main],
+    [9, o.assoc],
+    [15, o.from],
+    [21, o.to ?? "      "],
+    [27, o.days ?? "1111111"],
+    [34, o.category ?? "  "],
+    [36, o.dateInd ?? " "],
+    [37, o.location.padEnd(7)],
+    [44, o.baseSuffix ?? " "],
+    [45, o.assocSuffix ?? " "],
+    [46, "T"],
+    [47, o.type ?? " "],
+    [79, o.stp],
+  ]);
+
+/** SYNTHETIC change-en-route record (CR): BS train fields 20 columns to the left. */
+export const cr = (
+  tiploc: string,
+  o: { category?: string; headcode?: string; power?: string; speed?: string } = {},
+) =>
+  record("CR", [
+    [2, tiploc.padEnd(8)],
+    [10, o.category ?? "OO"],
+    [12, o.headcode ?? "1Z99"],
+    [21, "99999999"],
+    [30, (o.power ?? "EMU").padEnd(3)],
+    [37, o.speed ?? "100"],
+  ]);

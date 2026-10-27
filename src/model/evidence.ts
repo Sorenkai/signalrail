@@ -1,12 +1,16 @@
 import { z } from "zod";
 
 /**
- * Evidence levels, from strongest to weakest. See docs/DATA_MODEL.md.
+ * Evidence levels. The first five run from strongest to weakest claim about the real railway;
+ * `simplified` makes no such claim. See docs/DATA_MODEL.md and DECISION_LOG D-022.
  * - sourced:     taken directly from one named, registered source
  * - verified:    sourced and independently confirmed by at least one other registered source
  * - inferred:    derived by reasoning from sourced data; `note` must state the reasoning
  * - placeholder: deliberate stand-in so software can run; `note` must say what would replace it
  * - unknown:     not known; consumers must handle it explicitly
+ * - simplified:  a deliberate game simplification, kept on purpose and not a real-world fact;
+ *                `note` must say what is simplified and what the real arrangement is, or that
+ *                it is unknown. Sources, if any, are the real data being simplified.
  */
 export const EVIDENCE_LEVELS = [
   "sourced",
@@ -14,6 +18,7 @@ export const EVIDENCE_LEVELS = [
   "inferred",
   "placeholder",
   "unknown",
+  "simplified",
 ] as const;
 export const EvidenceLevel = z.enum(EVIDENCE_LEVELS);
 export type EvidenceLevel = z.infer<typeof EvidenceLevel>;
@@ -36,7 +41,7 @@ export const Provenance = z
   .object({
     evidence: EvidenceLevel,
     sources: z.array(SourceRef).default([]),
-    /** Required for inferred (reasoning) and placeholder (what replaces it). */
+    /** Required for inferred (reasoning), placeholder (what replaces it) and simplified. */
     note: z.string().optional(),
   })
   .superRefine((p, ctx) => {
@@ -52,7 +57,10 @@ export const Provenance = z
         message: "verified evidence requires at least two distinct sources",
       });
     }
-    if ((p.evidence === "inferred" || p.evidence === "placeholder") && !p.note?.trim()) {
+    if (
+      (p.evidence === "inferred" || p.evidence === "placeholder" || p.evidence === "simplified") &&
+      !p.note?.trim()
+    ) {
       ctx.addIssue({ code: "custom", message: `${p.evidence} evidence requires a note` });
     }
   });

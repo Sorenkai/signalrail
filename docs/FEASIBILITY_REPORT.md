@@ -13,15 +13,15 @@ _Date: 2026-10-27. Covers what public data can credibly support, and what it can
 
 ## What was actually done
 
-| Step                                     | Result                                                                                                                                                 |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| OSM tagging counts for 5 candidate areas | Measured 4 (York, Shrewsbury, Worcester, Carlisle) on 2026-10-27 via overpass-api.de. Derby was rate-limited and **not measured**.                     |
-| OSM snapshot, Shrewsbury                 | Downloaded 2026-10-27, OSM base `2026-10-27T16:38:36Z`, 1,565 elements (bbox extended north, D-011)                                                    |
-| Import to canonical model                | 271 nodes, 311 edges (44.0 km incl. track beyond the bbox), 77 points, 25 signals, 6 platforms, 17 locations (incl. 7 named junctions/yards/crossings) |
-| Validation                               | 0 errors, 7 warnings (see below)                                                                                                                       |
-| Network Rail SCHEDULE + CORPUS           | Supplied by the owner 2026-10-27; snapshot for 2026-11-04 imported. SMART not yet downloaded                                                           |
-| CIF parser                               | Full extract parsed (721,875 schedules, 0 errors); one service checked field by field                                                                  |
-| Sectional Appendix                       | **Not located or downloaded**                                                                                                                          |
+| Step                                     | Result                                                                                                                                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| OSM tagging counts for 5 candidate areas | Measured 4 (York, Shrewsbury, Worcester, Carlisle) on 2026-10-27 via overpass-api.de. Derby was rate-limited and **not measured**.                                                                                             |
+| OSM snapshot, Shrewsbury                 | Downloaded 2026-10-27, OSM base `2026-10-27T16:38:36Z`, 1,565 elements (bbox extended north, D-011)                                                                                                                            |
+| Import to canonical model                | 271 nodes, 311 edges (44.0 km incl. track beyond the bbox), 77 points, 25 signals, 6 platforms, 17 locations (incl. 7 named junctions/yards/crossings)                                                                         |
+| Validation                               | 0 errors, 7 warnings (see below)                                                                                                                                                                                               |
+| Network Rail SCHEDULE + CORPUS           | Supplied by the owner 2026-10-27; snapshot for 2026-11-04 imported. SMART was supplied later the same day and inspected (see "SMART + TD" below; D-015). _(Corrected: this row previously said SMART was not yet downloaded.)_ |
+| CIF parser                               | Full extract parsed (721,875 schedules, 0 errors); one service checked field by field                                                                                                                                          |
+| Sectional Appendix                       | **Not located or downloaded**                                                                                                                                                                                                  |
 
 ## Candidate areas
 

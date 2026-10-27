@@ -178,6 +178,43 @@ describe("validateDataset", () => {
     expect(issues.find((i) => i.code === "UNSUPPORTED_ASSUMPTION")?.ids).toEqual(["area-1"]);
   });
 
+  it("surfaces deliberate simplifications and keeps them out of source-derived layers", () => {
+    const d = syntheticDataset();
+    d.control!.areas[0]!.provenance = {
+      evidence: "simplified",
+      sources: [],
+      note: "one player works the whole area; the real division of work is not modelled",
+    };
+    const ok = validateDataset(d);
+    expect(ok.find((i) => i.code === "SIMPLIFIED_DATA")).toMatchObject({
+      severity: "warning",
+      ids: ["area-1"],
+    });
+    expect(codes(ok)).not.toContain("SIMPLIFIED_IN_SOURCE_LAYER");
+
+    d.infrastructure.edges[0]!.provenance = {
+      evidence: "simplified",
+      sources: [],
+      note: "SYNTHETIC: a simplified track edge",
+    };
+    expect(validateDataset(d).find((i) => i.code === "SIMPLIFIED_IN_SOURCE_LAYER")).toMatchObject({
+      severity: "error",
+      ids: ["e1"],
+    });
+  });
+
+  it("reports signals with no source-stated category", () => {
+    const d = syntheticDataset();
+    Object.assign(d.infrastructure.signals[0]!, {
+      type: "unknown",
+      function: "unknown",
+      components: [],
+    });
+    expect(validateDataset(d).find((i) => i.code === "SIGNAL_CLASS_UNKNOWN")?.ids).toEqual([
+      "sig1",
+    ]);
+  });
+
   it("reports elements controlled by two areas", () => {
     const d = syntheticDataset();
     d.control!.areas.push({
@@ -202,7 +239,9 @@ describe("summariseEvidence", () => {
       unknown: 1,
     });
     expect(s.byCollection["infrastructure.nodes"]).toMatchObject({ sourced: 7 });
-    expect(s.total.unknown).toBe(1);
+    // The three synthetic signals state no mounting, so each counts as unknown too.
+    expect(s.byCollection["infrastructure.signals.mounting"]).toMatchObject({ unknown: 3 });
+    expect(s.total.unknown).toBe(4);
   });
 });
 

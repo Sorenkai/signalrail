@@ -22803,6 +22803,32 @@
       },
       "type": "sign",
       "function": "stop_board",
+      "components": [
+        {
+          "category": "stop",
+          "sourceType": "GB-NR:stop",
+          "form": "sign",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:position": "left",
+        "railway:signal:stop": "GB-NR:stop",
+        "railway:signal:stop:form": "sign",
+        "ref": "SUB2084"
+      },
       "position": {
         "lat": 52.7019736,
         "lon": -2.7429261
@@ -22839,6 +22865,41 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:form": "semaphore"
+      },
       "position": {
         "lat": 52.7021997,
         "lon": -2.742634
@@ -22875,6 +22936,42 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:form": "semaphore",
+        "ref": "SBJ20"
+      },
       "position": {
         "lat": 52.71027,
         "lon": -2.7473696
@@ -22911,6 +23008,49 @@
       },
       "type": "colour_light",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "light",
+          "design": "combined",
+          "states": [
+            "red",
+            "green",
+            "yellow"
+          ],
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "light",
+          "design": "theatre",
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:design": "combined",
+        "railway:signal:main:form": "light",
+        "railway:signal:main:states": "red;green;yellow",
+        "railway:signal:position": "left",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:design": "theatre",
+        "railway:signal:route:form": "light",
+        "ref": "SBJ67"
+      },
       "position": {
         "lat": 52.7104514,
         "lon": -2.7474419
@@ -22947,6 +23087,49 @@
       },
       "type": "colour_light",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "light",
+          "design": "combined",
+          "states": [
+            "red",
+            "green",
+            "yellow"
+          ],
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "light",
+          "design": "theatre",
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:design": "combined",
+        "railway:signal:main:form": "light",
+        "railway:signal:main:states": "red;green;yellow",
+        "railway:signal:position": "right",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:design": "theatre",
+        "railway:signal:route:form": "light",
+        "ref": "SBJ60"
+      },
       "position": {
         "lat": 52.7104643,
         "lon": -2.7474081
@@ -22983,6 +23166,32 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "ref": "SBJ99"
+      },
       "position": {
         "lat": 52.7105876,
         "lon": -2.747946
@@ -23019,6 +23228,32 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "ref": "AF6"
+      },
       "position": {
         "lat": 52.7095425,
         "lon": -2.7430105
@@ -23055,6 +23290,32 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "ref": "AF5"
+      },
       "position": {
         "lat": 52.7096495,
         "lon": -2.7430146
@@ -23091,6 +23352,48 @@
       },
       "type": "colour_light",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "light",
+          "design": "individual",
+          "states": [
+            "red",
+            "green"
+          ],
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "light",
+          "design": "theatre",
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:design": "individual",
+        "railway:signal:main:form": "light",
+        "railway:signal:main:states": "red;green",
+        "railway:signal:position": "left",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:design": "theatre",
+        "railway:signal:route:form": "light",
+        "ref": "AF90"
+      },
       "position": {
         "lat": 52.709553,
         "lon": -2.7407229
@@ -23127,6 +23430,38 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": "gantry",
+        "provenance": {
+          "evidence": "sourced",
+          "sources": [
+            {
+              "sourceId": "openstreetmap",
+              "recordId": "node/13892008026",
+              "version": "2026-10-27T16:38:36Z",
+              "retrieved": "2026-10-27"
+            }
+          ]
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "bridge",
+        "ref": "CJ119"
+      },
       "position": {
         "lat": 52.712381,
         "lon": -2.7503535
@@ -23163,6 +23498,50 @@
       },
       "type": "colour_light",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "light",
+          "design": "combined",
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "light",
+          "design": "theatre",
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": "gantry",
+        "provenance": {
+          "evidence": "sourced",
+          "sources": [
+            {
+              "sourceId": "openstreetmap",
+              "recordId": "node/13892008027",
+              "version": "2026-10-27T16:38:36Z",
+              "retrieved": "2026-10-27"
+            }
+          ]
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:design": "combined",
+        "railway:signal:main:form": "light",
+        "railway:signal:position": "bridge",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:design": "theatre",
+        "railway:signal:route:form": "light",
+        "ref": "CJ106"
+      },
       "position": {
         "lat": 52.7123993,
         "lon": -2.7502944
@@ -23199,6 +23578,20 @@
       },
       "type": "unknown",
       "function": "unknown",
+      "components": [],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM does not state the mounting"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "ref": "CJ97"
+      },
       "position": {
         "lat": 52.7124156,
         "lon": -2.7502417
@@ -23233,8 +23626,34 @@
           ]
         }
       },
-      "type": "colour_light",
+      "type": "light",
       "function": "repeater",
+      "components": [
+        {
+          "category": "main_repeated",
+          "sourceType": "GB-NR:banner",
+          "form": "light",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main_repeated": "GB-NR:banner",
+        "railway:signal:main_repeated:form": "light",
+        "railway:signal:position": "right",
+        "ref": "CJ97R"
+      },
       "position": {
         "lat": 52.7120582,
         "lon": -2.7498668
@@ -23271,6 +23690,32 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left",
+        "ref": "SBJ22"
+      },
       "position": {
         "lat": 52.7082147,
         "lon": -2.7460446
@@ -23307,6 +23752,31 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "right"
+      },
       "position": {
         "lat": 52.7080516,
         "lon": -2.7458088
@@ -23343,6 +23813,43 @@
       },
       "type": "colour_light",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "light",
+          "design": "individual",
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "route",
+          "sourceType": "GB-NR:junction",
+          "form": "light",
+          "design": "theatre",
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:design": "individual",
+        "railway:signal:main:form": "light",
+        "railway:signal:position": "left",
+        "railway:signal:route": "GB-NR:junction",
+        "railway:signal:route:design": "theatre",
+        "railway:signal:route:form": "light"
+      },
       "position": {
         "lat": 52.7072778,
         "lon": -2.7457166
@@ -23379,6 +23886,41 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "distant",
+          "sourceType": "GB-NR:distant",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:distant": "GB-NR:distant",
+        "railway:signal:distant:form": "semaphore",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left"
+      },
       "position": {
         "lat": 52.7054468,
         "lon": -2.7439488
@@ -23415,6 +23957,31 @@
       },
       "type": "semaphore",
       "function": "shunting",
+      "components": [
+        {
+          "category": "shunting",
+          "sourceType": "GB-NR:shunting",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:position": "right",
+        "railway:signal:shunting": "GB-NR:shunting",
+        "railway:signal:shunting:form": "semaphore"
+      },
       "position": {
         "lat": 52.7025469,
         "lon": -2.7426523
@@ -23451,6 +24018,31 @@
       },
       "type": "sign",
       "function": "stop_board",
+      "components": [
+        {
+          "category": "stop",
+          "sourceType": "GB-NR:stop",
+          "form": "sign",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:position": "left",
+        "railway:signal:stop": "GB-NR:stop",
+        "railway:signal:stop:form": "sign"
+      },
       "position": {
         "lat": 52.7025533,
         "lon": -2.7427208
@@ -23487,6 +24079,31 @@
       },
       "type": "sign",
       "function": "stop_board",
+      "components": [
+        {
+          "category": "stop",
+          "sourceType": "GB-NR:stop",
+          "form": "sign",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:position": "left",
+        "railway:signal:stop": "GB-NR:stop",
+        "railway:signal:stop:form": "sign"
+      },
       "position": {
         "lat": 52.7025542,
         "lon": -2.7427792
@@ -23523,6 +24140,41 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "distant",
+          "sourceType": "GB-NR:distant",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        },
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:distant": "GB-NR:distant",
+        "railway:signal:distant:form": "semaphore",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left"
+      },
       "position": {
         "lat": 52.7018879,
         "lon": -2.7427437
@@ -23559,6 +24211,31 @@
       },
       "type": "semaphore",
       "function": "shunting",
+      "components": [
+        {
+          "category": "shunting",
+          "sourceType": "GB-NR:shunting",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:position": "right",
+        "railway:signal:shunting": "GB-NR:shunting",
+        "railway:signal:shunting:form": "semaphore"
+      },
       "position": {
         "lat": 52.7005799,
         "lon": -2.7433488
@@ -23595,6 +24272,31 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left"
+      },
       "position": {
         "lat": 52.6994382,
         "lon": -2.7441275
@@ -23631,6 +24333,31 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=right gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "backward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "right"
+      },
       "position": {
         "lat": 52.6995041,
         "lon": -2.7444014
@@ -23667,6 +24394,31 @@
       },
       "type": "semaphore",
       "function": "main",
+      "components": [
+        {
+          "category": "main",
+          "sourceType": "GB-NR:main",
+          "form": "semaphore",
+          "design": null,
+          "states": null,
+          "height": null
+        }
+      ],
+      "mounting": {
+        "value": null,
+        "provenance": {
+          "evidence": "unknown",
+          "sources": [],
+          "note": "OSM railway:signal:position=left gives no mounting (post, ground or other)"
+        }
+      },
+      "sourceTags": {
+        "railway": "signal",
+        "railway:signal:direction": "forward",
+        "railway:signal:main": "GB-NR:main",
+        "railway:signal:main:form": "semaphore",
+        "railway:signal:position": "left"
+      },
       "position": {
         "lat": 52.6994256,
         "lon": -2.744062

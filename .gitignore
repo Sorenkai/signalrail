@@ -5,3 +5,10 @@ coverage
 .DS_Store
 # Restricted-licence source files supplied manually by the user (see docs/DATA_SOURCES.md)
 data/private/
+# Raw Overpass supplements are kept locally; the committed form is the deterministic *-supplement-slim.json derivative (DECISION_LOG D-019).
+data/raw/osm/*-supplement.json
+# RESTRICTED, pending Network Rail licence confirmation for SMART (DECISION_LOG D-016, D-019):
+# SMART-derived data files are kept local, not committed or published. Not a finding that redistribution is prohibited.
+data/datasets/carlisle/signal-evidence.json
+docs/pilots/carlisle-pilot-results.json
+docs/pilots/carlisle-phase1-geography.json

@@ -3,9 +3,12 @@
  * that join exactly on CRS code to an infrastructure location. Existing mappings are kept.
  *
  *   npm run data:import-corpus -- --dataset shrewsbury --file data/private/CORPUSExtract.json \
- *       --retrieved 2026-10-27 [--tiplocs SHRWBY,SHRWEBJ,...]
+ *       --retrieved 2026-10-27 [--tiplocs SHRWBY,SHRWEBJ,...] \
+ *       [--deferred KGMRJCN,... --deferred-reason "Kingmoor area deferred (playable-area.json)"]
  *
- * Without --tiplocs, the TIPLOCs already listed in areaTiplocs are refreshed.
+ * Without --tiplocs, the TIPLOCs already listed in areaTiplocs are refreshed. --deferred records
+ * TIPLOCs of an area outside the playable scope (deferredTiplocs), described from CORPUS too;
+ * without it, existing deferredTiplocs are kept.
  */
 import { CorpusFile, mapByCrs, tiplocReferences } from "../src/import/corpus/corpus.ts";
 import { Infrastructure, TimingPointsFile } from "../src/model/index.ts";
@@ -34,6 +37,21 @@ const opts = { sourceId: "nr-open-data-feeds", ...(a.retrieved ? { retrieved: a.
 const { references, missing } = tiplocReferences(corpus, tiplocs, opts);
 const infra = Infrastructure.parse(readJson(path(datasetDir(datasetId), "infrastructure.json")));
 const joined = mapByCrs(references, infra.locations);
+const deferredList = a.deferred
+  ?.split(",")
+  .map((t) => t.trim())
+  .filter(Boolean);
+if (deferredList && !a["deferred-reason"]) {
+  console.error("--deferred needs --deferred-reason");
+  process.exit(1);
+}
+const deferred = deferredList
+  ? (() => {
+      const d = tiplocReferences(corpus, deferredList, opts);
+      if (d.missing.length) console.log(`Deferred TIPLOCs not in CORPUS: ${d.missing.join(", ")}`);
+      return d.references.map((r) => ({ ...r, reason: a["deferred-reason"]! }));
+    })()
+  : existing.deferredTiplocs;
 const kept = existing.mappings.filter((m) => !joined.some((j) => j.tiploc === m.tiploc));
 
 writeJson(tpPath, {
@@ -41,6 +59,7 @@ writeJson(tpPath, {
   areaTiplocs: references,
   mappings: [...kept, ...joined].sort((x, y) => x.tiploc.localeCompare(y.tiploc)),
   inferredPositions: existing.inferredPositions,
+  deferredTiplocs: deferred,
 });
 console.log(
   `${references.length} TIPLOC(s) described from CORPUS; ${joined.length} mapped by CRS.`,

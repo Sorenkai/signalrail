@@ -22,7 +22,7 @@ Audit the real-world data for correctness and honesty. The rules in CLAUDE.md un
 
 ## 3. Audit
 
-For each item, confirm it has an evidence label (`sourced`, `verified`, `inferred`, `placeholder` or `unknown`) and that the label is justified.
+For each item, confirm it has an evidence label (`sourced`, `verified`, `inferred`, `placeholder`, `unknown` or `simplified`) and that the label is justified.
 
 - **Infrastructure:** signals, points, track sections and berths have source references. There are no duplicate IDs and no orphan elements.
 - **Track connections:** the graph is connected where it should be. Points have valid normal and reverse legs. Directions are consistent, and there are no dangling ends that aren't real buffer stops or area boundaries.

@@ -6,3 +6,5 @@ data/previews
 package-lock.json
 data/datasets/**/timetables
 data/datasets/**/timing-points.json
+docs/pilots/*.json
+data/datasets/**/signal-evidence.json

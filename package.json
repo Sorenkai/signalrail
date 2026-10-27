@@ -25,7 +25,10 @@
     "data:preview": "tsx tools/render-preview.ts",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run data:validate",
     "data:import-corpus": "tsx tools/import-corpus.ts",
-    "data:smart-coverage": "tsx tools/smart-coverage.ts"
+    "data:smart-coverage": "tsx tools/smart-coverage.ts",
+    "data:reconcile-signals": "tsx tools/reconcile-signals.ts",
+    "data:assess-geography": "tsx tools/assess-geography.ts",
+    "data:control-membership": "tsx tools/control-membership.ts"
   },
   "dependencies": {
     "react": "^19.3.1",

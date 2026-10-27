@@ -1,0 +1,13 @@
+{
+  "$comment": "Carlisle feasibility PILOT (docs/pilots/CARLISLE_PILOT.md). Not a playable area; the project default remains shrewsbury. Bbox is a project choice covering Kingmoor, Caldew Jn, Currock Jn, Upperby Bridge Jn, Petteril Bridge Jn and Carlisle station. Phase 2 (D-019): infrastructure built from the 18:47Z main refresh (content-identical to the pilot extract carlisle-2026-10-27.json, which is kept) plus the slimmed supplement for platform outlines and stop_area relations.",
+  "datasetId": "carlisle",
+  "name": "Carlisle pilot (Kingmoor - Carlisle station - Upperby / Petteril Bridge)",
+  "bbox": {
+    "south": 54.87,
+    "west": -2.985,
+    "north": 54.94,
+    "east": -2.895
+  },
+  "osmSnapshot": "data/raw/osm/carlisle-20261027T184451Z.json",
+  "osmSupplement": "data/raw/osm/carlisle-20261027T184451Z-supplement-slim.json"
+}

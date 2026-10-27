@@ -1,0 +1,1010 @@
+{
+  "$comment": "Carlisle play-area TIPLOCs (project scope, described from Network Rail CORPUS) and their links to infrastructure; deferredTiplocs are the Kingmoor area deferred in playable-area.json. Selection by CORPUS name and STANOX, with timetable neighbours deciding ambiguous names (DECISION_LOG D-026). CORPUS has no coordinates, so whether each TIPLOC lies inside the bbox is unverified. TIPLOCs are never guessed; unmapped ones need a sourced or documented inferred position.",
+  "areaTiplocs": [
+    {
+      "tiploc": "CARLILE",
+      "description": "CARLISLE",
+      "stanox": "09161",
+      "crs": "CAR",
+      "nlc": "211800",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211800",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLLHS",
+      "description": "STATION L H S",
+      "stanox": "09161",
+      "crs": null,
+      "nlc": "211914",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211914",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLCJN",
+      "description": "CALDEW JN",
+      "stanox": "09159",
+      "crs": null,
+      "nlc": "211802",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211802",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLCUR",
+      "description": "CURROCK JUNCTION",
+      "stanox": "09190",
+      "crs": null,
+      "nlc": "211101",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211101",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLBJN",
+      "description": "BOG JN",
+      "stanox": "09193",
+      "crs": null,
+      "nlc": "211801",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211801",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUJN",
+      "description": "UPPERBY JUNCTION CARLISLE",
+      "stanox": "09198",
+      "crs": null,
+      "nlc": "211600",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211600",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUBJ",
+      "description": "UPPERBY BRIDGE JN",
+      "stanox": "09199",
+      "crs": null,
+      "nlc": "211806",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211806",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUTG",
+      "description": "UPPERBY UP THROUGH GOODS LINE",
+      "stanox": "09194",
+      "crs": null,
+      "nlc": "211810",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211810",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUJG",
+      "description": "UPPERBY JN DOWN GOODS LINE",
+      "stanox": "09194",
+      "crs": null,
+      "nlc": "211808",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211808",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLLSL",
+      "description": "CARLISLE UPPERBY TMD LSL",
+      "stanox": "09201",
+      "crs": null,
+      "nlc": "207303",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207303",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUMD",
+      "description": "UPPERBY MD",
+      "stanox": "09195",
+      "crs": null,
+      "nlc": "211820",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211820",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLURS",
+      "description": "UPPERBY RS",
+      "stanox": "09195",
+      "crs": null,
+      "nlc": "211809",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211809",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLTMD",
+      "description": "CARLISLE STATION T&RS",
+      "stanox": "09195",
+      "crs": "XUM",
+      "nlc": "211860",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211860",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLAPC",
+      "description": "UPPERBY E.W.S.",
+      "stanox": "09196",
+      "crs": null,
+      "nlc": "211816",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211816",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLUES",
+      "description": "CE/S&TE SIDING (UPPERBY)",
+      "stanox": "09197",
+      "crs": null,
+      "nlc": "211813",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211813",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "PETLBGJ",
+      "description": "PETTERIL BRIDGE JUNCTION",
+      "stanox": "09180",
+      "crs": null,
+      "nlc": "207302",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207302",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "PETLBGE",
+      "description": "ESSO(PETTERIL BRIDGE)",
+      "stanox": "09171",
+      "crs": null,
+      "nlc": "207315",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207315",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLLRJ",
+      "description": "LONDON ROAD JUNCTION",
+      "stanox": "09179",
+      "crs": null,
+      "nlc": "207301",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207301",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLLR",
+      "description": "CARLISLE LONDON ROAD",
+      "stanox": "09171",
+      "crs": null,
+      "nlc": "207300",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207300",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLFD",
+      "description": "CARLISLE LONDON RD FRT",
+      "stanox": "09171",
+      "crs": null,
+      "nlc": "207363",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=207363",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "STNICE",
+      "description": "CARLISLE ST NICHOLAS",
+      "stanox": "09177",
+      "crs": null,
+      "nlc": "211700",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211700",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLHWS",
+      "description": "CARLISLE HIGH WAPPING SDGS",
+      "stanox": "09160",
+      "crs": null,
+      "nlc": "211835",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211835",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLHFH",
+      "description": "HIGH WAPPING",
+      "stanox": "09163",
+      "crs": null,
+      "nlc": "211836",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211836",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARLNEC",
+      "description": "CARLISLE SHUNT NECK",
+      "stanox": "09178",
+      "crs": null,
+      "nlc": "211701",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211701",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARL291",
+      "description": "CARLISLE CE 291 SIGNAL",
+      "stanox": "09173",
+      "crs": null,
+      "nlc": "211833",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211833",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARL335",
+      "description": "CARLISLE CE 335 SIGNAL",
+      "stanox": "09168",
+      "crs": null,
+      "nlc": "211853",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211853",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARL336",
+      "description": "CARLISLE CE336 SIGNAL",
+      "stanox": "09186",
+      "crs": null,
+      "nlc": "211887",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211887",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARL404",
+      "description": "CARLISLE CE 404 SIGNAL",
+      "stanox": "09180",
+      "crs": null,
+      "nlc": "211819",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211819",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    },
+    {
+      "tiploc": "CARL437",
+      "description": "CARLISLE SIGNAL CE437",
+      "stanox": "09176",
+      "crs": null,
+      "nlc": "211861",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211861",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "tiploc": "CARLILE",
+      "locationId": "osm-loc-n10288172",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211800",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/10288172",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Joined on CRS CAR: CORPUS gives CARLILE -> CAR; the location's CRS is from its own source."
+      }
+    }
+  ],
+  "inferredPositions": [],
+  "deferredTiplocs": [
+    {
+      "tiploc": "KGMRJCN",
+      "description": "KINGMOOR JN",
+      "stanox": "09153",
+      "crs": null,
+      "nlc": "211910",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211910",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRSRR",
+      "description": "STAINTON JN",
+      "stanox": "09145",
+      "crs": null,
+      "nlc": "195411",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=195411",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRSGF",
+      "description": "KINGMOOR GROUND FRAME",
+      "stanox": "09135",
+      "crs": null,
+      "nlc": "211862",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211862",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRUDS",
+      "description": "KINGMOOR UP DEPARTURES",
+      "stanox": "09136",
+      "crs": null,
+      "nlc": "211863",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211863",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRURS",
+      "description": "KINGMOOR UP RECEPTION SDGS",
+      "stanox": "09139",
+      "crs": null,
+      "nlc": "211870",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211870",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRUTS",
+      "description": "KINGMOOR UP THROUGH SDG",
+      "stanox": "09141",
+      "crs": null,
+      "nlc": "211915",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211915",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRULP",
+      "description": "KINGMOOR UP LOOP",
+      "stanox": "09157",
+      "crs": null,
+      "nlc": "211922",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211922",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRDSB",
+      "description": "KINGMOOR DN ARR STOP BOARD",
+      "stanox": "09138",
+      "crs": null,
+      "nlc": "211869",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211869",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRDSG",
+      "description": "KINGMOOR DOWN RECESS SDGS",
+      "stanox": "09137",
+      "crs": null,
+      "nlc": "211866",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211866",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRDRS",
+      "description": "CARLISLE KINGMOOR SIDINGS(DRS)",
+      "stanox": "09149",
+      "crs": null,
+      "nlc": "211825",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211825",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRLIP",
+      "description": "CARLISLE KINGMOOR TMD (DRS)",
+      "stanox": "09148",
+      "crs": null,
+      "nlc": "211818",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211818",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRVQ",
+      "description": "CARLISLE KINGMOOR V.Q. (NR)",
+      "stanox": "09152",
+      "crs": null,
+      "nlc": "211911",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211911",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRVWR",
+      "description": "CARLISLE KINGMOOR",
+      "stanox": null,
+      "crs": null,
+      "nlc": "211839",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211839",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMRBBJ",
+      "description": "K'MOOR BRUNTHIL BRANCH JN",
+      "stanox": "09183",
+      "crs": null,
+      "nlc": "211875",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211875",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMR486",
+      "description": "KINGMOOR SIGNAL CE486",
+      "stanox": "09184",
+      "crs": null,
+      "nlc": "211877",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211877",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMR487",
+      "description": "KINGMOOR SIGNAL CE487",
+      "stanox": "09185",
+      "crs": null,
+      "nlc": "211881",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211881",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "KGMR490",
+      "description": "KINGMOOR SIGNAL CE490",
+      "stanox": "09182",
+      "crs": null,
+      "nlc": "211874",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211874",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARL464",
+      "description": "CARLISLE CE 464 SIGNAL",
+      "stanox": "09153",
+      "crs": null,
+      "nlc": "211821",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211821",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARL465",
+      "description": "CARLISLE CE 465 SIGNAL",
+      "stanox": "09153",
+      "crs": null,
+      "nlc": "211807",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211807",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARL467",
+      "description": "CARLISLE CE 467 SIGNAL",
+      "stanox": "09153",
+      "crs": null,
+      "nlc": "211826",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211826",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLAME",
+      "description": "CARLISLE YARD",
+      "stanox": "09155",
+      "crs": null,
+      "nlc": "211827",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211827",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLYDR",
+      "description": "CARLISLE YARD",
+      "stanox": "09154",
+      "crs": null,
+      "nlc": "211921",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211921",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLYDL",
+      "description": "CARLISLE YARD LHS",
+      "stanox": "09169",
+      "crs": null,
+      "nlc": "211803",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211803",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLBRU",
+      "description": "CARLISLE BRUNTHILL (FHH)",
+      "stanox": "09144",
+      "crs": null,
+      "nlc": "211815",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211815",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLCLR",
+      "description": "CARLISLE BRUNTHILL COLAS RAIL",
+      "stanox": "09143",
+      "crs": null,
+      "nlc": "211830",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211830",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLILY",
+      "description": "NY_(DBS)",
+      "stanox": "09150",
+      "crs": "XKY",
+      "nlc": "211920",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211920",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    },
+    {
+      "tiploc": "CARLBGS",
+      "description": "CE SIDING (KINGMOOR B GROUP)",
+      "stanox": "09147",
+      "crs": null,
+      "nlc": "211811",
+      "provenance": {
+        "evidence": "sourced",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CORPUS:NLC=211811",
+            "retrieved": "2026-10-27"
+          }
+        ]
+      },
+      "reason": "Kingmoor area: deferred in playable-area.json (optional area). KGMR*, Stainton Jn and Kingmoor B Group by CORPUS name; CE464/465/467 share Kingmoor Jn's STANOX 09153; CARLAME ('Carlisle Yard'), CARLCLR (Brunthill) and CARLILY (NY DBS) are only ever timetabled next to Kingmoor TIPLOCs, and CARLYDR/CARLYDL/CARLBRU share those names."
+    }
+  ]
+}

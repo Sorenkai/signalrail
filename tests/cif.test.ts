@@ -49,7 +49,9 @@ describe("parseCif (synthetic fixture)", () => {
     });
     expect(p!.locations[2]).toMatchObject({ pass: "08:15", arrival: null, publicArrival: null });
     expect(p!.locations[3]).toMatchObject({ record: "LT", arrival: "08:25", platform: "3" });
-    expect(cif.skippedRecords).toEqual({ ZZ: 1 });
+    // ZZ is the file trailer: recognised, not skipped.
+    expect(cif.skippedRecords).toEqual({});
+    expect(cif.unknownRecordTypes).toEqual([]);
   });
 
   it("reports location records outside a schedule", () => {
@@ -78,7 +80,11 @@ describe("dated snapshots", () => {
   });
 
   it("builds a schema-valid snapshot with provenance", () => {
-    const snap = buildSnapshot(cif, "2026-11-04", { id: "syn", sourceId: "synthetic-fixture" });
+    const snap = buildSnapshot(cif, "2026-11-04", {
+      id: "syn",
+      sourceId: "synthetic-fixture",
+      areaTiplocs: new Set(["SYNA", "SYNB", "SYNC"]),
+    });
     expect(() => TimetableSnapshot.parse(snap)).not.toThrow();
     const svc = snap.services.find((s) => s.uid === "Z90001")!;
     expect(svc.calls[0]).toMatchObject({ kind: "origin", departure: "08:30" });
@@ -116,6 +122,9 @@ describe("CifParser (streaming)", () => {
       "SYNJN",
       "SYNC",
     ]);
-    expect(out.skippedRecords.CR).toBe(1);
+    expect(out.schedules[0]!.changesEnRoute).toEqual([
+      expect.objectContaining({ tiploc: "SYNJN", locationIndex: 2 }),
+    ]);
+    expect(out.skippedRecords.CR).toBeUndefined();
   });
 });

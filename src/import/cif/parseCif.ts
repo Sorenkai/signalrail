@@ -3,12 +3,32 @@
  * RDG timetable feed. Field positions follow the CIF End User Specification (fixed-width,
  * 80-character records) as documented on the Open Rail Data wiki.
  *
- * Only the records needed for game timetables are read: HD, BS, BX, LO, LI, LT. Change-en-
- * route (CR), association (AA) and TIPLOC (TI/TA/TD) records are counted and skipped.
+ * Records read: HD, BS, BX, LO, LI, LT, CR (change en route) and AA (association). TIPLOC
+ * master records (TI/TA/TD) describe locations, not trains: they are counted in
+ * `skippedRecords` and reported, never silently dropped. ZZ ends the file. Any other record
+ * type is counted under `skippedRecords` too and flagged by `unknownRecordTypes`.
  *
- * NOTE: positions have not yet been checked against a real extract by this project; see
- * docs/FEASIBILITY_REPORT.md. Tests use a synthetic fixture.
+ * Field positions were checked against the real Network Rail SCHEDULE full extract DFROC1F
+ * (2026-10-23): every one of its 79,404 AA and 104,589 CR records fits the positions below, and
+ * every CR precedes the location record it names (DECISION_LOG D-026). Field order and value
+ * meanings follow the Open Rail Data wiki's CIF pages.
  */
+
+/** Record types this parser understands; anything else is reported as unknown. */
+export const KNOWN_RECORD_TYPES = [
+  "HD",
+  "BS",
+  "BX",
+  "LO",
+  "LI",
+  "LT",
+  "CR",
+  "AA",
+  "TI",
+  "TA",
+  "TD",
+  "ZZ",
+];
 
 export interface CifHeader {
   mainframeIdentity: string;
@@ -36,6 +56,48 @@ export interface CifLocation {
   activities: string[];
 }
 
+/**
+ * Change en route (CR): new train attributes that apply from the location record that follows
+ * it. Only fields whose positions were verified on real data are decoded; `raw` keeps the rest.
+ */
+export interface CifChangeEnRoute {
+  tiploc: string;
+  suffix: string;
+  /** Index into the schedule's `locations` of the location the change applies from. */
+  locationIndex: number;
+  category: string | null;
+  headcode: string | null;
+  serviceCode: string | null;
+  powerType: string | null;
+  speed: string | null;
+  raw: string;
+}
+
+/**
+ * Association (AA): a join (JJ), divide (VV) or next working (NP) between a main (base) train
+ * and an associated train at a location. Dates and days-run apply to the main train; the date
+ * indicator says whether the associated train runs the same day (S), the next day (N) or the
+ * previous day (P). A cancellation (STP C) carries no category.
+ */
+export interface CifAssociation {
+  transaction: "N" | "D" | "R" | string;
+  mainUid: string;
+  assocUid: string;
+  startDate: string;
+  endDate: string | null;
+  daysRun: boolean[] | null;
+  category: "JJ" | "VV" | "NP" | null;
+  dateIndicator: "S" | "N" | "P" | null;
+  location: string;
+  baseSuffix: string;
+  assocSuffix: string;
+  diagramType: string | null;
+  associationType: "P" | "O" | null;
+  stpIndicator: "C" | "N" | "O" | "P" | string;
+  /** 1-based line number in the source file. */
+  line: number;
+}
+
 export interface CifSchedule {
   transaction: "N" | "D" | "R" | string;
   uid: string;
@@ -54,12 +116,27 @@ export interface CifSchedule {
   stpIndicator: "C" | "N" | "O" | "P" | string;
   atocCode: string | null;
   locations: CifLocation[];
+  changesEnRoute: CifChangeEnRoute[];
+  /** False when a schedule with locations ended without an LT (terminating) record. */
+  complete: boolean;
+  /** 1-based line number of the BS record. */
+  line: number;
 }
+
+/** The dating fields of a schedule, kept for every schedule when indexing is on. */
+export type CifScheduleKey = Pick<
+  CifSchedule,
+  "transaction" | "uid" | "runsFrom" | "runsTo" | "daysRun" | "stpIndicator"
+> & { hasLocations: boolean };
 
 export interface CifFile {
   header: CifHeader | null;
   schedules: CifSchedule[];
+  associations: CifAssociation[];
+  /** Records counted but not imported, by type (TI/TA/TD and any unknown type). */
   skippedRecords: Record<string, number>;
+  /** Record types outside KNOWN_RECORD_TYPES. */
+  unknownRecordTypes: string[];
   errors: { line: number; message: string }[];
 }
 
@@ -112,7 +189,7 @@ function parseHeader(l: string): CifHeader {
   };
 }
 
-function parseBasicSchedule(l: string): CifSchedule {
+function parseBasicSchedule(l: string, line: number): CifSchedule {
   const runsFrom = cifDate(field(l, 9, 6));
   if (!runsFrom) throw new Error(`invalid runs-from date "${field(l, 9, 6)}"`);
   return {
@@ -132,6 +209,61 @@ function parseBasicSchedule(l: string): CifSchedule {
     stpIndicator: field(l, 79, 1),
     atocCode: null,
     locations: [],
+    changesEnRoute: [],
+    complete: true,
+    line,
+  };
+}
+
+const enumOrNull = <T extends string>(v: string, allowed: readonly T[]): T | null =>
+  (allowed as readonly string[]).includes(v) ? (v as T) : null;
+
+function parseAssociation(l: string, line: number): CifAssociation {
+  const startDate = cifDate(field(l, 15, 6));
+  if (!startDate) throw new Error(`AA: invalid start date "${field(l, 15, 6)}"`);
+  const endRaw = field(l, 21, 6);
+  const endDate = endRaw.trim() ? cifDate(endRaw) : null;
+  if (endRaw.trim() && !endDate) throw new Error(`AA: invalid end date "${endRaw}"`);
+  const days = field(l, 27, 7);
+  if (days.trim() && !/^[01]{7}$/.test(days)) throw new Error(`AA: invalid days "${days}"`);
+  const category = field(l, 34, 2).trim();
+  if (category && !["JJ", "VV", "NP"].includes(category))
+    throw new Error(`AA: unknown association category "${category}"`);
+  const mainUid = field(l, 3, 6);
+  const assocUid = field(l, 9, 6);
+  if (!/^[A-Z ]\d{5}$/.test(mainUid) || !/^[A-Z ]\d{5}$/.test(assocUid))
+    throw new Error(`AA: invalid train UID "${mainUid}"/"${assocUid}"`);
+  return {
+    transaction: field(l, 2, 1),
+    mainUid,
+    assocUid,
+    startDate,
+    endDate,
+    daysRun: days.trim() ? [...days].map((c) => c === "1") : null,
+    category: enumOrNull(category, ["JJ", "VV", "NP"] as const),
+    dateIndicator: enumOrNull(field(l, 36, 1), ["S", "N", "P"] as const),
+    location: field(l, 37, 7).trim(),
+    baseSuffix: field(l, 44, 1).trim(),
+    assocSuffix: field(l, 45, 1).trim(),
+    diagramType: trimmed(l, 46, 1),
+    associationType: enumOrNull(field(l, 47, 1), ["P", "O"] as const),
+    stpIndicator: field(l, 79, 1),
+    line,
+  };
+}
+
+/** CR repeats the BS train fields 20 columns to the left, after an 8-character location. */
+function parseChangeEnRoute(l: string, locationIndex: number): CifChangeEnRoute {
+  return {
+    tiploc: field(l, 2, 7).trim(),
+    suffix: field(l, 9, 1).trim(),
+    locationIndex,
+    category: trimmed(l, 10, 2),
+    headcode: trimmed(l, 12, 4),
+    serviceCode: trimmed(l, 21, 8),
+    powerType: trimmed(l, 30, 3),
+    speed: trimmed(l, 37, 3),
+    raw: l.trimEnd(),
   };
 }
 
@@ -187,14 +319,28 @@ function parseLocation(l: string): CifLocation {
  * filters by location must let location-less schedules through.
  */
 export class CifParser {
-  readonly result: CifFile = { header: null, schedules: [], skippedRecords: {}, errors: [] };
+  readonly result: CifFile = {
+    header: null,
+    schedules: [],
+    associations: [],
+    skippedRecords: {},
+    unknownRecordTypes: [],
+    errors: [],
+  };
   /** Schedules seen before `keep` filtering. */
   scheduleCount = 0;
   private current: CifSchedule | null = null;
   private inLocations = false;
+  private pendingChange: string | null = null;
   private lineNo = 0;
 
-  constructor(private readonly keep: (s: CifSchedule) => boolean = () => true) {}
+  /** With `index`, every schedule's dating fields, by UID, whether kept or not. */
+  readonly index = new Map<string, CifScheduleKey[]>();
+
+  constructor(
+    private readonly keep: (s: CifSchedule) => boolean = () => true,
+    private readonly options: { index?: boolean } = {},
+  ) {}
 
   push(raw: string): void {
     this.lineNo++;
@@ -208,8 +354,12 @@ export class CifParser {
           break;
         case "BS":
           this.flush();
-          this.current = parseBasicSchedule(l);
+          this.current = parseBasicSchedule(l, this.lineNo);
           this.scheduleCount++;
+          break;
+        case "AA":
+          this.flush();
+          this.result.associations.push(parseAssociation(l, this.lineNo));
           break;
         case "BX":
           if (!this.current) throw new Error("BX without preceding BS");
@@ -219,17 +369,35 @@ export class CifParser {
         case "LI":
         case "LT":
           if (!this.current) throw new Error(`${type} without preceding BS`);
+          if (type === "LO" && this.current.locations.length > 0)
+            throw new Error(`LO after other locations in schedule ${this.current.uid}`);
           this.inLocations = true;
+          if (this.pendingChange !== null) {
+            const cr = parseChangeEnRoute(this.pendingChange, this.current.locations.length);
+            this.pendingChange = null;
+            if (cr.tiploc !== field(l, 2, 7).trim())
+              throw new Error(
+                `CR at ${cr.tiploc} is followed by ${type} at ${field(l, 2, 7).trim()} in schedule ${this.current.uid}`,
+              );
+            this.current.changesEnRoute.push(cr);
+          }
           this.current.locations.push(parseLocation(l));
           if (type === "LT") this.flush();
           break;
         case "CR":
-          // Change-en-route sits between location records; it does not end the schedule.
-          this.result.skippedRecords[type] = (this.result.skippedRecords[type] ?? 0) + 1;
+          // Change en route sits between location records and applies from the next one.
+          if (!this.current || !this.inLocations)
+            throw new Error("CR outside a schedule's location records");
+          this.pendingChange = l;
+          break;
+        case "ZZ":
+          this.flush();
           break;
         default:
           if (!this.inLocations) this.flush();
           this.result.skippedRecords[type] = (this.result.skippedRecords[type] ?? 0) + 1;
+          if (!KNOWN_RECORD_TYPES.includes(type) && !this.result.unknownRecordTypes.includes(type))
+            this.result.unknownRecordTypes.push(type);
       }
     } catch (e) {
       this.result.errors.push({ line: this.lineNo, message: (e as Error).message });
@@ -242,9 +410,39 @@ export class CifParser {
   }
 
   private flush() {
-    if (this.current && this.keep(this.current)) this.result.schedules.push(this.current);
+    if (this.current) {
+      const last = this.current.locations.at(-1);
+      if (this.current.locations.length > 0 && last?.record !== "LT") {
+        this.current.complete = false;
+        this.result.errors.push({
+          line: this.current.line,
+          message: `schedule ${this.current.uid} ends without an LT record`,
+        });
+      }
+      if (this.pendingChange !== null)
+        this.result.errors.push({
+          line: this.lineNo,
+          message: `CR in schedule ${this.current.uid} is not followed by a location`,
+        });
+      if (this.options.index) {
+        const c = this.current;
+        const list = this.index.get(c.uid) ?? [];
+        list.push({
+          transaction: c.transaction,
+          uid: c.uid,
+          runsFrom: c.runsFrom,
+          runsTo: c.runsTo,
+          daysRun: c.daysRun,
+          stpIndicator: c.stpIndicator,
+          hasLocations: c.locations.length > 0,
+        });
+        this.index.set(c.uid, list);
+      }
+      if (this.keep(this.current)) this.result.schedules.push(this.current);
+    }
     this.current = null;
     this.inLocations = false;
+    this.pendingChange = null;
   }
 }
 

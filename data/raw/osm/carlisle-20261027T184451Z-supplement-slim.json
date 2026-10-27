@@ -1,0 +1,5993 @@
+{
+  "query": "[out:json][timeout:180];\nway[\"railway\"=\"rail\"](54.87,-2.985,54.94,-2.895)->.track;\n(\n  nwr[\"railway\"~\"^(platform|platform_edge)$\"](54.87,-2.985,54.94,-2.895);\n  nwr[\"public_transport\"=\"platform\"][\"railway\"!=\"platform\"][\"highway\"!=\"bus_stop\"](54.87,-2.985,54.94,-2.895);\n)->.plat;\n.plat out body geom;\nway[\"railway\"~\"^(construction|disused|abandoned|proposed|narrow_gauge|light_rail|miniature|preserved)$\"](54.87,-2.985,54.94,-2.895)->.other;\n.other out body geom;\n(\n  node[~\"^railway:signal:\"~\".\"][\"railway\"!=\"signal\"](54.87,-2.985,54.94,-2.895);\n  node[\"railway\"~\"^(derail|stop|milestone|crossing_box|owner_change|switch_heater|train_protection|vacancy_detection)$\"](54.87,-2.985,54.94,-2.895);\n)->.extra;\n.extra out body;\n(\n  rel(bw.track);\n  rel[\"public_transport\"=\"stop_area\"](54.87,-2.985,54.94,-2.895);\n)->.rels;\n.rels out body;",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "retrieved": "2026-10-27",
+  "retrievedAt": "2026-10-27T18:47:40.591Z",
+  "supplementTo": "carlisle-20261027T184451Z.json",
+  "note": "Additions to the original scope, same bbox: platform / platform_edge / public_transport=platform with full geometry (out geom); non-operational railway ways (construction, disused, etc.) with geometry; nodes with railway:signal:* tags but no railway=signal; extra railway node types (derail, stop, milestone, ...); relations containing the bbox's railway=rail ways, and stop_area relations. Not consumed by the importer.",
+  "fetch": {
+    "attempts": [
+      {
+        "attempt": 1,
+        "started": "2026-10-27T18:45:52.770Z",
+        "finished": "2026-10-27T18:45:52.898Z",
+        "httpStatus": 502,
+        "contentType": "text/plain",
+        "bytes": 534,
+        "sha256": "8084e21e11df846a2e41bb93ddaf66961aa2ef71e9a9fc1f46debc960b303042",
+        "error": "invalid JSON: Unexpected token '#', \"# 502 Gate\"... is not valid JSON; head: # 502 Gateway Timeout\n\nThis Overpass API server is currently at capacity. All query workers are busy\nand the request queue is full.\n\n## What to do\n\nRetry your request using exponential backoff: wait a short interval, then retry.\nIf the request fails again, double the wait time and retry again.\n\n## F"
+      },
+      {
+        "attempt": 2,
+        "started": "2026-10-27T18:46:52.920Z",
+        "finished": "2026-10-27T18:47:40.591Z",
+        "httpStatus": 200,
+        "contentType": "application/json",
+        "bytes": 3572822,
+        "sha256": "e6bb5ebb62b315458bc49050f31b499f35575ddebc4982b819047afda21ae569"
+      }
+    ],
+    "validation": "HTTP 200; JSON.parse ok; no Overpass remark; osm3s.timestamp_osm_base and elements present"
+  },
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-27T18:46:17Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "derivedFrom": {
+    "file": "data/raw/osm/carlisle-20261027T184451Z-supplement.json",
+    "sha256": "c75cb89ac709a8e074aa3b828d41794b88dbde3f0148585f11161d5ef6e91f3c",
+    "bytes": 4535058,
+    "elements": 130
+  },
+  "derivation": {
+    "tool": "tools/slim-osm-supplement.ts",
+    "mainExtract": "data/raw/osm/carlisle-20261027T184451Z.json",
+    "rules": [
+      "Keep all nodes and ways unchanged (geometry included).",
+      "Keep relations without a route tag (stop_area, site) unchanged.",
+      "Keep route=railway relations; filter their members to ways present in the main extract.",
+      "Omit all other route relations (route=train, route=historic, ...): listed in `omitted`."
+    ],
+    "filteredRailwayRoutes": [
+      {
+        "relation": 2582592,
+        "name": "Settle-Carlisle Line",
+        "members": 741,
+        "kept": 5
+      },
+      {
+        "relation": 7521764,
+        "name": "West Coast Main Line",
+        "members": 7323,
+        "kept": 54
+      },
+      {
+        "relation": 11047224,
+        "name": "Tyne Valley Line",
+        "members": 352,
+        "kept": 13
+      },
+      {
+        "relation": 18101384,
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "members": 7,
+        "kept": 7
+      }
+    ],
+    "omitted": [
+      {
+        "relation": 2307521,
+        "route": "train",
+        "name": "Cumbrian Coast Line",
+        "members": 394
+      },
+      {
+        "relation": 2313358,
+        "route": "train",
+        "name": "NR06: Barrow-in-Furness => Carlisle",
+        "members": 256
+      },
+      {
+        "relation": 2588073,
+        "route": "train",
+        "name": "Newcastle and Carlisle Railway",
+        "members": 382
+      },
+      {
+        "relation": 3224913,
+        "route": "train",
+        "name": "Highland Sleeper: London Euston => Fort William",
+        "members": 1680
+      },
+      {
+        "relation": 3224914,
+        "route": "train",
+        "name": "Highland Sleeper: Fort William => London Euston",
+        "members": 1664
+      },
+      {
+        "relation": 5374270,
+        "route": "historic",
+        "name": "Waverley Line",
+        "members": 311
+      },
+      {
+        "relation": 6345994,
+        "route": "train",
+        "name": "Edinburgh Waverley => London Euston (via Birmingham)",
+        "members": 1272
+      },
+      {
+        "relation": 6345995,
+        "route": "train",
+        "name": "Glasgow Central => London Euston (via Birmingham)",
+        "members": 1301
+      },
+      {
+        "relation": 6346028,
+        "route": "train",
+        "name": "London Euston => Edinburgh Waverley (via Birmingham)",
+        "members": 1287
+      },
+      {
+        "relation": 6346029,
+        "route": "train",
+        "name": "London Euston => Glasgow Central (via Birmingham)",
+        "members": 1319
+      },
+      {
+        "relation": 6346230,
+        "route": "train",
+        "name": "Glasgow Central => London Euston (via Trent Valley)",
+        "members": 1153
+      },
+      {
+        "relation": 6346231,
+        "route": "train",
+        "name": "London Euston => Glasgow Central (via Trent Valley)",
+        "members": 1170
+      },
+      {
+        "relation": 6354618,
+        "route": "train",
+        "name": "Transpennine Northwest: Edinburgh Waverley => Manchester Airport",
+        "members": 763
+      },
+      {
+        "relation": 6354619,
+        "route": "train",
+        "name": "Transpennine Northwest: Glasgow Central => Manchester Airport",
+        "members": 792
+      },
+      {
+        "relation": 6354620,
+        "route": "train",
+        "name": "Transpennine Northwest: Manchester Airport => Edinburgh Waverley",
+        "members": 805
+      },
+      {
+        "relation": 6354621,
+        "route": "train",
+        "name": "Transpennine Northwest: Manchester Airport => Glasgow Central",
+        "members": 834
+      },
+      {
+        "relation": 6389380,
+        "route": "train",
+        "name": "Lowland Sleeper: Edinburgh Waverley => London Euston",
+        "members": 1127
+      },
+      {
+        "relation": 6389381,
+        "route": "train",
+        "name": "Lowland Sleeper: Glasgow Central => London Euston",
+        "members": 1155
+      },
+      {
+        "relation": 6389382,
+        "route": "train",
+        "name": "Lowland Sleeper: London Euston => Edinburgh Waverley",
+        "members": 1143
+      },
+      {
+        "relation": 6389383,
+        "route": "train",
+        "name": "Lowland Sleeper: London Euston => Glasgow Central",
+        "members": 1172
+      },
+      {
+        "relation": 6393944,
+        "route": "train",
+        "name": "Highland Sleeper: Aberdeen => London Euston",
+        "members": 1565
+      },
+      {
+        "relation": 6393945,
+        "route": "train",
+        "name": "Highland Sleeper: Inverness => London Euston",
+        "members": 1758
+      },
+      {
+        "relation": 6393947,
+        "route": "train",
+        "name": "Highland Sleeper: London Euston => Aberdeen",
+        "members": 1582
+      },
+      {
+        "relation": 6393948,
+        "route": "train",
+        "name": "Highland Sleeper: London Euston => Inverness",
+        "members": 1777
+      },
+      {
+        "relation": 6485338,
+        "route": "train",
+        "name": "Train NR04: Carlisle → Newcastle (Full)",
+        "members": 215
+      },
+      {
+        "relation": 6485339,
+        "route": "train",
+        "name": "Train NR04: Newcastle → Carlisle (Full)",
+        "members": 216
+      },
+      {
+        "relation": 9794790,
+        "route": "train",
+        "name": "Train NR04: Newcastle → Carlisle (Day x:23)",
+        "members": 198
+      },
+      {
+        "relation": 9794791,
+        "route": "train",
+        "name": "Train NR04: Newcastle → Carlisle (Morning)",
+        "members": 212
+      },
+      {
+        "relation": 9802087,
+        "route": "train",
+        "name": "Train NR04: Middlesbrough → Carlisle",
+        "members": 420
+      },
+      {
+        "relation": 9902815,
+        "route": "train",
+        "name": "Train NR07: Carlisle → Leeds",
+        "members": 564
+      },
+      {
+        "relation": 9902816,
+        "route": "train",
+        "name": "Train NR07: Leeds → Carlisle",
+        "members": 572
+      },
+      {
+        "relation": 10865338,
+        "route": "train",
+        "name": "NR06: Carlisle => Barrow-in-Furness",
+        "members": 246
+      },
+      {
+        "relation": 11287754,
+        "route": "train",
+        "name": "Train NR04: Whitby → Carlisle",
+        "members": 555
+      },
+      {
+        "relation": 11287758,
+        "route": "train",
+        "name": "Train NR04: Carlisle → Nunthorpe",
+        "members": 411
+      },
+      {
+        "relation": 11287858,
+        "route": "train",
+        "name": "Train NR04: Carlisle → Whitby",
+        "members": 552
+      },
+      {
+        "relation": 11287859,
+        "route": "train",
+        "name": "Train NR04: Carlisle → Whitby",
+        "members": 554
+      },
+      {
+        "relation": 11816890,
+        "route": "train",
+        "name": "Train NR01: Carlisle → Morpeth",
+        "members": 280
+      },
+      {
+        "relation": 11817244,
+        "route": "train",
+        "name": "Train NR01: Carlisle → Chathill",
+        "members": 344
+      },
+      {
+        "relation": 11817628,
+        "route": "train",
+        "name": "Train NR01: Chathill → Carlisle",
+        "members": 341
+      },
+      {
+        "relation": 13074805,
+        "route": "train",
+        "name": "Train NR04: Middlesbrough → Carlisle",
+        "members": 410
+      },
+      {
+        "relation": 14965137,
+        "route": "train",
+        "name": "Transpennine Northwest: Glasgow Central => Liverpool Lime St",
+        "members": 789
+      },
+      {
+        "relation": 14965138,
+        "route": "train",
+        "name": "Transpennine Northwest: Liverpool Lime St => Glasgow Central",
+        "members": 798
+      },
+      {
+        "relation": 20068403,
+        "route": "train",
+        "name": "ScotRail: Dumfries → Carlisle",
+        "members": 97
+      },
+      {
+        "relation": 20068404,
+        "route": "train",
+        "name": "ScotRail: Carlisle → Dumfries",
+        "members": 99
+      },
+      {
+        "relation": 20068405,
+        "route": "train",
+        "name": "ScotRail: Carlisle → Glasgow Central",
+        "members": 394
+      },
+      {
+        "relation": 20068406,
+        "route": "train",
+        "name": "ScotRail: Glasgow Central → Carlisle",
+        "members": 385
+      },
+      {
+        "relation": 20818508,
+        "route": "train",
+        "name": "Lumo: Stirling → London Euston",
+        "members": 1214
+      },
+      {
+        "relation": 20818509,
+        "route": "train",
+        "name": "Lumo: London Euston → Stirling",
+        "members": 1230
+      }
+    ]
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 12787782011,
+      "lat": 54.9143144,
+      "lon": -2.9533468,
+      "tags": {
+        "name": "Lowery Hill Swinburn Drive",
+        "public_transport": "platform"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132752066,
+      "bounds": {
+        "minlat": 54.8893251,
+        "minlon": -2.9325769,
+        "maxlat": 54.8905568,
+        "maxlon": -2.9308526
+      },
+      "nodes": [
+        1460422829,
+        1460422854,
+        1460422805,
+        2358430445,
+        1460422801,
+        1460422804,
+        1460505333,
+        1460422796,
+        1460422789,
+        2889076636,
+        5457782056,
+        1460505339,
+        5457782058,
+        1460422807,
+        1460422827,
+        2358430447,
+        1460422831,
+        1460422828,
+        1460422832,
+        1460422829
+      ],
+      "geometry": [
+        {
+          "lat": 54.8893251,
+          "lon": -2.9308526
+        },
+        {
+          "lat": 54.8895365,
+          "lon": -2.9310371
+        },
+        {
+          "lat": 54.8896492,
+          "lon": -2.9311551
+        },
+        {
+          "lat": 54.8896628,
+          "lon": -2.9311712
+        },
+        {
+          "lat": 54.8898866,
+          "lon": -2.9314213
+        },
+        {
+          "lat": 54.8900325,
+          "lon": -2.9316197
+        },
+        {
+          "lat": 54.8902319,
+          "lon": -2.9319245
+        },
+        {
+          "lat": 54.8905275,
+          "lon": -2.9325769
+        },
+        {
+          "lat": 54.8905568,
+          "lon": -2.9325384
+        },
+        {
+          "lat": 54.8904623,
+          "lon": -2.932325
+        },
+        {
+          "lat": 54.8904962,
+          "lon": -2.9322801
+        },
+        {
+          "lat": 54.8903451,
+          "lon": -2.9319628
+        },
+        {
+          "lat": 54.8901867,
+          "lon": -2.9316849
+        },
+        {
+          "lat": 54.8899937,
+          "lon": -2.9314108
+        },
+        {
+          "lat": 54.8897159,
+          "lon": -2.9310974
+        },
+        {
+          "lat": 54.8896919,
+          "lon": -2.9311307
+        },
+        {
+          "lat": 54.8896722,
+          "lon": -2.9311074
+        },
+        {
+          "lat": 54.8895565,
+          "lon": -2.9309867
+        },
+        {
+          "lat": 54.8893884,
+          "lon": -2.9308681
+        },
+        {
+          "lat": 54.8893251,
+          "lon": -2.9308526
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "lit": "yes",
+        "name": "6",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "6",
+        "shelter": "yes",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132753329,
+      "bounds": {
+        "minlat": 54.8892719,
+        "minlon": -2.9326774,
+        "maxlat": 54.8904774,
+        "maxlon": -2.9309325
+      },
+      "nodes": [
+        1460455176,
+        1460455250,
+        1460455227,
+        1460455155,
+        1460455168,
+        2358430443,
+        1460455242,
+        3755107186,
+        1460455239,
+        1460505329,
+        1460455163,
+        1460455134,
+        1460505337,
+        1460455189,
+        1460455190,
+        1013289630,
+        1460455139,
+        1460455180,
+        1460455136,
+        1460455176
+      ],
+      "geometry": [
+        {
+          "lat": 54.8892719,
+          "lon": -2.9309444
+        },
+        {
+          "lat": 54.8892805,
+          "lon": -2.9309325
+        },
+        {
+          "lat": 54.8894215,
+          "lon": -2.931039
+        },
+        {
+          "lat": 54.889518,
+          "lon": -2.9311202
+        },
+        {
+          "lat": 54.8896125,
+          "lon": -2.9312074
+        },
+        {
+          "lat": 54.889627,
+          "lon": -2.9312204
+        },
+        {
+          "lat": 54.8898219,
+          "lon": -2.9314662
+        },
+        {
+          "lat": 54.8899156,
+          "lon": -2.9315796
+        },
+        {
+          "lat": 54.889972,
+          "lon": -2.931648
+        },
+        {
+          "lat": 54.8901832,
+          "lon": -2.9319897
+        },
+        {
+          "lat": 54.8904774,
+          "lon": -2.9326455
+        },
+        {
+          "lat": 54.8904541,
+          "lon": -2.9326774
+        },
+        {
+          "lat": 54.8901493,
+          "lon": -2.9320188
+        },
+        {
+          "lat": 54.8899361,
+          "lon": -2.9316942
+        },
+        {
+          "lat": 54.8898054,
+          "lon": -2.9314991
+        },
+        {
+          "lat": 54.889602,
+          "lon": -2.9312551
+        },
+        {
+          "lat": 54.889584,
+          "lon": -2.9312342
+        },
+        {
+          "lat": 54.8895103,
+          "lon": -2.9311605
+        },
+        {
+          "lat": 54.8894115,
+          "lon": -2.9310752
+        },
+        {
+          "lat": 54.8892719,
+          "lon": -2.9309444
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "lit": "yes",
+        "name": "5",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "5",
+        "shelter": "yes",
+        "source:geometry": "Bing",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132753331,
+      "bounds": {
+        "minlat": 54.8891557,
+        "minlon": -2.9323499,
+        "maxlat": 54.8899886,
+        "maxlon": -2.9311181
+      },
+      "nodes": [
+        1460455195,
+        1460455216,
+        1460455135,
+        1460455241,
+        1460455228,
+        1460455230,
+        2358430441,
+        1460455186,
+        1460455208,
+        1460504068,
+        1460455238,
+        2358430439,
+        1460455200,
+        1460455213,
+        1460455159,
+        1460455195
+      ],
+      "geometry": [
+        {
+          "lat": 54.8899375,
+          "lon": -2.9323499
+        },
+        {
+          "lat": 54.8899603,
+          "lon": -2.9323163
+        },
+        {
+          "lat": 54.8899886,
+          "lon": -2.9322757
+        },
+        {
+          "lat": 54.8899497,
+          "lon": -2.9321993
+        },
+        {
+          "lat": 54.8899038,
+          "lon": -2.932117
+        },
+        {
+          "lat": 54.889642,
+          "lon": -2.9316985
+        },
+        {
+          "lat": 54.88942,
+          "lon": -2.9314164
+        },
+        {
+          "lat": 54.8893283,
+          "lon": -2.9312999
+        },
+        {
+          "lat": 54.8891647,
+          "lon": -2.9311181
+        },
+        {
+          "lat": 54.8891557,
+          "lon": -2.9311253
+        },
+        {
+          "lat": 54.8893267,
+          "lon": -2.9313354
+        },
+        {
+          "lat": 54.8894053,
+          "lon": -2.9314427
+        },
+        {
+          "lat": 54.8896229,
+          "lon": -2.9317398
+        },
+        {
+          "lat": 54.889913,
+          "lon": -2.9322441
+        },
+        {
+          "lat": 54.8899006,
+          "lon": -2.9322682
+        },
+        {
+          "lat": 54.8899375,
+          "lon": -2.9323499
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "lit": "yes",
+        "name": "2",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "2",
+        "shelter": "yes",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132753332,
+      "bounds": {
+        "minlat": 54.889266,
+        "minlon": -2.9355939,
+        "maxlat": 54.8915667,
+        "maxlon": -2.9309444
+      },
+      "nodes": [
+        1460455169,
+        1460455176,
+        1460455136,
+        1460455180,
+        1460455139,
+        1013289630,
+        1460455190,
+        1460455189,
+        1460505337,
+        1460455134,
+        1460455225,
+        4566536435,
+        1460455243,
+        1460504033,
+        1460455183,
+        1460455229,
+        2358430467,
+        1460455252,
+        1460455232,
+        1460455244,
+        1460455149,
+        2358430465,
+        1460455214,
+        1460455202,
+        1460455194,
+        4566536434,
+        1460455133,
+        2358430453,
+        1460455182,
+        1460455174,
+        1460455245,
+        1460455199,
+        1460455141,
+        1460455170,
+        1460455169
+      ],
+      "geometry": [
+        {
+          "lat": 54.889266,
+          "lon": -2.9309531
+        },
+        {
+          "lat": 54.8892719,
+          "lon": -2.9309444
+        },
+        {
+          "lat": 54.8894115,
+          "lon": -2.9310752
+        },
+        {
+          "lat": 54.8895103,
+          "lon": -2.9311605
+        },
+        {
+          "lat": 54.889584,
+          "lon": -2.9312342
+        },
+        {
+          "lat": 54.889602,
+          "lon": -2.9312551
+        },
+        {
+          "lat": 54.8898054,
+          "lon": -2.9314991
+        },
+        {
+          "lat": 54.8899361,
+          "lon": -2.9316942
+        },
+        {
+          "lat": 54.8901493,
+          "lon": -2.9320188
+        },
+        {
+          "lat": 54.8904541,
+          "lon": -2.9326774
+        },
+        {
+          "lat": 54.8904683,
+          "lon": -2.9327349
+        },
+        {
+          "lat": 54.890795,
+          "lon": -2.9334553
+        },
+        {
+          "lat": 54.8908092,
+          "lon": -2.9334886
+        },
+        {
+          "lat": 54.8910454,
+          "lon": -2.9339962
+        },
+        {
+          "lat": 54.8910601,
+          "lon": -2.9340376
+        },
+        {
+          "lat": 54.8911501,
+          "lon": -2.9342942
+        },
+        {
+          "lat": 54.8912668,
+          "lon": -2.9346945
+        },
+        {
+          "lat": 54.8912804,
+          "lon": -2.9347354
+        },
+        {
+          "lat": 54.8915667,
+          "lon": -2.9355808
+        },
+        {
+          "lat": 54.8915521,
+          "lon": -2.9355939
+        },
+        {
+          "lat": 54.8912653,
+          "lon": -2.9347461
+        },
+        {
+          "lat": 54.8912553,
+          "lon": -2.9347191
+        },
+        {
+          "lat": 54.8911217,
+          "lon": -2.9343074
+        },
+        {
+          "lat": 54.8910331,
+          "lon": -2.934058
+        },
+        {
+          "lat": 54.8907944,
+          "lon": -2.9335077
+        },
+        {
+          "lat": 54.8907783,
+          "lon": -2.9334758
+        },
+        {
+          "lat": 54.8904508,
+          "lon": -2.9327539
+        },
+        {
+          "lat": 54.8901772,
+          "lon": -2.9321476
+        },
+        {
+          "lat": 54.8901464,
+          "lon": -2.9321038
+        },
+        {
+          "lat": 54.8899192,
+          "lon": -2.931725
+        },
+        {
+          "lat": 54.88979,
+          "lon": -2.9315447
+        },
+        {
+          "lat": 54.8895756,
+          "lon": -2.9312724
+        },
+        {
+          "lat": 54.8895119,
+          "lon": -2.9311978
+        },
+        {
+          "lat": 54.8894085,
+          "lon": -2.9310953
+        },
+        {
+          "lat": 54.889266,
+          "lon": -2.9309531
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "bin": "yes",
+        "covered": "yes",
+        "lit": "yes",
+        "name": "4",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "4",
+        "source:geometry": "Bing",
+        "surface": "concrete",
+        "tactile_paving": "yes",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132753334,
+      "bounds": {
+        "minlat": 54.8891647,
+        "minlon": -2.9355892,
+        "maxlat": 54.891451,
+        "maxlon": -2.9310993
+      },
+      "nodes": [
+        1460455208,
+        1460455137,
+        1460455212,
+        1013289570,
+        3755107183,
+        1013289619,
+        1013289648,
+        1460455226,
+        1460455211,
+        4566536437,
+        1460455162,
+        1460455177,
+        1460455152,
+        2358430461,
+        1460455138,
+        1460455197,
+        1460455172,
+        2358430459,
+        1460455140,
+        1460455185,
+        1460455196,
+        1460455161,
+        1460455209,
+        4783041429,
+        3743459331,
+        1460455131,
+        1460455216,
+        1460455135,
+        1460455241,
+        1460455228,
+        1460455230,
+        2358430441,
+        1460455186,
+        1460455208
+      ],
+      "geometry": [
+        {
+          "lat": 54.8891647,
+          "lon": -2.9311181
+        },
+        {
+          "lat": 54.889177,
+          "lon": -2.9310993
+        },
+        {
+          "lat": 54.8893468,
+          "lon": -2.9312651
+        },
+        {
+          "lat": 54.889446,
+          "lon": -2.9313697
+        },
+        {
+          "lat": 54.8896162,
+          "lon": -2.9315854
+        },
+        {
+          "lat": 54.8898055,
+          "lon": -2.9318476
+        },
+        {
+          "lat": 54.8900597,
+          "lon": -2.9322723
+        },
+        {
+          "lat": 54.8901012,
+          "lon": -2.9323648
+        },
+        {
+          "lat": 54.8903449,
+          "lon": -2.93292
+        },
+        {
+          "lat": 54.8906673,
+          "lon": -2.9336145
+        },
+        {
+          "lat": 54.8906966,
+          "lon": -2.9336817
+        },
+        {
+          "lat": 54.8909805,
+          "lon": -2.9343013
+        },
+        {
+          "lat": 54.8910514,
+          "lon": -2.9344784
+        },
+        {
+          "lat": 54.8911719,
+          "lon": -2.9348063
+        },
+        {
+          "lat": 54.8913245,
+          "lon": -2.9352213
+        },
+        {
+          "lat": 54.891451,
+          "lon": -2.93557
+        },
+        {
+          "lat": 54.8914308,
+          "lon": -2.9355892
+        },
+        {
+          "lat": 54.8911288,
+          "lon": -2.9348601
+        },
+        {
+          "lat": 54.8911162,
+          "lon": -2.9348297
+        },
+        {
+          "lat": 54.8910946,
+          "lon": -2.9348566
+        },
+        {
+          "lat": 54.8909867,
+          "lon": -2.9346026
+        },
+        {
+          "lat": 54.8910007,
+          "lon": -2.934585
+        },
+        {
+          "lat": 54.8909329,
+          "lon": -2.9344432
+        },
+        {
+          "lat": 54.8905992,
+          "lon": -2.9337225
+        },
+        {
+          "lat": 54.8904569,
+          "lon": -2.9334094
+        },
+        {
+          "lat": 54.8900079,
+          "lon": -2.9324207
+        },
+        {
+          "lat": 54.8899603,
+          "lon": -2.9323163
+        },
+        {
+          "lat": 54.8899886,
+          "lon": -2.9322757
+        },
+        {
+          "lat": 54.8899497,
+          "lon": -2.9321993
+        },
+        {
+          "lat": 54.8899038,
+          "lon": -2.932117
+        },
+        {
+          "lat": 54.889642,
+          "lon": -2.9316985
+        },
+        {
+          "lat": 54.88942,
+          "lon": -2.9314164
+        },
+        {
+          "lat": 54.8893283,
+          "lon": -2.9312999
+        },
+        {
+          "lat": 54.8891647,
+          "lon": -2.9311181
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "bin": "yes",
+        "covered": "yes",
+        "lit": "yes",
+        "name": "3",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "3",
+        "surface": "concrete",
+        "tactile_paving": "yes",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132760229,
+      "bounds": {
+        "minlat": 54.8910454,
+        "minlon": -2.9355808,
+        "maxlat": 54.891579,
+        "maxlon": -2.9339522
+      },
+      "nodes": [
+        1460503980,
+        1460503987,
+        2358430469,
+        1460504026,
+        1460504007,
+        1460504013,
+        1460455232,
+        1460455252,
+        2358430467,
+        1460455229,
+        1460455183,
+        1460504033,
+        1460503980
+      ],
+      "geometry": [
+        {
+          "lat": 54.8910904,
+          "lon": -2.9339522
+        },
+        {
+          "lat": 54.8911795,
+          "lon": -2.9342731
+        },
+        {
+          "lat": 54.8912833,
+          "lon": -2.9346665
+        },
+        {
+          "lat": 54.8913037,
+          "lon": -2.9347419
+        },
+        {
+          "lat": 54.8914618,
+          "lon": -2.9352186
+        },
+        {
+          "lat": 54.891579,
+          "lon": -2.9355754
+        },
+        {
+          "lat": 54.8915667,
+          "lon": -2.9355808
+        },
+        {
+          "lat": 54.8912804,
+          "lon": -2.9347354
+        },
+        {
+          "lat": 54.8912668,
+          "lon": -2.9346945
+        },
+        {
+          "lat": 54.8911501,
+          "lon": -2.9342942
+        },
+        {
+          "lat": 54.8910601,
+          "lon": -2.9340376
+        },
+        {
+          "lat": 54.8910454,
+          "lon": -2.9339962
+        },
+        {
+          "lat": 54.8910904,
+          "lon": -2.9339522
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "lit": "yes",
+        "name": "7",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "7",
+        "shelter": "yes",
+        "source:geometry": "Bing",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132760232,
+      "bounds": {
+        "minlat": 54.8904541,
+        "minlon": -2.9339962,
+        "maxlat": 54.8911833,
+        "maxlon": -2.9322801
+      },
+      "nodes": [
+        1460504023,
+        5457782010,
+        5457782009,
+        5457782005,
+        5457782011,
+        5457782013,
+        1460503979,
+        5457782014,
+        5457782012,
+        2889076637,
+        5457782056,
+        2889076636,
+        1460422789,
+        1460422796,
+        1460455163,
+        1460455134,
+        1460455225,
+        4566536435,
+        1460455243,
+        1460504033,
+        1460503980,
+        5457781994,
+        5457781995,
+        5457781993,
+        5457781992,
+        3751348251,
+        1460504023
+      ],
+      "geometry": [
+        {
+          "lat": 54.8911833,
+          "lon": -2.9338791
+        },
+        {
+          "lat": 54.8911428,
+          "lon": -2.9337869
+        },
+        {
+          "lat": 54.8911616,
+          "lon": -2.9337614
+        },
+        {
+          "lat": 54.891152,
+          "lon": -2.9337402
+        },
+        {
+          "lat": 54.8910455,
+          "lon": -2.9335041
+        },
+        {
+          "lat": 54.8910155,
+          "lon": -2.933545
+        },
+        {
+          "lat": 54.8909757,
+          "lon": -2.9334567
+        },
+        {
+          "lat": 54.8909336,
+          "lon": -2.9333635
+        },
+        {
+          "lat": 54.8909642,
+          "lon": -2.9333218
+        },
+        {
+          "lat": 54.8905418,
+          "lon": -2.9323854
+        },
+        {
+          "lat": 54.8904962,
+          "lon": -2.9322801
+        },
+        {
+          "lat": 54.8904623,
+          "lon": -2.932325
+        },
+        {
+          "lat": 54.8905568,
+          "lon": -2.9325384
+        },
+        {
+          "lat": 54.8905275,
+          "lon": -2.9325769
+        },
+        {
+          "lat": 54.8904774,
+          "lon": -2.9326455
+        },
+        {
+          "lat": 54.8904541,
+          "lon": -2.9326774
+        },
+        {
+          "lat": 54.8904683,
+          "lon": -2.9327349
+        },
+        {
+          "lat": 54.890795,
+          "lon": -2.9334553
+        },
+        {
+          "lat": 54.8908092,
+          "lon": -2.9334886
+        },
+        {
+          "lat": 54.8910454,
+          "lon": -2.9339962
+        },
+        {
+          "lat": 54.8910904,
+          "lon": -2.9339522
+        },
+        {
+          "lat": 54.8910799,
+          "lon": -2.9339111
+        },
+        {
+          "lat": 54.8911,
+          "lon": -2.9338961
+        },
+        {
+          "lat": 54.8910959,
+          "lon": -2.9338803
+        },
+        {
+          "lat": 54.8911294,
+          "lon": -2.9338543
+        },
+        {
+          "lat": 54.891144,
+          "lon": -2.9339116
+        },
+        {
+          "lat": 54.8911833,
+          "lon": -2.9338791
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "bin": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "shelter": "yes",
+        "tactile_paving": "yes",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 132760247,
+      "bounds": {
+        "minlat": 54.8890999,
+        "minlon": -2.9352782,
+        "maxlat": 54.8912088,
+        "maxlon": -2.9311367
+      },
+      "nodes": [
+        1460504008,
+        2464365892,
+        1460504005,
+        1460504010,
+        2358430435,
+        1460504038,
+        1460504055,
+        1460504061,
+        1460455159,
+        1460455195,
+        1460504057,
+        1460504027,
+        3743459326,
+        1460503993,
+        1460504020,
+        1460455196,
+        1460455185,
+        1460504066,
+        2358430455,
+        1460504012,
+        1460504047,
+        1460504016,
+        1460504032,
+        1460504006,
+        1460503997,
+        1013289636,
+        1460504008
+      ],
+      "geometry": [
+        {
+          "lat": 54.8894596,
+          "lon": -2.9317154
+        },
+        {
+          "lat": 54.889308,
+          "lon": -2.9314772
+        },
+        {
+          "lat": 54.8890999,
+          "lon": -2.9311902
+        },
+        {
+          "lat": 54.889117,
+          "lon": -2.9311367
+        },
+        {
+          "lat": 54.8893879,
+          "lon": -2.9314612
+        },
+        {
+          "lat": 54.8895099,
+          "lon": -2.931631
+        },
+        {
+          "lat": 54.8896708,
+          "lon": -2.9319115
+        },
+        {
+          "lat": 54.8898806,
+          "lon": -2.932295
+        },
+        {
+          "lat": 54.8899006,
+          "lon": -2.9322682
+        },
+        {
+          "lat": 54.8899375,
+          "lon": -2.9323499
+        },
+        {
+          "lat": 54.8899052,
+          "lon": -2.9323943
+        },
+        {
+          "lat": 54.8904008,
+          "lon": -2.9334839
+        },
+        {
+          "lat": 54.8905176,
+          "lon": -2.9337417
+        },
+        {
+          "lat": 54.8906411,
+          "lon": -2.9340009
+        },
+        {
+          "lat": 54.8909496,
+          "lon": -2.93465
+        },
+        {
+          "lat": 54.8909867,
+          "lon": -2.9346026
+        },
+        {
+          "lat": 54.8910946,
+          "lon": -2.9348566
+        },
+        {
+          "lat": 54.8910699,
+          "lon": -2.9348914
+        },
+        {
+          "lat": 54.8910812,
+          "lon": -2.9349197
+        },
+        {
+          "lat": 54.8912088,
+          "lon": -2.9352401
+        },
+        {
+          "lat": 54.8911825,
+          "lon": -2.9352782
+        },
+        {
+          "lat": 54.8910144,
+          "lon": -2.9349451
+        },
+        {
+          "lat": 54.8908847,
+          "lon": -2.9346908
+        },
+        {
+          "lat": 54.8906039,
+          "lon": -2.9341104
+        },
+        {
+          "lat": 54.8902392,
+          "lon": -2.9333124
+        },
+        {
+          "lat": 54.8896085,
+          "lon": -2.9319897
+        },
+        {
+          "lat": 54.8894596,
+          "lon": -2.9317154
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "check_date:shelter": "2025-02-24",
+        "lit": "yes",
+        "name": "1",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "1",
+        "shelter": "yes",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 371575256,
+      "bounds": {
+        "minlat": 54.891144,
+        "minlon": -2.9356809,
+        "maxlat": 54.8917062,
+        "maxlon": -2.9338791
+      },
+      "nodes": [
+        3751348257,
+        3751348256,
+        3751348254,
+        3751348251,
+        1460504023,
+        5457782008,
+        5457782007,
+        5457782000,
+        3751348253,
+        3751348255,
+        3751348257
+      ],
+      "geometry": [
+        {
+          "lat": 54.8917062,
+          "lon": -2.935658
+        },
+        {
+          "lat": 54.891683,
+          "lon": -2.9356809
+        },
+        {
+          "lat": 54.8913574,
+          "lon": -2.9346938
+        },
+        {
+          "lat": 54.891144,
+          "lon": -2.9339116
+        },
+        {
+          "lat": 54.8911833,
+          "lon": -2.9338791
+        },
+        {
+          "lat": 54.8912343,
+          "lon": -2.933995
+        },
+        {
+          "lat": 54.8912549,
+          "lon": -2.9339676
+        },
+        {
+          "lat": 54.891306,
+          "lon": -2.9341736
+        },
+        {
+          "lat": 54.8913365,
+          "lon": -2.9342958
+        },
+        {
+          "lat": 54.8913868,
+          "lon": -2.9346871
+        },
+        {
+          "lat": 54.8917062,
+          "lon": -2.935658
+        }
+      ],
+      "tags": {
+        "area": "yes",
+        "bench": "yes",
+        "lit": "yes",
+        "name": "8",
+        "passenger_information_display": "yes",
+        "public_transport": "platform",
+        "railway": "platform",
+        "ref": "8",
+        "shelter": "yes",
+        "source": "survey",
+        "source:geometry": "Bing",
+        "surface": "concrete",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1154517373,
+      "bounds": {
+        "minlat": 54.8979979,
+        "minlon": -2.9650842,
+        "maxlat": 54.8980537,
+        "maxlon": -2.9649744
+      },
+      "nodes": [
+        10737164282,
+        10737164283,
+        10737164284,
+        10737164285,
+        10737164286,
+        10737164282
+      ],
+      "geometry": [
+        {
+          "lat": 54.8980537,
+          "lon": -2.9650586
+        },
+        {
+          "lat": 54.8980317,
+          "lon": -2.9650842
+        },
+        {
+          "lat": 54.8980082,
+          "lon": -2.965051
+        },
+        {
+          "lat": 54.8979979,
+          "lon": -2.9649821
+        },
+        {
+          "lat": 54.8980273,
+          "lon": -2.9649744
+        },
+        {
+          "lat": 54.8980537,
+          "lon": -2.9650586
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "platform",
+        "public_transport": "platform",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "way",
+      "id": 45364906,
+      "bounds": {
+        "minlat": 54.8979992,
+        "minlon": -2.9586206,
+        "maxlat": 54.9001744,
+        "maxlon": -2.9477976
+      },
+      "nodes": [
+        3655485894,
+        3655485897,
+        576785826,
+        3655485898,
+        2374179007,
+        576785830,
+        576785831,
+        576785832,
+        576785835,
+        576785837,
+        10737164121,
+        10737164222,
+        3655485895,
+        576785839
+      ],
+      "geometry": [
+        {
+          "lat": 54.8993831,
+          "lon": -2.9477976
+        },
+        {
+          "lat": 54.8999821,
+          "lon": -2.9490676
+        },
+        {
+          "lat": 54.9001095,
+          "lon": -2.9496617
+        },
+        {
+          "lat": 54.9001744,
+          "lon": -2.9503448
+        },
+        {
+          "lat": 54.9001461,
+          "lon": -2.9510268
+        },
+        {
+          "lat": 54.8999986,
+          "lon": -2.9518443
+        },
+        {
+          "lat": 54.899713,
+          "lon": -2.9526747
+        },
+        {
+          "lat": 54.8985686,
+          "lon": -2.9551123
+        },
+        {
+          "lat": 54.8983718,
+          "lon": -2.9556487
+        },
+        {
+          "lat": 54.8982034,
+          "lon": -2.9565392
+        },
+        {
+          "lat": 54.8981186,
+          "lon": -2.9572138
+        },
+        {
+          "lat": 54.8980925,
+          "lon": -2.9574215
+        },
+        {
+          "lat": 54.8980785,
+          "lon": -2.9575333
+        },
+        {
+          "lat": 54.8979992,
+          "lon": -2.9586206
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Port Carlisle Branch",
+        "railway": "abandoned",
+        "ref": "PCB2",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 65406785,
+      "bounds": {
+        "minlat": 54.8875204,
+        "minlon": -2.9368511,
+        "maxlat": 54.8885997,
+        "maxlon": -2.9352354
+      },
+      "nodes": [
+        798785863,
+        8572043248,
+        2374141704,
+        2319167933,
+        2374141752,
+        1176727404,
+        2319167922
+      ],
+      "geometry": [
+        {
+          "lat": 54.8875204,
+          "lon": -2.9352354
+        },
+        {
+          "lat": 54.8876207,
+          "lon": -2.9355487
+        },
+        {
+          "lat": 54.8878482,
+          "lon": -2.9360372
+        },
+        {
+          "lat": 54.8879883,
+          "lon": -2.9362736
+        },
+        {
+          "lat": 54.8881487,
+          "lon": -2.936487
+        },
+        {
+          "lat": 54.8883773,
+          "lon": -2.9367191
+        },
+        {
+          "lat": 54.8885997,
+          "lon": -2.9368511
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "railway": "abandoned",
+        "ref": "UCJ",
+        "source": "Bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 65406811,
+      "bounds": {
+        "minlat": 54.8853082,
+        "minlon": -2.9352354,
+        "maxlat": 54.8875204,
+        "maxlon": -2.9333894
+      },
+      "nodes": [
+        798785863,
+        798785873,
+        8572031877,
+        798785874,
+        2374141733,
+        8572031876,
+        8572031875,
+        2082485301,
+        8572031874,
+        2374141755,
+        8572031867,
+        798785876,
+        8572031866,
+        8572031865,
+        8572031864,
+        5235157281
+      ],
+      "geometry": [
+        {
+          "lat": 54.8875204,
+          "lon": -2.9352354
+        },
+        {
+          "lat": 54.8872463,
+          "lon": -2.9344995
+        },
+        {
+          "lat": 54.8871429,
+          "lon": -2.9342311
+        },
+        {
+          "lat": 54.887021,
+          "lon": -2.9339945
+        },
+        {
+          "lat": 54.886914,
+          "lon": -2.9338241
+        },
+        {
+          "lat": 54.8867682,
+          "lon": -2.9336458
+        },
+        {
+          "lat": 54.8866742,
+          "lon": -2.9335497
+        },
+        {
+          "lat": 54.8865325,
+          "lon": -2.9334738
+        },
+        {
+          "lat": 54.886385,
+          "lon": -2.9334135
+        },
+        {
+          "lat": 54.8862637,
+          "lon": -2.9333894
+        },
+        {
+          "lat": 54.886158,
+          "lon": -2.9334115
+        },
+        {
+          "lat": 54.8860461,
+          "lon": -2.9334655
+        },
+        {
+          "lat": 54.885908,
+          "lon": -2.9335442
+        },
+        {
+          "lat": 54.8857124,
+          "lon": -2.933685
+        },
+        {
+          "lat": 54.8855132,
+          "lon": -2.9338796
+        },
+        {
+          "lat": 54.8853082,
+          "lon": -2.9341296
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Maryport and Carlisle Goods Lines",
+        "railway": "abandoned",
+        "ref": "MCG",
+        "source": "NPE"
+      }
+    },
+    {
+      "type": "way",
+      "id": 70125797,
+      "bounds": {
+        "minlat": 54.8990057,
+        "minlon": -2.9637684,
+        "maxlat": 54.8999189,
+        "maxlon": -2.9626656
+      },
+      "nodes": [
+        837625324,
+        10737164038,
+        576785853,
+        1347256444,
+        837625209
+      ],
+      "geometry": [
+        {
+          "lat": 54.8990057,
+          "lon": -2.9626656
+        },
+        {
+          "lat": 54.8991275,
+          "lon": -2.9628535
+        },
+        {
+          "lat": 54.8992341,
+          "lon": -2.963018
+        },
+        {
+          "lat": 54.8995595,
+          "lon": -2.9634245
+        },
+        {
+          "lat": 54.8999189,
+          "lon": -2.9637684
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "bridge": "yes",
+        "layer": "1",
+        "name": "Waverley Viaduct",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 81767870,
+      "bounds": {
+        "minlat": 54.9226387,
+        "minlon": -2.9603253,
+        "maxlat": 54.9341585,
+        "maxlon": -2.9601676
+      },
+      "nodes": [
+        2464074099,
+        576785957,
+        1759753727,
+        576785962,
+        1759753774,
+        3257738900,
+        12704453127,
+        3257738901,
+        3438883521,
+        7374860110,
+        576785966
+      ],
+      "geometry": [
+        {
+          "lat": 54.9226387,
+          "lon": -2.9601676
+        },
+        {
+          "lat": 54.9242416,
+          "lon": -2.9602722
+        },
+        {
+          "lat": 54.9263576,
+          "lon": -2.9603014
+        },
+        {
+          "lat": 54.9284588,
+          "lon": -2.9603253
+        },
+        {
+          "lat": 54.9312375,
+          "lon": -2.960208
+        },
+        {
+          "lat": 54.9318225,
+          "lon": -2.9602357
+        },
+        {
+          "lat": 54.93199,
+          "lon": -2.9602436
+        },
+        {
+          "lat": 54.9329293,
+          "lon": -2.9602882
+        },
+        {
+          "lat": 54.9335977,
+          "lon": -2.9602558
+        },
+        {
+          "lat": 54.9339955,
+          "lon": -2.9602361
+        },
+        {
+          "lat": 54.9341585,
+          "lon": -2.9602287
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "alt_name": "Edinburgh to Carlisle Line",
+        "name": "Waverley Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 82083281,
+      "bounds": {
+        "minlat": 54.8999189,
+        "minlon": -2.9652,
+        "maxlat": 54.907721,
+        "maxlon": -2.9637684
+      },
+      "nodes": [
+        2464074020,
+        8572062384,
+        576785875,
+        8572062383,
+        8572062382,
+        576785867,
+        8572062381,
+        576785863,
+        576785858,
+        837625209
+      ],
+      "geometry": [
+        {
+          "lat": 54.907721,
+          "lon": -2.9652
+        },
+        {
+          "lat": 54.9056587,
+          "lon": -2.9649776
+        },
+        {
+          "lat": 54.9045212,
+          "lon": -2.9648632
+        },
+        {
+          "lat": 54.9039408,
+          "lon": -2.9648043
+        },
+        {
+          "lat": 54.9027739,
+          "lon": -2.9646897
+        },
+        {
+          "lat": 54.9019675,
+          "lon": -2.9646068
+        },
+        {
+          "lat": 54.9012001,
+          "lon": -2.964518
+        },
+        {
+          "lat": 54.9005707,
+          "lon": -2.9643093
+        },
+        {
+          "lat": 54.9003284,
+          "lon": -2.9641572
+        },
+        {
+          "lat": 54.8999189,
+          "lon": -2.9637684
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "OS_OpenData_Streetview;GPS;npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 222973592,
+      "bounds": {
+        "minlat": 54.8980439,
+        "minlon": -2.962024,
+        "maxlat": 54.8987168,
+        "maxlon": -2.9592311
+      },
+      "nodes": [
+        5588907039,
+        5588907038,
+        5588907037,
+        5588907036,
+        5588907035,
+        5588907034,
+        576785843,
+        5588907033,
+        10737164164,
+        5588907032,
+        5588907031,
+        5588907030
+      ],
+      "geometry": [
+        {
+          "lat": 54.8980439,
+          "lon": -2.9592311
+        },
+        {
+          "lat": 54.89805,
+          "lon": -2.959315
+        },
+        {
+          "lat": 54.8980829,
+          "lon": -2.9597638
+        },
+        {
+          "lat": 54.8981278,
+          "lon": -2.9599995
+        },
+        {
+          "lat": 54.8981924,
+          "lon": -2.960321
+        },
+        {
+          "lat": 54.8982417,
+          "lon": -2.9605668
+        },
+        {
+          "lat": 54.898318,
+          "lon": -2.9609468
+        },
+        {
+          "lat": 54.8984356,
+          "lon": -2.9612763
+        },
+        {
+          "lat": 54.8984957,
+          "lon": -2.9614448
+        },
+        {
+          "lat": 54.8985241,
+          "lon": -2.9615243
+        },
+        {
+          "lat": 54.8986018,
+          "lon": -2.9617419
+        },
+        {
+          "lat": 54.8987168,
+          "lon": -2.962024
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "highway": "footway",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 222973593,
+      "bounds": {
+        "minlat": 54.8891237,
+        "minlon": -2.9424217,
+        "maxlat": 54.8942214,
+        "maxlon": -2.937007
+      },
+      "nodes": [
+        2319167925,
+        8572043250,
+        8572043251,
+        8572043252,
+        8572043253,
+        8572043254,
+        8572043255,
+        10069394565,
+        10069394566,
+        10069394567,
+        10069394568,
+        10069394569,
+        10069394570
+      ],
+      "geometry": [
+        {
+          "lat": 54.8891237,
+          "lon": -2.937007
+        },
+        {
+          "lat": 54.889387,
+          "lon": -2.9371077
+        },
+        {
+          "lat": 54.8898283,
+          "lon": -2.9372737
+        },
+        {
+          "lat": 54.8903836,
+          "lon": -2.9375745
+        },
+        {
+          "lat": 54.8905824,
+          "lon": -2.9377331
+        },
+        {
+          "lat": 54.8908548,
+          "lon": -2.9380034
+        },
+        {
+          "lat": 54.8910968,
+          "lon": -2.9383083
+        },
+        {
+          "lat": 54.8915357,
+          "lon": -2.939065
+        },
+        {
+          "lat": 54.8919047,
+          "lon": -2.9396351
+        },
+        {
+          "lat": 54.8922235,
+          "lon": -2.9400908
+        },
+        {
+          "lat": 54.8935286,
+          "lon": -2.9416521
+        },
+        {
+          "lat": 54.8941438,
+          "lon": -2.9423356
+        },
+        {
+          "lat": 54.8942214,
+          "lon": -2.9424217
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "railway": "abandoned",
+        "ref": "UCJ",
+        "source": "NPE;Bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 228740064,
+      "bounds": {
+        "minlat": 54.88667,
+        "minlon": -2.9352354,
+        "maxlat": 54.8875204,
+        "maxlon": -2.9312175
+      },
+      "nodes": [
+        2374141708,
+        8572031869,
+        8572031870,
+        8572031868,
+        2374141747,
+        8572031871,
+        2374141723,
+        8572031872,
+        8572031873,
+        798785863
+      ],
+      "geometry": [
+        {
+          "lat": 54.88667,
+          "lon": -2.9312175
+        },
+        {
+          "lat": 54.8867531,
+          "lon": -2.9318733
+        },
+        {
+          "lat": 54.8867657,
+          "lon": -2.9320822
+        },
+        {
+          "lat": 54.8867921,
+          "lon": -2.9323601
+        },
+        {
+          "lat": 54.8868569,
+          "lon": -2.932835
+        },
+        {
+          "lat": 54.8869517,
+          "lon": -2.9333768
+        },
+        {
+          "lat": 54.8870494,
+          "lon": -2.9337818
+        },
+        {
+          "lat": 54.8872483,
+          "lon": -2.934329
+        },
+        {
+          "lat": 54.8874095,
+          "lon": -2.934785
+        },
+        {
+          "lat": 54.8875204,
+          "lon": -2.9352354
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "railway": "abandoned",
+        "ref": "UCJ",
+        "source": "NPE"
+      }
+    },
+    {
+      "type": "way",
+      "id": 238621923,
+      "bounds": {
+        "minlat": 54.8863979,
+        "minlon": -2.9312162,
+        "maxlat": 54.8866421,
+        "maxlon": -2.929966
+      },
+      "nodes": [
+        314950822,
+        2464330250,
+        2464330310
+      ],
+      "geometry": [
+        {
+          "lat": 54.8863979,
+          "lon": -2.929966
+        },
+        {
+          "lat": 54.8864945,
+          "lon": -2.9304803
+        },
+        {
+          "lat": 54.8866421,
+          "lon": -2.9312162
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "electrified": "no",
+        "gauge": "1435",
+        "maxspeed": "20 mph",
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "railway": "disused",
+        "railway:aws": "no",
+        "railway:preferred_direction": "forward",
+        "railway:tpws": "no",
+        "railway:track_ref": "Down Goods Arrival",
+        "railway:traffic_mode": "freight",
+        "ref": "UCJ",
+        "service": "siding",
+        "source": "OS_OpenData_StreetView"
+      }
+    },
+    {
+      "type": "way",
+      "id": 276843187,
+      "bounds": {
+        "minlat": 54.8861247,
+        "minlon": -2.9117639,
+        "maxlat": 54.886205,
+        "maxlon": -2.9059126
+      },
+      "nodes": [
+        10069394080,
+        10069394079,
+        10069394078,
+        10069394077,
+        2814195212,
+        2814195218
+      ],
+      "geometry": [
+        {
+          "lat": 54.8861684,
+          "lon": -2.9059126
+        },
+        {
+          "lat": 54.8861806,
+          "lon": -2.9062347
+        },
+        {
+          "lat": 54.8861989,
+          "lon": -2.9067124
+        },
+        {
+          "lat": 54.886205,
+          "lon": -2.9070593
+        },
+        {
+          "lat": 54.8861673,
+          "lon": -2.9094417
+        },
+        {
+          "lat": 54.8861247,
+          "lon": -2.9117639
+        }
+      ],
+      "tags": {
+        "electrified": "no",
+        "gauge": "1435",
+        "loading_gauge": "W6A*, W7*",
+        "loading_gauge:maxheight": "2667",
+        "loading_gauge:maxwidth": "2550",
+        "railway": "disused",
+        "ref:lor": "LN682",
+        "service": "siding",
+        "source": "Bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 361018937,
+      "bounds": {
+        "minlat": 54.9353465,
+        "minlon": -2.9602287,
+        "maxlat": 54.9701234,
+        "maxlon": -2.9516674
+      },
+      "nodes": [
+        3655485900,
+        576785970,
+        576785974,
+        576785978,
+        1759753833,
+        576785981,
+        576785982,
+        3377854481,
+        576785988,
+        576785992,
+        576785996,
+        576786004,
+        576786009,
+        3377854759,
+        1759753877,
+        3655485901,
+        576786016,
+        3655485902,
+        576786028,
+        3655485903,
+        9379230692
+      ],
+      "geometry": [
+        {
+          "lat": 54.9353465,
+          "lon": -2.9602287
+        },
+        {
+          "lat": 54.9376679,
+          "lon": -2.9601902
+        },
+        {
+          "lat": 54.9390389,
+          "lon": -2.9599169
+        },
+        {
+          "lat": 54.9398971,
+          "lon": -2.9596023
+        },
+        {
+          "lat": 54.9415092,
+          "lon": -2.9587702
+        },
+        {
+          "lat": 54.9431595,
+          "lon": -2.9575446
+        },
+        {
+          "lat": 54.9482069,
+          "lon": -2.9536515
+        },
+        {
+          "lat": 54.9491566,
+          "lon": -2.9529665
+        },
+        {
+          "lat": 54.9500882,
+          "lon": -2.9525124
+        },
+        {
+          "lat": 54.9518242,
+          "lon": -2.9519195
+        },
+        {
+          "lat": 54.9529743,
+          "lon": -2.9516674
+        },
+        {
+          "lat": 54.9540547,
+          "lon": -2.9516862
+        },
+        {
+          "lat": 54.9562141,
+          "lon": -2.9520921
+        },
+        {
+          "lat": 54.957628,
+          "lon": -2.9526135
+        },
+        {
+          "lat": 54.9590239,
+          "lon": -2.9533978
+        },
+        {
+          "lat": 54.9608616,
+          "lon": -2.9545943
+        },
+        {
+          "lat": 54.9616546,
+          "lon": -2.9550103
+        },
+        {
+          "lat": 54.9625097,
+          "lon": -2.9553931
+        },
+        {
+          "lat": 54.9666174,
+          "lon": -2.9568743
+        },
+        {
+          "lat": 54.9693341,
+          "lon": -2.9577677
+        },
+        {
+          "lat": 54.9701234,
+          "lon": -2.9580758
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "alt_name": "Edinburgh to Carlisle Line",
+        "name": "Waverley Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 769768210,
+      "bounds": {
+        "minlat": 54.8864276,
+        "minlon": -2.9312175,
+        "maxlat": 54.88667,
+        "maxlon": -2.9299486
+      },
+      "nodes": [
+        2374141708,
+        2464330439
+      ],
+      "geometry": [
+        {
+          "lat": 54.88667,
+          "lon": -2.9312175
+        },
+        {
+          "lat": 54.8864276,
+          "lon": -2.9299486
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "electrified": "no",
+        "gauge": "1435",
+        "maxspeed": "20 mph",
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "railway": "disused",
+        "railway:aws": "no",
+        "railway:preferred_direction": "forward",
+        "railway:tpws": "no",
+        "railway:track_ref": "Up Goods Departure",
+        "railway:traffic_mode": "freight",
+        "ref": "UCJ",
+        "service": "siding",
+        "source": "OS_OpenData_StreetView"
+      }
+    },
+    {
+      "type": "way",
+      "id": 914834917,
+      "bounds": {
+        "minlat": 54.8887613,
+        "minlon": -2.9399068,
+        "maxlat": 54.8889293,
+        "maxlon": -2.9393095
+      },
+      "nodes": [
+        8498109108,
+        8498109109,
+        8498109110
+      ],
+      "geometry": [
+        {
+          "lat": 54.8888753,
+          "lon": -2.9399068
+        },
+        {
+          "lat": 54.8887613,
+          "lon": -2.9394247
+        },
+        {
+          "lat": 54.8889293,
+          "lon": -2.9393095
+        }
+      ],
+      "tags": {
+        "description": "Remains of industrial narrow gauge railway",
+        "disused:railway": "narrow_gauge",
+        "gauge": "610",
+        "railway": "disused"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414013,
+      "bounds": {
+        "minlat": 54.8823144,
+        "minlon": -2.9213902,
+        "maxlat": 54.8824678,
+        "maxlon": -2.9213533
+      },
+      "nodes": [
+        7683158444,
+        8572031891
+      ],
+      "geometry": [
+        {
+          "lat": 54.8823144,
+          "lon": -2.9213533
+        },
+        {
+          "lat": 54.8824678,
+          "lon": -2.9213902
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414014,
+      "bounds": {
+        "minlat": 54.8824678,
+        "minlon": -2.9214114,
+        "maxlat": 54.8825371,
+        "maxlon": -2.9213902
+      },
+      "nodes": [
+        8572031891,
+        8572031892
+      ],
+      "geometry": [
+        {
+          "lat": 54.8824678,
+          "lon": -2.9213902
+        },
+        {
+          "lat": 54.8825371,
+          "lon": -2.9214114
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414015,
+      "bounds": {
+        "minlat": 54.8825371,
+        "minlon": -2.9216238,
+        "maxlat": 54.8835947,
+        "maxlon": -2.9214114
+      },
+      "nodes": [
+        8572031892,
+        8572031893,
+        8572031894,
+        8572031895,
+        8572031896
+      ],
+      "geometry": [
+        {
+          "lat": 54.8825371,
+          "lon": -2.9214114
+        },
+        {
+          "lat": 54.8832191,
+          "lon": -2.9215884
+        },
+        {
+          "lat": 54.8833972,
+          "lon": -2.9216238
+        },
+        {
+          "lat": 54.8835204,
+          "lon": -2.9216238
+        },
+        {
+          "lat": 54.8835947,
+          "lon": -2.9216114
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414016,
+      "bounds": {
+        "minlat": 54.8833972,
+        "minlon": -2.9218945,
+        "maxlat": 54.8854341,
+        "maxlon": -2.9216238
+      },
+      "nodes": [
+        8572031894,
+        8572031897,
+        8572031898,
+        8572031899,
+        8572031900,
+        8572031901,
+        8572031902,
+        8572031903
+      ],
+      "geometry": [
+        {
+          "lat": 54.8833972,
+          "lon": -2.9216238
+        },
+        {
+          "lat": 54.8838156,
+          "lon": -2.9217087
+        },
+        {
+          "lat": 54.8842492,
+          "lon": -2.9217972
+        },
+        {
+          "lat": 54.8847755,
+          "lon": -2.9218945
+        },
+        {
+          "lat": 54.884974,
+          "lon": -2.9218945
+        },
+        {
+          "lat": 54.8851949,
+          "lon": -2.9218822
+        },
+        {
+          "lat": 54.8853608,
+          "lon": -2.9218556
+        },
+        {
+          "lat": 54.8854341,
+          "lon": -2.9218326
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414020,
+      "bounds": {
+        "minlat": 54.8907069,
+        "minlon": -2.9514823,
+        "maxlat": 54.8946558,
+        "maxlon": -2.9466399
+      },
+      "nodes": [
+        8572043275,
+        8572043266,
+        8572043268,
+        8572043269,
+        8572043270,
+        8572043271,
+        8572043272,
+        8572043273,
+        8572043274,
+        8572043277,
+        798785824
+      ],
+      "geometry": [
+        {
+          "lat": 54.8907069,
+          "lon": -2.9466399
+        },
+        {
+          "lat": 54.8909343,
+          "lon": -2.9471121
+        },
+        {
+          "lat": 54.891382,
+          "lon": -2.9478927
+        },
+        {
+          "lat": 54.8918064,
+          "lon": -2.9485391
+        },
+        {
+          "lat": 54.892578,
+          "lon": -2.9495636
+        },
+        {
+          "lat": 54.8929509,
+          "lon": -2.9500006
+        },
+        {
+          "lat": 54.8931917,
+          "lon": -2.9502507
+        },
+        {
+          "lat": 54.8937867,
+          "lon": -2.9508991
+        },
+        {
+          "lat": 54.8942672,
+          "lon": -2.9512975
+        },
+        {
+          "lat": 54.8944167,
+          "lon": -2.9513822
+        },
+        {
+          "lat": 54.8946558,
+          "lon": -2.9514823
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Canal Branch",
+        "railway": "abandoned",
+        "ref": "CAA"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923414021,
+      "bounds": {
+        "minlat": 54.8876207,
+        "minlon": -2.9358184,
+        "maxlat": 54.8876695,
+        "maxlon": -2.9355487
+      },
+      "nodes": [
+        8572043248,
+        8572043276
+      ],
+      "geometry": [
+        {
+          "lat": 54.8876207,
+          "lon": -2.9355487
+        },
+        {
+          "lat": 54.8876695,
+          "lon": -2.9358184
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Canal Branch",
+        "railway": "abandoned",
+        "ref": "CAA"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923423522,
+      "bounds": {
+        "minlat": 54.9140767,
+        "minlon": -2.9639739,
+        "maxlat": 54.9143561,
+        "maxlon": -2.9636887
+      },
+      "nodes": [
+        8572062376,
+        8572062377
+      ],
+      "geometry": [
+        {
+          "lat": 54.9143561,
+          "lon": -2.9636887
+        },
+        {
+          "lat": 54.9140767,
+          "lon": -2.9639739
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "bridge": "yes",
+        "layer": "1",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC"
+      }
+    },
+    {
+      "type": "way",
+      "id": 923423523,
+      "bounds": {
+        "minlat": 54.8986857,
+        "minlon": -2.9638355,
+        "maxlat": 54.8987465,
+        "maxlon": -2.962024
+      },
+      "nodes": [
+        5588907030,
+        8572062387,
+        8572062388,
+        8572062389,
+        8572062390
+      ],
+      "geometry": [
+        {
+          "lat": 54.8987168,
+          "lon": -2.962024
+        },
+        {
+          "lat": 54.8987418,
+          "lon": -2.9626057
+        },
+        {
+          "lat": 54.8987465,
+          "lon": -2.9630488
+        },
+        {
+          "lat": 54.8987243,
+          "lon": -2.9633517
+        },
+        {
+          "lat": 54.8986857,
+          "lon": -2.9638355
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Brunthill Stainton Sidings",
+        "railway": "abandoned",
+        "ref": "BSN",
+        "service": "spur"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1017667437,
+      "bounds": {
+        "minlat": 54.8861607,
+        "minlon": -2.9163225,
+        "maxlat": 54.8862516,
+        "maxlon": -2.915899
+      },
+      "nodes": [
+        9386700057,
+        9386691094,
+        9386700058,
+        9386700056
+      ],
+      "geometry": [
+        {
+          "lat": 54.8862516,
+          "lon": -2.9163225
+        },
+        {
+          "lat": 54.8862141,
+          "lon": -2.9161732
+        },
+        {
+          "lat": 54.8862058,
+          "lon": -2.9161306
+        },
+        {
+          "lat": 54.8861607,
+          "lon": -2.915899
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1017667440,
+      "bounds": {
+        "minlat": 54.886003,
+        "minlon": -2.915869,
+        "maxlat": 54.8860534,
+        "maxlon": -2.9150074
+      },
+      "nodes": [
+        9386700063,
+        9386700064,
+        9386700065,
+        9386700066
+      ],
+      "geometry": [
+        {
+          "lat": 54.886003,
+          "lon": -2.915869
+        },
+        {
+          "lat": 54.8860082,
+          "lon": -2.9156168
+        },
+        {
+          "lat": 54.8860321,
+          "lon": -2.9152841
+        },
+        {
+          "lat": 54.8860534,
+          "lon": -2.9150074
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1017667441,
+      "bounds": {
+        "minlat": 54.8860275,
+        "minlon": -2.9158715,
+        "maxlat": 54.8860321,
+        "maxlon": -2.9152841
+      },
+      "nodes": [
+        9386700067,
+        9386700065
+      ],
+      "geometry": [
+        {
+          "lat": 54.8860275,
+          "lon": -2.9158715
+        },
+        {
+          "lat": 54.8860321,
+          "lon": -2.9152841
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1017667443,
+      "bounds": {
+        "minlat": 54.886064,
+        "minlon": -2.915684,
+        "maxlat": 54.8860794,
+        "maxlon": -2.9152904
+      },
+      "nodes": [
+        9386700068,
+        9386700069
+      ],
+      "geometry": [
+        {
+          "lat": 54.8860794,
+          "lon": -2.915684
+        },
+        {
+          "lat": 54.886064,
+          "lon": -2.9152904
+        }
+      ],
+      "tags": {
+        "disused:railway": "rail",
+        "railway": "disused",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929510,
+      "bounds": {
+        "minlat": 54.8861341,
+        "minlon": -2.912134,
+        "maxlat": 54.886231,
+        "maxlon": -2.9067124
+      },
+      "nodes": [
+        2814195238,
+        10069394085,
+        10069394086,
+        10069394087,
+        10069394088,
+        10069394089,
+        10069394078
+      ],
+      "geometry": [
+        {
+          "lat": 54.8861341,
+          "lon": -2.912134
+        },
+        {
+          "lat": 54.8861504,
+          "lon": -2.9115578
+        },
+        {
+          "lat": 54.8861625,
+          "lon": -2.9107289
+        },
+        {
+          "lat": 54.8861974,
+          "lon": -2.9090547
+        },
+        {
+          "lat": 54.886231,
+          "lon": -2.9073291
+        },
+        {
+          "lat": 54.8862176,
+          "lon": -2.9070653
+        },
+        {
+          "lat": 54.8861989,
+          "lon": -2.9067124
+        }
+      ],
+      "tags": {
+        "electrified": "no",
+        "gauge": "1435",
+        "loading_gauge": "W6A*, W7*",
+        "loading_gauge:maxheight": "2667",
+        "loading_gauge:maxwidth": "2550",
+        "railway": "disused",
+        "ref:lor": "LN682",
+        "service": "siding",
+        "source": "Bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929514,
+      "bounds": {
+        "minlat": 54.8796378,
+        "minlon": -2.937791,
+        "maxlat": 54.881788,
+        "maxlon": -2.9346899
+      },
+      "nodes": [
+        10069394414,
+        10069394415,
+        10069394416,
+        10069394417,
+        10069394418,
+        10069394419,
+        10069394420,
+        10069394421,
+        10069394422,
+        10069394423,
+        10069394424
+      ],
+      "geometry": [
+        {
+          "lat": 54.881788,
+          "lon": -2.9346899
+        },
+        {
+          "lat": 54.8814425,
+          "lon": -2.9357066
+        },
+        {
+          "lat": 54.8812517,
+          "lon": -2.9362729
+        },
+        {
+          "lat": 54.8811185,
+          "lon": -2.9366138
+        },
+        {
+          "lat": 54.8809692,
+          "lon": -2.9368798
+        },
+        {
+          "lat": 54.8807658,
+          "lon": -2.9371019
+        },
+        {
+          "lat": 54.8804977,
+          "lon": -2.9373334
+        },
+        {
+          "lat": 54.8803357,
+          "lon": -2.9374428
+        },
+        {
+          "lat": 54.8800387,
+          "lon": -2.9376118
+        },
+        {
+          "lat": 54.8798498,
+          "lon": -2.9376837
+        },
+        {
+          "lat": 54.8796378,
+          "lon": -2.937791
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929515,
+      "bounds": {
+        "minlat": 54.8775148,
+        "minlon": -2.9381305,
+        "maxlat": 54.8798498,
+        "maxlon": -2.9376837
+      },
+      "nodes": [
+        10069394423,
+        10069394425,
+        10069394426,
+        10069394427,
+        10069394428
+      ],
+      "geometry": [
+        {
+          "lat": 54.8798498,
+          "lon": -2.9376837
+        },
+        {
+          "lat": 54.8791173,
+          "lon": -2.9378839
+        },
+        {
+          "lat": 54.8785936,
+          "lon": -2.9379809
+        },
+        {
+          "lat": 54.8779903,
+          "lon": -2.938091
+        },
+        {
+          "lat": 54.8775148,
+          "lon": -2.9381305
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929516,
+      "bounds": {
+        "minlat": 54.8809587,
+        "minlon": -2.9371195,
+        "maxlat": 54.8832537,
+        "maxlon": -2.93326
+      },
+      "nodes": [
+        10069394494,
+        10069394507,
+        10069394506,
+        10069394505,
+        10069394504,
+        10069394503,
+        10069394431,
+        10069394432,
+        10069394464,
+        10069394465,
+        10069394466,
+        10069394461
+      ],
+      "geometry": [
+        {
+          "lat": 54.8832537,
+          "lon": -2.93326
+        },
+        {
+          "lat": 54.8831015,
+          "lon": -2.9336957
+        },
+        {
+          "lat": 54.8830443,
+          "lon": -2.9338284
+        },
+        {
+          "lat": 54.8829433,
+          "lon": -2.9340537
+        },
+        {
+          "lat": 54.8826897,
+          "lon": -2.9345136
+        },
+        {
+          "lat": 54.8824035,
+          "lon": -2.9350301
+        },
+        {
+          "lat": 54.881968,
+          "lon": -2.9357966
+        },
+        {
+          "lat": 54.8816932,
+          "lon": -2.9362609
+        },
+        {
+          "lat": 54.881531,
+          "lon": -2.936521
+        },
+        {
+          "lat": 54.8813659,
+          "lon": -2.9367274
+        },
+        {
+          "lat": 54.8811973,
+          "lon": -2.9369172
+        },
+        {
+          "lat": 54.8809587,
+          "lon": -2.9371195
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929517,
+      "bounds": {
+        "minlat": 54.8806654,
+        "minlon": -2.9373424,
+        "maxlat": 54.8831391,
+        "maxlon": -2.9337789
+      },
+      "nodes": [
+        10069394493,
+        10069394498,
+        10069394497,
+        10069394496,
+        10069394495,
+        10069394433,
+        10069394434,
+        10069394468,
+        10069394469,
+        10069394470,
+        10069394471,
+        10069394472,
+        10069394463
+      ],
+      "geometry": [
+        {
+          "lat": 54.8831391,
+          "lon": -2.9337789
+        },
+        {
+          "lat": 54.8830006,
+          "lon": -2.9341058
+        },
+        {
+          "lat": 54.8829038,
+          "lon": -2.9343168
+        },
+        {
+          "lat": 54.8827988,
+          "lon": -2.9345278
+        },
+        {
+          "lat": 54.8824705,
+          "lon": -2.935141
+        },
+        {
+          "lat": 54.882036,
+          "lon": -2.9359092
+        },
+        {
+          "lat": 54.8817716,
+          "lon": -2.9363724
+        },
+        {
+          "lat": 54.8816248,
+          "lon": -2.936587
+        },
+        {
+          "lat": 54.8814882,
+          "lon": -2.9367542
+        },
+        {
+          "lat": 54.8813374,
+          "lon": -2.9368925
+        },
+        {
+          "lat": 54.8810905,
+          "lon": -2.9371009
+        },
+        {
+          "lat": 54.8808613,
+          "lon": -2.9372372
+        },
+        {
+          "lat": 54.8806654,
+          "lon": -2.9373424
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929518,
+      "bounds": {
+        "minlat": 54.8816996,
+        "minlon": -2.9366489,
+        "maxlat": 54.8830483,
+        "maxlon": -2.934133
+      },
+      "nodes": [
+        10069394492,
+        10069394502,
+        10069394501,
+        10069394500,
+        10069394499,
+        10069394435,
+        10069394436,
+        10069394437
+      ],
+      "geometry": [
+        {
+          "lat": 54.8830483,
+          "lon": -2.934133
+        },
+        {
+          "lat": 54.8829542,
+          "lon": -2.9343453
+        },
+        {
+          "lat": 54.8827865,
+          "lon": -2.9347317
+        },
+        {
+          "lat": 54.8826597,
+          "lon": -2.9349854
+        },
+        {
+          "lat": 54.882523,
+          "lon": -2.9352279
+        },
+        {
+          "lat": 54.8820917,
+          "lon": -2.9360015
+        },
+        {
+          "lat": 54.8819097,
+          "lon": -2.9363228
+        },
+        {
+          "lat": 54.8816996,
+          "lon": -2.9366489
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929519,
+      "bounds": {
+        "minlat": 54.8800387,
+        "minlon": -2.9376118,
+        "maxlat": 54.8833344,
+        "maxlon": -2.9328204
+      },
+      "nodes": [
+        10069394484,
+        10069394494,
+        10069394493,
+        10069394492,
+        10069394491,
+        10069394490,
+        10069394489,
+        10069394488,
+        10069394487,
+        10069394486,
+        10069394438,
+        10069394439,
+        10069394437,
+        10069394440,
+        10069394441,
+        10069394442,
+        10069394443,
+        10069394444,
+        10069394445,
+        10069394446,
+        10069394422
+      ],
+      "geometry": [
+        {
+          "lat": 54.8833344,
+          "lon": -2.9328204
+        },
+        {
+          "lat": 54.8832537,
+          "lon": -2.93326
+        },
+        {
+          "lat": 54.8831391,
+          "lon": -2.9337789
+        },
+        {
+          "lat": 54.8830483,
+          "lon": -2.934133
+        },
+        {
+          "lat": 54.8829616,
+          "lon": -2.9344075
+        },
+        {
+          "lat": 54.8828548,
+          "lon": -2.9347192
+        },
+        {
+          "lat": 54.8827111,
+          "lon": -2.9350783
+        },
+        {
+          "lat": 54.8825829,
+          "lon": -2.9353652
+        },
+        {
+          "lat": 54.8824499,
+          "lon": -2.9356191
+        },
+        {
+          "lat": 54.882311,
+          "lon": -2.9358502
+        },
+        {
+          "lat": 54.8821056,
+          "lon": -2.9361577
+        },
+        {
+          "lat": 54.8819358,
+          "lon": -2.9363786
+        },
+        {
+          "lat": 54.8816996,
+          "lon": -2.9366489
+        },
+        {
+          "lat": 54.8816153,
+          "lon": -2.9367521
+        },
+        {
+          "lat": 54.8814158,
+          "lon": -2.9369296
+        },
+        {
+          "lat": 54.8811534,
+          "lon": -2.9371009
+        },
+        {
+          "lat": 54.8809326,
+          "lon": -2.9372413
+        },
+        {
+          "lat": 54.8807248,
+          "lon": -2.9373527
+        },
+        {
+          "lat": 54.8805087,
+          "lon": -2.9374394
+        },
+        {
+          "lat": 54.8801881,
+          "lon": -2.9375653
+        },
+        {
+          "lat": 54.8800387,
+          "lon": -2.9376118
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929520,
+      "bounds": {
+        "minlat": 54.8806038,
+        "minlon": -2.9373805,
+        "maxlat": 54.8815642,
+        "maxlon": -2.9359761
+      },
+      "nodes": [
+        10069394447,
+        10069394448,
+        10069394449,
+        10069394473,
+        10069394474,
+        10069394475,
+        10069394476
+      ],
+      "geometry": [
+        {
+          "lat": 54.8815642,
+          "lon": -2.9359761
+        },
+        {
+          "lat": 54.8814336,
+          "lon": -2.9363167
+        },
+        {
+          "lat": 54.8813576,
+          "lon": -2.9364859
+        },
+        {
+          "lat": 54.8811866,
+          "lon": -2.9367563
+        },
+        {
+          "lat": 54.8809848,
+          "lon": -2.9369812
+        },
+        {
+          "lat": 54.8807675,
+          "lon": -2.9372083
+        },
+        {
+          "lat": 54.8806038,
+          "lon": -2.9373805
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929521,
+      "bounds": {
+        "minlat": 54.8809692,
+        "minlon": -2.9368798,
+        "maxlat": 54.8821258,
+        "maxlon": -2.9342507
+      },
+      "nodes": [
+        10069394418,
+        10069394467,
+        10069394450,
+        10069394451,
+        10069394452,
+        10069394453,
+        10069394454,
+        10069394477
+      ],
+      "geometry": [
+        {
+          "lat": 54.8809692,
+          "lon": -2.9368798
+        },
+        {
+          "lat": 54.8811403,
+          "lon": -2.9366716
+        },
+        {
+          "lat": 54.8812472,
+          "lon": -2.9364962
+        },
+        {
+          "lat": 54.8813291,
+          "lon": -2.9363414
+        },
+        {
+          "lat": 54.8814538,
+          "lon": -2.9360256
+        },
+        {
+          "lat": 54.8816105,
+          "lon": -2.9356252
+        },
+        {
+          "lat": 54.8817494,
+          "lon": -2.9352496
+        },
+        {
+          "lat": 54.8821258,
+          "lon": -2.9342507
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929522,
+      "bounds": {
+        "minlat": 54.8805087,
+        "minlon": -2.9374394,
+        "maxlat": 54.8834543,
+        "maxlon": -2.9321723
+      },
+      "nodes": [
+        10069394485,
+        10069394484,
+        10069394483,
+        10069394482,
+        10069394481,
+        10069394480,
+        10069394479,
+        10069394478,
+        10069394455,
+        10069394456,
+        10069394457,
+        10069394458,
+        10069394459,
+        10069394460,
+        10069394461,
+        10069394462,
+        10069394463,
+        10069394476,
+        10069394445
+      ],
+      "geometry": [
+        {
+          "lat": 54.8834543,
+          "lon": -2.9321723
+        },
+        {
+          "lat": 54.8833344,
+          "lon": -2.9328204
+        },
+        {
+          "lat": 54.8832264,
+          "lon": -2.9331609
+        },
+        {
+          "lat": 54.8831468,
+          "lon": -2.933324
+        },
+        {
+          "lat": 54.8829889,
+          "lon": -2.9336315
+        },
+        {
+          "lat": 54.8826814,
+          "lon": -2.9341764
+        },
+        {
+          "lat": 54.8824131,
+          "lon": -2.9346346
+        },
+        {
+          "lat": 54.88204,
+          "lon": -2.9353102
+        },
+        {
+          "lat": 54.8818711,
+          "lon": -2.9356361
+        },
+        {
+          "lat": 54.8816271,
+          "lon": -2.9360999
+        },
+        {
+          "lat": 54.8814965,
+          "lon": -2.9363311
+        },
+        {
+          "lat": 54.8813315,
+          "lon": -2.9366345
+        },
+        {
+          "lat": 54.8812365,
+          "lon": -2.9367769
+        },
+        {
+          "lat": 54.8811023,
+          "lon": -2.9369523
+        },
+        {
+          "lat": 54.8809587,
+          "lon": -2.9371195
+        },
+        {
+          "lat": 54.8808388,
+          "lon": -2.9372124
+        },
+        {
+          "lat": 54.8806654,
+          "lon": -2.9373424
+        },
+        {
+          "lat": 54.8806038,
+          "lon": -2.9373805
+        },
+        {
+          "lat": 54.8805087,
+          "lon": -2.9374394
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929523,
+      "bounds": {
+        "minlat": 54.8815431,
+        "minlon": -2.9371263,
+        "maxlat": 54.8827342,
+        "maxlon": -2.9358253
+      },
+      "nodes": [
+        10069394508,
+        10069394509,
+        10069394510,
+        10069394511,
+        10069394512,
+        10069394513,
+        10069394514
+      ],
+      "geometry": [
+        {
+          "lat": 54.8827342,
+          "lon": -2.9358253
+        },
+        {
+          "lat": 54.8825048,
+          "lon": -2.9361559
+        },
+        {
+          "lat": 54.882296,
+          "lon": -2.9364757
+        },
+        {
+          "lat": 54.882141,
+          "lon": -2.9366482
+        },
+        {
+          "lat": 54.8818826,
+          "lon": -2.9368818
+        },
+        {
+          "lat": 54.8817317,
+          "lon": -2.9369931
+        },
+        {
+          "lat": 54.8815431,
+          "lon": -2.9371263
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929524,
+      "bounds": {
+        "minlat": 54.8817317,
+        "minlon": -2.9369931,
+        "maxlat": 54.8862916,
+        "maxlon": -2.9318617
+      },
+      "nodes": [
+        10069394528,
+        10069394527,
+        10069394526,
+        10069394525,
+        10069394524,
+        10069394523,
+        10069394522,
+        10069394521,
+        10069394520,
+        10069394519,
+        10069394529,
+        10069394518,
+        10069394515,
+        10069394516,
+        10069394517,
+        10069394513
+      ],
+      "geometry": [
+        {
+          "lat": 54.8862916,
+          "lon": -2.9318617
+        },
+        {
+          "lat": 54.8861945,
+          "lon": -2.9322606
+        },
+        {
+          "lat": 54.8861428,
+          "lon": -2.9324187
+        },
+        {
+          "lat": 54.8858989,
+          "lon": -2.9329793
+        },
+        {
+          "lat": 54.8857625,
+          "lon": -2.9332164
+        },
+        {
+          "lat": 54.8849894,
+          "lon": -2.9343627
+        },
+        {
+          "lat": 54.8845926,
+          "lon": -2.9348802
+        },
+        {
+          "lat": 54.8843673,
+          "lon": -2.9351497
+        },
+        {
+          "lat": 54.8839787,
+          "lon": -2.9355486
+        },
+        {
+          "lat": 54.8836231,
+          "lon": -2.9358504
+        },
+        {
+          "lat": 54.8834747,
+          "lon": -2.9359644
+        },
+        {
+          "lat": 54.8833565,
+          "lon": -2.9360553
+        },
+        {
+          "lat": 54.8828851,
+          "lon": -2.9363679
+        },
+        {
+          "lat": 54.8823828,
+          "lon": -2.9366194
+        },
+        {
+          "lat": 54.8819901,
+          "lon": -2.9368458
+        },
+        {
+          "lat": 54.8817317,
+          "lon": -2.9369931
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929525,
+      "bounds": {
+        "minlat": 54.8834747,
+        "minlon": -2.9359644,
+        "maxlat": 54.8860271,
+        "maxlon": -2.9323216
+      },
+      "nodes": [
+        10069394529,
+        10069394554,
+        10069394530,
+        10069394531,
+        10069394532,
+        10069394533,
+        10069394534,
+        10069394535,
+        10069394536,
+        10069394537,
+        10069394538,
+        10069394539,
+        10069394540
+      ],
+      "geometry": [
+        {
+          "lat": 54.8834747,
+          "lon": -2.9359644
+        },
+        {
+          "lat": 54.8835357,
+          "lon": -2.9358872
+        },
+        {
+          "lat": 54.8836955,
+          "lon": -2.9356851
+        },
+        {
+          "lat": 54.8840221,
+          "lon": -2.935297
+        },
+        {
+          "lat": 54.884328,
+          "lon": -2.9349197
+        },
+        {
+          "lat": 54.8845802,
+          "lon": -2.9346071
+        },
+        {
+          "lat": 54.8847207,
+          "lon": -2.934431
+        },
+        {
+          "lat": 54.8850494,
+          "lon": -2.9339639
+        },
+        {
+          "lat": 54.8856674,
+          "lon": -2.9330691
+        },
+        {
+          "lat": 54.8857542,
+          "lon": -2.9329182
+        },
+        {
+          "lat": 54.8858741,
+          "lon": -2.9326846
+        },
+        {
+          "lat": 54.8859609,
+          "lon": -2.9324977
+        },
+        {
+          "lat": 54.8860271,
+          "lon": -2.9323216
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929526,
+      "bounds": {
+        "minlat": 54.8835357,
+        "minlon": -2.9358872,
+        "maxlat": 54.8860767,
+        "maxlon": -2.932372
+      },
+      "nodes": [
+        10069394554,
+        10069394553,
+        10069394552,
+        10069394551,
+        10069394550,
+        10069394549,
+        10069394541,
+        10069394542,
+        10069394543,
+        10069394544,
+        10069394545,
+        10069394546,
+        10069394547,
+        10069394548
+      ],
+      "geometry": [
+        {
+          "lat": 54.8835357,
+          "lon": -2.9358872
+        },
+        {
+          "lat": 54.8838029,
+          "lon": -2.9356384
+        },
+        {
+          "lat": 54.88396,
+          "lon": -2.9354731
+        },
+        {
+          "lat": 54.8842102,
+          "lon": -2.9351856
+        },
+        {
+          "lat": 54.884421,
+          "lon": -2.9349521
+        },
+        {
+          "lat": 54.8846236,
+          "lon": -2.9346969
+        },
+        {
+          "lat": 54.8848509,
+          "lon": -2.9343915
+        },
+        {
+          "lat": 54.8854566,
+          "lon": -2.9335147
+        },
+        {
+          "lat": 54.8857274,
+          "lon": -2.9331014
+        },
+        {
+          "lat": 54.8858369,
+          "lon": -2.9329146
+        },
+        {
+          "lat": 54.8859568,
+          "lon": -2.9326666
+        },
+        {
+          "lat": 54.8860312,
+          "lon": -2.9325049
+        },
+        {
+          "lat": 54.8860601,
+          "lon": -2.9324259
+        },
+        {
+          "lat": 54.8860767,
+          "lon": -2.932372
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "siding"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929533,
+      "bounds": {
+        "minlat": 54.8790492,
+        "minlon": -2.9196661,
+        "maxlat": 54.8808505,
+        "maxlon": -2.9193714
+      },
+      "nodes": [
+        10069394625,
+        10069394624,
+        10069394623,
+        10069394601,
+        10069394602,
+        10069394603,
+        10069394635,
+        10069394604,
+        10069394640,
+        10069394605,
+        10069394606
+      ],
+      "geometry": [
+        {
+          "lat": 54.8808505,
+          "lon": -2.9195774
+        },
+        {
+          "lat": 54.8807588,
+          "lon": -2.9196196
+        },
+        {
+          "lat": 54.8806081,
+          "lon": -2.9196535
+        },
+        {
+          "lat": 54.8804321,
+          "lon": -2.9196661
+        },
+        {
+          "lat": 54.8801377,
+          "lon": -2.9196066
+        },
+        {
+          "lat": 54.8799681,
+          "lon": -2.9195679
+        },
+        {
+          "lat": 54.8798767,
+          "lon": -2.9195592
+        },
+        {
+          "lat": 54.8796436,
+          "lon": -2.919537
+        },
+        {
+          "lat": 54.879603,
+          "lon": -2.9195265
+        },
+        {
+          "lat": 54.8793937,
+          "lon": -2.9194726
+        },
+        {
+          "lat": 54.8790492,
+          "lon": -2.9193714
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929534,
+      "bounds": {
+        "minlat": 54.8798738,
+        "minlon": -2.9198615,
+        "maxlat": 54.8818903,
+        "maxlon": -2.9196255
+      },
+      "nodes": [
+        10069394608,
+        10069394609,
+        10069394610,
+        10069394611,
+        10069394612,
+        10069394613,
+        10069394614,
+        10069394615,
+        10069394616,
+        10069394617,
+        10069394618
+      ],
+      "geometry": [
+        {
+          "lat": 54.8798738,
+          "lon": -2.9197576
+        },
+        {
+          "lat": 54.8800633,
+          "lon": -2.9197838
+        },
+        {
+          "lat": 54.8801937,
+          "lon": -2.9198027
+        },
+        {
+          "lat": 54.880463,
+          "lon": -2.9198213
+        },
+        {
+          "lat": 54.8808981,
+          "lon": -2.9198615
+        },
+        {
+          "lat": 54.8810308,
+          "lon": -2.9198535
+        },
+        {
+          "lat": 54.8811959,
+          "lon": -2.9198267
+        },
+        {
+          "lat": 54.8814629,
+          "lon": -2.919765
+        },
+        {
+          "lat": 54.8816681,
+          "lon": -2.9197167
+        },
+        {
+          "lat": 54.8817745,
+          "lon": -2.9196818
+        },
+        {
+          "lat": 54.8818903,
+          "lon": -2.9196255
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929535,
+      "bounds": {
+        "minlat": 54.8798767,
+        "minlon": -2.9195592,
+        "maxlat": 54.8820982,
+        "maxlon": -2.9187152
+      },
+      "nodes": [
+        10069394619,
+        10069394620,
+        10069394631,
+        10069394632,
+        10069394633,
+        10069394634,
+        10069394635
+      ],
+      "geometry": [
+        {
+          "lat": 54.8820982,
+          "lon": -2.9187152
+        },
+        {
+          "lat": 54.8811712,
+          "lon": -2.919081
+        },
+        {
+          "lat": 54.8809094,
+          "lon": -2.9191913
+        },
+        {
+          "lat": 54.8805177,
+          "lon": -2.9193454
+        },
+        {
+          "lat": 54.8801685,
+          "lon": -2.9194871
+        },
+        {
+          "lat": 54.8799687,
+          "lon": -2.9195426
+        },
+        {
+          "lat": 54.8798767,
+          "lon": -2.9195592
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929536,
+      "bounds": {
+        "minlat": 54.879603,
+        "minlon": -2.9195265,
+        "maxlat": 54.8820617,
+        "maxlon": -2.9184352
+      },
+      "nodes": [
+        10069394621,
+        10069394622,
+        10069394641,
+        10069394636,
+        10069394637,
+        10069394638,
+        10069394600,
+        10069394639,
+        10069394640
+      ],
+      "geometry": [
+        {
+          "lat": 54.8820617,
+          "lon": -2.9184352
+        },
+        {
+          "lat": 54.8810324,
+          "lon": -2.918845
+        },
+        {
+          "lat": 54.8808055,
+          "lon": -2.9189363
+        },
+        {
+          "lat": 54.880452,
+          "lon": -2.9191536
+        },
+        {
+          "lat": 54.8802057,
+          "lon": -2.9192987
+        },
+        {
+          "lat": 54.8800092,
+          "lon": -2.9193996
+        },
+        {
+          "lat": 54.8798811,
+          "lon": -2.9194496
+        },
+        {
+          "lat": 54.8797455,
+          "lon": -2.9195058
+        },
+        {
+          "lat": 54.879603,
+          "lon": -2.9195265
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929537,
+      "bounds": {
+        "minlat": 54.880463,
+        "minlon": -2.9198213,
+        "maxlat": 54.8808677,
+        "maxlon": -2.9197096
+      },
+      "nodes": [
+        10069394626,
+        10069394627,
+        10069394611
+      ],
+      "geometry": [
+        {
+          "lat": 54.8808677,
+          "lon": -2.9197096
+        },
+        {
+          "lat": 54.880624,
+          "lon": -2.9197891
+        },
+        {
+          "lat": 54.880463,
+          "lon": -2.9198213
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1099929538,
+      "bounds": {
+        "minlat": 54.8801377,
+        "minlon": -2.9196066,
+        "maxlat": 54.8808268,
+        "maxlon": -2.9193958
+      },
+      "nodes": [
+        10069394628,
+        10069394629,
+        10069394630,
+        10069394602
+      ],
+      "geometry": [
+        {
+          "lat": 54.8808268,
+          "lon": -2.9193958
+        },
+        {
+          "lat": 54.8805425,
+          "lon": -2.9194964
+        },
+        {
+          "lat": 54.8802731,
+          "lon": -2.9195765
+        },
+        {
+          "lat": 54.8801377,
+          "lon": -2.9196066
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "railway": "abandoned",
+        "service": "yard"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1154686396,
+      "bounds": {
+        "minlat": 54.8987168,
+        "minlon": -2.9626656,
+        "maxlat": 54.8990057,
+        "maxlon": -2.962024
+      },
+      "nodes": [
+        5588907030,
+        837625324
+      ],
+      "geometry": [
+        {
+          "lat": 54.8987168,
+          "lon": -2.962024
+        },
+        {
+          "lat": 54.8990057,
+          "lon": -2.9626656
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1154686397,
+      "bounds": {
+        "minlat": 54.8979992,
+        "minlon": -2.9592311,
+        "maxlat": 54.8980439,
+        "maxlon": -2.9586206
+      },
+      "nodes": [
+        576785839,
+        5588907039
+      ],
+      "geometry": [
+        {
+          "lat": 54.8979992,
+          "lon": -2.9586206
+        },
+        {
+          "lat": 54.8980439,
+          "lon": -2.9592311
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC",
+        "source": "npe"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223544910,
+      "bounds": {
+        "minlat": 54.9095232,
+        "minlon": -2.9654313,
+        "maxlat": 54.9140767,
+        "maxlon": -2.9639739
+      },
+      "nodes": [
+        8572062377,
+        11349280557,
+        11349280558,
+        11349280559,
+        11349280560,
+        11349280561,
+        11349280562,
+        11349280563,
+        11349280564,
+        11349280565,
+        11349280566,
+        11349280567,
+        11349280568,
+        11349297269,
+        11349297270,
+        11349297271,
+        11349297272,
+        2464074093
+      ],
+      "geometry": [
+        {
+          "lat": 54.9140767,
+          "lon": -2.9639739
+        },
+        {
+          "lat": 54.9139638,
+          "lon": -2.9640733
+        },
+        {
+          "lat": 54.9137716,
+          "lon": -2.9642396
+        },
+        {
+          "lat": 54.9135998,
+          "lon": -2.9643741
+        },
+        {
+          "lat": 54.9134152,
+          "lon": -2.9645179
+        },
+        {
+          "lat": 54.9132402,
+          "lon": -2.9646356
+        },
+        {
+          "lat": 54.9129986,
+          "lon": -2.9647813
+        },
+        {
+          "lat": 54.9128225,
+          "lon": -2.9648821
+        },
+        {
+          "lat": 54.9126528,
+          "lon": -2.9649793
+        },
+        {
+          "lat": 54.9123243,
+          "lon": -2.9651156
+        },
+        {
+          "lat": 54.9120301,
+          "lon": -2.9652258
+        },
+        {
+          "lat": 54.9117423,
+          "lon": -2.9653062
+        },
+        {
+          "lat": 54.911475,
+          "lon": -2.9653641
+        },
+        {
+          "lat": 54.9112119,
+          "lon": -2.9654052
+        },
+        {
+          "lat": 54.9109606,
+          "lon": -2.9654276
+        },
+        {
+          "lat": 54.9106857,
+          "lon": -2.9654313
+        },
+        {
+          "lat": 54.9104313,
+          "lon": -2.9654182
+        },
+        {
+          "lat": 54.9095232,
+          "lon": -2.9653886
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223544913,
+      "bounds": {
+        "minlat": 54.9143561,
+        "minlon": -2.9636887,
+        "maxlat": 54.9212749,
+        "maxlon": -2.9598668
+      },
+      "nodes": [
+        8572062376,
+        11349297332,
+        11349297333,
+        11349297335,
+        11349297336,
+        11349297337,
+        11349297338,
+        11349297339,
+        11349297340,
+        11349297341,
+        11349297342,
+        11349297343,
+        11349297344,
+        11349297345,
+        11349297346,
+        11349297347,
+        11349297348,
+        11349297349
+      ],
+      "geometry": [
+        {
+          "lat": 54.9143561,
+          "lon": -2.9636887
+        },
+        {
+          "lat": 54.9147516,
+          "lon": -2.9632427
+        },
+        {
+          "lat": 54.9157133,
+          "lon": -2.962194
+        },
+        {
+          "lat": 54.9159215,
+          "lon": -2.9620062
+        },
+        {
+          "lat": 54.9165794,
+          "lon": -2.961378
+        },
+        {
+          "lat": 54.9167856,
+          "lon": -2.9612047
+        },
+        {
+          "lat": 54.9171678,
+          "lon": -2.9609404
+        },
+        {
+          "lat": 54.9174424,
+          "lon": -2.9607794
+        },
+        {
+          "lat": 54.9178369,
+          "lon": -2.9605582
+        },
+        {
+          "lat": 54.9181805,
+          "lon": -2.9603765
+        },
+        {
+          "lat": 54.9184489,
+          "lon": -2.9602384
+        },
+        {
+          "lat": 54.9187073,
+          "lon": -2.9601476
+        },
+        {
+          "lat": 54.9190588,
+          "lon": -2.9600476
+        },
+        {
+          "lat": 54.9193594,
+          "lon": -2.9599745
+        },
+        {
+          "lat": 54.9198203,
+          "lon": -2.9598995
+        },
+        {
+          "lat": 54.9202812,
+          "lon": -2.9598668
+        },
+        {
+          "lat": 54.9208537,
+          "lon": -2.9598726
+        },
+        {
+          "lat": 54.9212749,
+          "lon": -2.9598971
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Edinburgh to Carlisle Line",
+        "railway": "abandoned",
+        "ref": "ETC"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223802703,
+      "bounds": {
+        "minlat": 54.899677,
+        "minlon": -2.9907019,
+        "maxlat": 54.9056391,
+        "maxlon": -2.9808848
+      },
+      "nodes": [
+        1700266185,
+        2624035469,
+        2624035459,
+        1700266174,
+        1700266206,
+        2624035472,
+        2624035453,
+        1700266164,
+        2624035470,
+        1700266170,
+        2624035466,
+        8572062397,
+        8572062398,
+        8572062399,
+        8572062400,
+        8572062401,
+        1700266184,
+        2624035449,
+        8572062402,
+        2624035446,
+        8572062403,
+        2624035475,
+        8572062396,
+        1700266236
+      ],
+      "geometry": [
+        {
+          "lat": 54.9056391,
+          "lon": -2.9907019
+        },
+        {
+          "lat": 54.9048082,
+          "lon": -2.9889562
+        },
+        {
+          "lat": 54.9046955,
+          "lon": -2.9885115
+        },
+        {
+          "lat": 54.9046121,
+          "lon": -2.9876564
+        },
+        {
+          "lat": 54.9045226,
+          "lon": -2.9844738
+        },
+        {
+          "lat": 54.9044609,
+          "lon": -2.9836737
+        },
+        {
+          "lat": 54.9042911,
+          "lon": -2.982879
+        },
+        {
+          "lat": 54.9040397,
+          "lon": -2.982302
+        },
+        {
+          "lat": 54.9038326,
+          "lon": -2.981938
+        },
+        {
+          "lat": 54.9035024,
+          "lon": -2.9817152
+        },
+        {
+          "lat": 54.9031358,
+          "lon": -2.9815247
+        },
+        {
+          "lat": 54.9027713,
+          "lon": -2.9814648
+        },
+        {
+          "lat": 54.90235,
+          "lon": -2.9815133
+        },
+        {
+          "lat": 54.9020738,
+          "lon": -2.9816137
+        },
+        {
+          "lat": 54.901608,
+          "lon": -2.9819005
+        },
+        {
+          "lat": 54.9012968,
+          "lon": -2.982061
+        },
+        {
+          "lat": 54.9009787,
+          "lon": -2.9821016
+        },
+        {
+          "lat": 54.900678,
+          "lon": -2.9820469
+        },
+        {
+          "lat": 54.9004044,
+          "lon": -2.981967
+        },
+        {
+          "lat": 54.900242,
+          "lon": -2.9818715
+        },
+        {
+          "lat": 54.899997,
+          "lon": -2.9815702
+        },
+        {
+          "lat": 54.899872,
+          "lon": -2.9814165
+        },
+        {
+          "lat": 54.8997545,
+          "lon": -2.9811797
+        },
+        {
+          "lat": 54.899677,
+          "lon": -2.9808848
+        }
+      ],
+      "tags": {
+        "abandoned:railway": "rail",
+        "name": "Silloth Branch",
+        "railway": "abandoned",
+        "ref": "SLH",
+        "source": "npe+bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1302662525,
+      "bounds": {
+        "minlat": 54.8860355,
+        "minlon": -2.9130212,
+        "maxlat": 54.8861745,
+        "maxlon": -2.9064994
+      },
+      "nodes": [
+        10069394082,
+        10069394081,
+        2814195228,
+        2814195216,
+        2814195218,
+        2814195238,
+        2814195223,
+        2814195214
+      ],
+      "geometry": [
+        {
+          "lat": 54.8861505,
+          "lon": -2.9064994
+        },
+        {
+          "lat": 54.8861745,
+          "lon": -2.907162
+        },
+        {
+          "lat": 54.8861332,
+          "lon": -2.9094431
+        },
+        {
+          "lat": 54.886107,
+          "lon": -2.9112536
+        },
+        {
+          "lat": 54.8861247,
+          "lon": -2.9117639
+        },
+        {
+          "lat": 54.8861341,
+          "lon": -2.912134
+        },
+        {
+          "lat": 54.8861095,
+          "lon": -2.912532
+        },
+        {
+          "lat": 54.8860355,
+          "lon": -2.9130212
+        }
+      ],
+      "tags": {
+        "electrified": "no",
+        "gauge": "1435",
+        "loading_gauge": "W6A*, W7*",
+        "loading_gauge:maxheight": "2667",
+        "loading_gauge:maxwidth": "2550",
+        "railway": "disused",
+        "ref:lor": "LN682",
+        "service": "siding",
+        "source": "Bing"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1460409445,
+      "lat": 54.8902037,
+      "lon": -2.9319906,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "5",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1460503998,
+      "lat": 54.8912088,
+      "lon": -2.9343147,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "7",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1460504029,
+      "lat": 54.8896168,
+      "lon": -2.9317801,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "2",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2464339858,
+      "lat": 54.8902295,
+      "lon": -2.9319643,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "6",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2464424116,
+      "lat": 54.8903185,
+      "lon": -2.9335346,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "1",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2464424124,
+      "lat": 54.8910821,
+      "lon": -2.9343929,
+      "tags": {
+        "railway": "derail"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3751485316,
+      "lat": 54.8905151,
+      "lon": -2.9332261,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "3",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3751485317,
+      "lat": 54.8905993,
+      "lon": -2.9331189,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "4",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3751485318,
+      "lat": 54.8912312,
+      "lon": -2.9342961,
+      "tags": {
+        "name": "Carlisle",
+        "public_transport": "stop_position",
+        "railway": "stop",
+        "ref": "8",
+        "train": "yes"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 1782890,
+      "members": [
+        {
+          "type": "node",
+          "ref": 2464424116,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 1460504029,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 3751485316,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 3751485317,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 1460409445,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 2464339858,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 1460503998,
+          "role": "stop"
+        },
+        {
+          "type": "node",
+          "ref": 3751485318,
+          "role": "stop"
+        },
+        {
+          "type": "way",
+          "ref": 132760247,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132753331,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132753334,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132753332,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132753329,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132752066,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 132760229,
+          "role": "platform"
+        },
+        {
+          "type": "way",
+          "ref": 371575256,
+          "role": "platform"
+        },
+        {
+          "type": "node",
+          "ref": 10288172,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 3740595685,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 1460503985,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 529729962,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 1460503991,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 522095786,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760225,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 566812590,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 370651756,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 485521701,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760230,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760236,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760234,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760228,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 42468484,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760245,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 485521700,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760232,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967674,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967676,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967678,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1134526010,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1134526011,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 23467609,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132761150,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967682,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967681,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 371967684,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 566812589,
+          "role": ""
+        }
+      ],
+      "tags": {
+        "HE_ref": "1196969",
+        "alt_name": "Carlisle Citadel Station",
+        "heritage": "2",
+        "heritage:operator": "Historic England",
+        "listed_status": "Grade II*",
+        "name": "Carlisle",
+        "network": "National Rail",
+        "public_transport": "stop_area",
+        "rail": "yes",
+        "start_date": "1876",
+        "type": "public_transport",
+        "wikidata": "Q2792535",
+        "wikipedia": "en:Carlisle railway station"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 2582592,
+      "members": [
+        {
+          "type": "way",
+          "ref": 452937035,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 365270403,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 440293680,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 365270402,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 452937034,
+          "role": ""
+        }
+      ],
+      "tags": {
+        "from": "Settle",
+        "name": "Settle-Carlisle Line",
+        "route": "railway",
+        "to": "Carlisle",
+        "type": "route",
+        "wikidata": "Q803210",
+        "wikipedia": "en:Settle–Carlisle line"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 7521764,
+      "members": [
+        {
+          "type": "way",
+          "ref": 342066400,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238621926,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 228740799,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 778039229,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731679,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731679,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 778039229,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 228740799,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238621926,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 342066400,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238574860,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238574860,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 426722923,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 426722923,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238632313,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238632313,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238636712,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 28658025,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 28658025,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238636712,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 126243846,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 126243844,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 368228615,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 778039230,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 38865151,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 38865150,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 342066398,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 342066398,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 38865150,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 38865151,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 778039230,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 368228615,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 126243844,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 126243846,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238611567,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1466120258,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473734745,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 368228866,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 368228866,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473734745,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1466120258,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238611567,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 206315238,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731677,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238611570,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731677,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238611570,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 206315238,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1466123775,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760242,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 28658022,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 28658022,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1466123775,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132760242,
+          "role": ""
+        }
+      ],
+      "tags": {
+        "name": "West Coast Main Line",
+        "operator": "Network Rail",
+        "operator:wikidata": "Q1501071",
+        "route": "railway",
+        "type": "route"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 9794793,
+      "members": [
+        {
+          "type": "way",
+          "ref": 132752066,
+          "role": "platform"
+        },
+        {
+          "type": "node",
+          "ref": 2464339858,
+          "role": "stop"
+        }
+      ],
+      "tags": {
+        "public_transport": "stop_area",
+        "type": "public_transport"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 9794794,
+      "members": [
+        {
+          "type": "way",
+          "ref": 132753329,
+          "role": "platform"
+        },
+        {
+          "type": "node",
+          "ref": 1460409445,
+          "role": "stop"
+        }
+      ],
+      "tags": {
+        "public_transport": "stop_area",
+        "type": "public_transport"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 11047224,
+      "members": [
+        {
+          "type": "way",
+          "ref": 440293681,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 365270356,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 435428569,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 276843194,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 440293680,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 386893493,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 134836456,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132752064,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 386893505,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132753330,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731680,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132753333,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 132751229,
+          "role": ""
+        }
+      ],
+      "tags": {
+        "alt_name": "Hadrian's Wall Country Line",
+        "from": "Carlisle",
+        "name": "Tyne Valley Line",
+        "operator": "Network Rail",
+        "operator:wikidata": "Q1501071",
+        "route": "railway",
+        "to": "Newcastle",
+        "type": "route"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 13531986,
+      "members": [
+        {
+          "type": "way",
+          "ref": 132760247,
+          "role": "platform"
+        },
+        {
+          "type": "node",
+          "ref": 2464424116,
+          "role": "stop"
+        }
+      ],
+      "tags": {
+        "public_transport": "stop_area",
+        "type": "public_transport"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 16827128,
+      "members": [
+        {
+          "type": "node",
+          "ref": 952666769,
+          "role": ""
+        },
+        {
+          "type": "node",
+          "ref": 2464074107,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 728781420,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1231578338,
+          "role": "outer"
+        },
+        {
+          "type": "node",
+          "ref": 11421772978,
+          "role": "label"
+        }
+      ],
+      "tags": {
+        "name": "Stainton Junction",
+        "type": "site"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 18101384,
+      "members": [
+        {
+          "type": "way",
+          "ref": 1473731685,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238575542,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 822915390,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 238621920,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731684,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 769768211,
+          "role": ""
+        },
+        {
+          "type": "way",
+          "ref": 1473731683,
+          "role": ""
+        }
+      ],
+      "tags": {
+        "name": "Upperby Bridge Junction to Carlisle Caldew Junction",
+        "operator": "Network Rail",
+        "operator:wikidata": "Q1501071",
+        "ref": "UCJ",
+        "route": "railway",
+        "type": "route"
+      }
+    },
+    {
+      "type": "relation",
+      "id": 19159451,
+      "members": [
+        {
+          "type": "node",
+          "ref": 486588753,
+          "role": "platform"
+        },
+        {
+          "type": "node",
+          "ref": 12787782013,
+          "role": "stop"
+        }
+      ],
+      "tags": {
+        "name": "Bannisdale Way",
+        "public_transport": "stop_area",
+        "type": "public_transport"
+      }
+    }
+  ]
+}

@@ -18,6 +18,11 @@ export const AreaConfig = z.object({
   bbox: z.object({ south: z.number(), west: z.number(), north: z.number(), east: z.number() }),
   /** Path (relative to repo root) of the raw OSM snapshot the infrastructure is built from. */
   osmSnapshot: z.string().nullable(),
+  /**
+   * Optional supplement extract for the same bbox (platform outlines, stop_area relations),
+   * used by the importer to link platforms to track. Must be a committed file.
+   */
+  osmSupplement: z.string().nullable().optional(),
 });
 export type AreaConfig = z.infer<typeof AreaConfig>;
 

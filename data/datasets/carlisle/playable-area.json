@@ -1,0 +1,336 @@
+{
+  "datasetId": "carlisle",
+  "status": "proposed",
+  "basis": "game_design",
+  "description": "Phase 1 proposed playable area: Carlisle station, Carlisle North/South Jns, Bog, Currock, London Road, Upperby and Petteril Bridge Jns. Bounded by the OSM extract edge to the south, east and south-west and by a gameplay cut at 54.902 N to the north. Kingmoor is an optional, deferred area. See docs/pilots/CARLISLE_PILOT.md, Phase 1.",
+  "cuts": [
+    {
+      "id": "cut-wcml-south-down",
+      "name": "WCML south, Down Main",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w342066398-0",
+      "insideNodeId": "osm-n13956027901",
+      "outsideNodeId": "osm-n3491073006",
+      "line": "Down Main",
+      "connectsTo": "Penrith (WCML south)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Down Main, south of Upperby Bridge Jn; CIF flows to and from Penrith."
+      }
+    },
+    {
+      "id": "cut-wcml-south-up",
+      "name": "WCML south, Up Main",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w342066400-1",
+      "insideNodeId": "osm-n11955498422",
+      "outsideNodeId": "osm-n3491073008",
+      "line": "Up Main",
+      "connectsTo": "Penrith (WCML south)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Up Main, south of Upperby Bridge Jn; CIF flows to and from Penrith."
+      }
+    },
+    {
+      "id": "cut-newcastle-down",
+      "name": "Tyne Valley, Down Newcastle",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w276843194-0",
+      "insideNodeId": "osm-n13915496846",
+      "outsideNodeId": "osm-n3682004697",
+      "line": "Down Newcastle",
+      "connectsTo": "Wetheral (Tyne Valley to Newcastle)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Down Newcastle east of Petteril Bridge Jn; CIF flows via Wetheral."
+      }
+    },
+    {
+      "id": "cut-newcastle-up",
+      "name": "Tyne Valley, Up Newcastle",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w435428569-2",
+      "insideNodeId": "osm-n13929785498",
+      "outsideNodeId": "osm-n1051241258",
+      "line": "Up Newcastle",
+      "connectsTo": "Wetheral (Tyne Valley to Newcastle)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Up Newcastle east of Petteril Bridge Jn; CIF flows via Wetheral."
+      }
+    },
+    {
+      "id": "cut-midland-down",
+      "name": "Settle-Carlisle, Down Midland",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w452937035-0",
+      "insideNodeId": "osm-n13915496833",
+      "outsideNodeId": "osm-n4497495512",
+      "line": "Down Midland",
+      "connectsTo": "Cumwhinton (Settle-Carlisle line)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Down Midland east of Petteril Bridge Jn; CIF flows via Cumwhinton."
+      }
+    },
+    {
+      "id": "cut-midland-up",
+      "name": "Settle-Carlisle, Up Midland",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w452937034-0",
+      "insideNodeId": "osm-n3693020292",
+      "outsideNodeId": "osm-n4497495514",
+      "line": "Up Midland",
+      "connectsTo": "Cumwhinton (Settle-Carlisle line)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: OSM track ref Up Midland east of Petteril Bridge Jn; CIF flows via Cumwhinton."
+      }
+    },
+    {
+      "id": "cut-cumbrian-coast-a",
+      "name": "Cumbrian Coast (M&C), track A",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w541385484-1",
+      "insideNodeId": "osm-n9428352494",
+      "outsideNodeId": "osm-n9428352497",
+      "line": null,
+      "connectsTo": "Dalston (Cumbrian Coast line)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: the edge has no track ref; the line beyond Currock Jn carries Up/Down M&C refs nearer the station (which track is which is not tagged at the cut); CIF flows via Dalston."
+      }
+    },
+    {
+      "id": "cut-cumbrian-coast-b",
+      "name": "Cumbrian Coast (M&C), track B",
+      "kind": "extract_boundary",
+      "edgeId": "osm-w223342519-0",
+      "insideNodeId": "osm-n9428352493",
+      "outsideNodeId": "osm-n9428352498",
+      "line": null,
+      "connectsTo": "Dalston (Cumbrian Coast line)",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          },
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "CIF entry/exit pairs, docs/pilots/carlisle-pilot-results.json timetable.entryExitPairs"
+          }
+        ],
+        "note": "The cut itself is the OSM extract edge (area_boundary node, INFERRED_BEHAVIOUR I-001). connectsTo is inferred: the edge has no track ref; CE361 (Down M&C) stands on the plain line leading to this boundary; CIF flows via Dalston."
+      }
+    },
+    {
+      "id": "cut-north-down-main",
+      "name": "North gameplay cut, Down Main",
+      "kind": "gameplay_cut",
+      "edgeId": "osm-w238611570-0",
+      "insideNodeId": "osm-n13520521838",
+      "outsideNodeId": "osm-n2464246638",
+      "line": "Down Main",
+      "connectsTo": "Kingmoor (optional area), then the WCML north and the Glasgow & South Western line",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          }
+        ],
+        "note": "Project choice: play stops at 54.902 N, between Port Carlisle Branch Jn (OSM 54.8994 N) and Etterby Jn (OSM 54.9059 N), so Kingmoor can be added later. The track continues in the data; nothing is removed."
+      }
+    },
+    {
+      "id": "cut-north-up-main",
+      "name": "North gameplay cut, Up Main",
+      "kind": "gameplay_cut",
+      "edgeId": "osm-w238611571-0",
+      "insideNodeId": "osm-n11954024796",
+      "outsideNodeId": "osm-n2464246568",
+      "line": "Up Main",
+      "connectsTo": "Kingmoor (optional area), then the WCML north and the Glasgow & South Western line",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          }
+        ],
+        "note": "Project choice: play stops at 54.902 N, between Port Carlisle Branch Jn (OSM 54.8994 N) and Etterby Jn (OSM 54.9059 N), so Kingmoor can be added later. The track continues in the data; nothing is removed."
+      }
+    },
+    {
+      "id": "cut-north-down-goods",
+      "name": "North gameplay cut, Down Goods",
+      "kind": "gameplay_cut",
+      "edgeId": "osm-w238611573-0",
+      "insideNodeId": "osm-n2464246595",
+      "outsideNodeId": "osm-n2464246601",
+      "line": "Down Goods",
+      "connectsTo": "Kingmoor (optional area), then the WCML north and the Glasgow & South Western line",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          }
+        ],
+        "note": "Project choice: play stops at 54.902 N, between Port Carlisle Branch Jn (OSM 54.8994 N) and Etterby Jn (OSM 54.9059 N), so Kingmoor can be added later. The track continues in the data; nothing is removed."
+      }
+    },
+    {
+      "id": "cut-north-up-goods",
+      "name": "North gameplay cut, Up Goods",
+      "kind": "gameplay_cut",
+      "edgeId": "osm-w238613009-0",
+      "insideNodeId": "osm-n2464246595",
+      "outsideNodeId": "osm-n2464246594",
+      "line": "Up Goods",
+      "connectsTo": "Kingmoor (optional area), then the WCML north and the Glasgow & South Western line",
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "version": "2026-10-27T16:59:21Z",
+            "recordId": "data/raw/osm/carlisle-2026-10-27.json"
+          }
+        ],
+        "note": "Project choice: play stops at 54.902 N, between Port Carlisle Branch Jn (OSM 54.8994 N) and Etterby Jn (OSM 54.9059 N), so Kingmoor can be added later. The track continues in the data; nothing is removed."
+      }
+    }
+  ],
+  "includedLocationIds": [
+    "osm-loc-n10288172",
+    "osm-loc-w1131695849",
+    "osm-loc-n10069403441",
+    "osm-loc-n3655485894",
+    "osm-loc-n7512348540",
+    "osm-loc-n7449608670",
+    "osm-loc-n7449608671",
+    "osm-loc-n7487443957",
+    "osm-loc-n10069394318",
+    "osm-loc-n7487443958",
+    "osm-loc-n8572043218",
+    "osm-loc-n10288164",
+    "osm-loc-n13520521848"
+  ],
+  "platformIds": [
+    "osm-plat-w132760247",
+    "osm-plat-w132753331",
+    "osm-plat-w132753334",
+    "osm-plat-w132753332",
+    "osm-plat-w132753329",
+    "osm-plat-w132752066",
+    "osm-plat-w132760229",
+    "osm-plat-w371575256",
+    "osm-plat-w132760232"
+  ],
+  "optionalAreas": [
+    {
+      "id": "kingmoor",
+      "name": "Kingmoor (Etterby, Stainton and Kingmoor Jns, TMD and yard)",
+      "status": "deferred",
+      "reason": "OSM maps no numbered signals at Kingmoor (4 refless signals only), while SMART has berths 0455-0506 and CORPUS names CE464/465/467/486/487/490 there. Adding it now would mean placing signals without evidence. Revisit after a survey.",
+      "locationIds": [
+        "osm-loc-n8572098527",
+        "osm-loc-n11421772978",
+        "osm-loc-n11421759941",
+        "osm-loc-n8572098526",
+        "osm-loc-w728781415",
+        "osm-loc-n8572035877",
+        "osm-loc-w728781416"
+      ]
+    }
+  ],
+  "gameplayCorrections": []
+}

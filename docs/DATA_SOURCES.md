@@ -6,14 +6,15 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
 
 ## Summary
 
-| Source                                         | Used for                                                                     | Access                 | Licence (confirmed?)                             | Retrieved                                                                                                     |
-| ---------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| OpenStreetMap via Overpass API                 | Track geometry/topology, signals (partial), points, platforms, boxes, speeds | Public, no account     | ODbL 1.0 (yes)                                   | 2026-10-27, OSM base `2026-10-27T16:01:40Z`, Shrewsbury bbox                                                  |
-| Network Rail Open Data Feeds                   | Timetable (SCHEDULE CIF), TIPLOC codes (CORPUS), TD berths (SMART)           | Free registration      | NR Data Feeds Licence → OGL (version not stated) | SCHEDULE full CIF (DFROC1F, extracted 2026-10-23) and CORPUS, supplied by the owner 2026-10-27; SMART not yet |
-| RDG timetable feed / National Rail Data Portal | Fallback passenger timetable                                                 | Registration / licence | RSP data licence (not read)                      | No                                                                                                            |
-| OpenRailwayMap                                 | Visual cross-check of OSM tagging                                            | Reference only         | Data ODbL; tiles not reviewed                    | No                                                                                                            |
-| Network Rail Sectional Appendix                | Corroborating line names, speeds, box limits                                 | Reference only         | Not reviewed                                     | No                                                                                                            |
-| Wikipedia                                      | Corroborating signal box names and status                                    | Public                 | CC BY-SA 4.0 (not re-read)                       | Read 2026-10-27 (facts only)                                                                                  |
+| Source                                         | Used for                                                                     | Access                 | Licence (confirmed?)                                                | Retrieved                                                                                                                                                                         |
+| ---------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OpenStreetMap via Overpass API                 | Track geometry/topology, signals (partial), points, platforms, boxes, speeds | Public, no account     | ODbL 1.0 (yes)                                                      | 2026-10-27: Shrewsbury (base `16:38:36Z`); Carlisle pilot (base `16:59:21Z`); Carlisle Phase 2 main (base `18:47:20Z`) and supplement (base `18:46:17Z`). See `data/sources.json` |
+| Network Rail Open Data Feeds                   | Timetable (SCHEDULE CIF), TIPLOC codes (CORPUS), TD berths (SMART)           | Free registration      | NR Data Feeds Licence → OGL (version not stated; **not confirmed**) | SCHEDULE full CIF (DFROC1F, extracted 2026-10-23), CORPUS and SMART, supplied by the owner 2026-10-27                                                                             |
+| RDG timetable feed / National Rail Data Portal | Fallback passenger timetable                                                 | Registration / licence | RSP data licence (not read)                                         | No                                                                                                                                                                                |
+| OpenRailwayMap                                 | Visual cross-check of OSM tagging                                            | Reference only         | Data ODbL; tiles not reviewed                                       | No                                                                                                                                                                                |
+| Network Rail Sectional Appendix                | Corroborating line names, speeds, box limits                                 | Reference only         | Not reviewed                                                        | No                                                                                                                                                                                |
+| Wikipedia                                      | Corroborating signal box names and status                                    | Public                 | CC BY-SA 4.0 (not re-read)                                          | Read 2026-10-27 (facts only)                                                                                                                                                      |
+| UK bank holidays (GOV.UK)                      | Whether a snapshot window holds a bank holiday                               | Public, no account     | OGL v3.0 (yes)                                                      | 2026-10-27 (`data/raw/govuk/bank-holidays-2026-10-27.json`)                                                                                                                       |
 
 ## OpenStreetMap (`openstreetmap`)
 
@@ -24,6 +25,11 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
 - **Share-alike:** `data/datasets/*/infrastructure.json` is a _derived database_. If it is distributed publicly or used in a public service, it must be offered under ODbL. The game's own code does not need to be. Keep derived data in separate files from authored game data (it already is), so the ODbL obligation stays limited to it.
 - **Quality caveat:** OSM is crowd-sourced. It records what contributors mapped, not Network Rail records. All OSM-derived elements are labelled `sourced` (attributable), not `verified`.
 - **Retrievals:** 2026-10-27, `data/raw/osm/shrewsbury-2026-10-27.json`, OSM base timestamp `2026-10-27T16:38:36Z`, from overpass-api.de, bbox 52.695–52.745 N, 2.770–2.725 W. It includes named junctions, yards and level crossings. It supersedes an earlier same-day extract (base `16:01:40Z`, smaller bbox). A mirror (overpass.private.coffee) returned a stale base (`2026-05-31`), so we discarded it and did not use it.
+- **Carlisle retrievals (all 2026-10-27, overpass-api.de, bbox 54.870–54.940 N, 2.985–2.895 W):**
+  - Pilot extract `data/raw/osm/carlisle-2026-10-27.json`, base `16:59:21Z`, sha256 `7cbdd90e…a77c94`. Kept unchanged.
+  - Phase 2 main refresh `data/raw/osm/carlisle-20261027T184451Z.json`, base `18:47:20Z`, sha256 `e6c49d21…cddc9e`. Same query as the pilot; content identical to it. It is the dataset's `osmSnapshot` (D-019).
+  - Phase 2 supplement `data/raw/osm/carlisle-20261027T184451Z-supplement.json`, base `18:46:17Z`, 4.5 MB, sha256 `c75cb89a…e9f3c`: platform outlines, stop_area relations and other documented additions. By owner decision (D-019), it is **kept local and git-ignored**. A fresh clone cannot regenerate the slim derivative without obtaining this raw input. Its recorded sha256 identifies the exact input, but guarantees neither its availability nor any redistribution right.
+  - Its deterministic slim derivative `…-supplement-slim.json` (sha256 `b9116307…c961582`) is the dataset's `osmSupplement`. Full queries, timestamps and HTTP attempts are in each file and in `data/sources.json`.
 
 ## Network Rail Open Data Feeds (`nr-open-data-feeds`)
 
@@ -40,6 +46,11 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
 - **Retrieved:** `data/private/toc-full.CIF` (SCHEDULE full extract, header `DFROC1F`, extracted 2026-10-23 20:01, valid 2026-10-23 to 2027-10-23, 721,875 schedules) and `data/private/CORPUSExtract.json` (55,981 rows). Both were downloaded by the project owner. The recorded retrieval date, 2026-10-27, is **derived from the local file timestamps**, not from a download record. Correct it only if reliable evidence shows a different date.
 - **Committed derivatives:** `data/datasets/shrewsbury/timetables/2026-11-04.json` and the CORPUS fields in `timing-points.json`. The raw files are never committed.
 - **SMART: inspected 2026-10-27.** `data/private/SMARTExtract.json` (34,298 berth rows, supplied by the owner; retrieval date from the file timestamp). `npm run data:smart-coverage` reports coverage per study-area TIPLOC. Findings are in FEASIBILITY_REPORT. In short: of the 15 study-area TIPLOCs, only Harlescott Crossing (TD area C3) has berth data. An earlier attempt to fetch SMART without a login returned HTTP 401; the project tools still hold no credentials.
+- **SMART-derived files: kept local, restricted pending licence review (owner decision, D-016 and D-019).** While Network Rail's SMART licence and redistribution terms are unconfirmed (`confirmed: false`), these are not committed or published. This is pending confirmation, not a finding that redistribution is prohibited.
+  - **Git-ignored bulk data:** `data/datasets/carlisle/signal-evidence.json` (raw berth step rows), `docs/pilots/carlisle-pilot-results.json` and `docs/pilots/carlisle-phase1-geography.json`.
+  - **Excluded locally** (`.git/info/exclude`, so formatting checks still apply): `docs/pilots/CARLISLE_PILOT.md` and `tests/carlisleEvidence.test.ts`.
+  - **Notices:** `data/datasets/carlisle/RESTRICTED-SMART.md` and `docs/pilots/RESTRICTED-SMART.md`.
+  - **Tracked docs quoting a few berth ids or steps in uncommitted changes:** DATA_GAPS (Carlisle), INFERRED_BEHAVIOUR (I-003, I-004) and DECISION_LOG (D-017, D-021). These need the same review before they are committed. The committed D-015 mentions two Harlescott berth records without quoting berth ids.
 
 ## RDG timetable feed (`rdg-timetable-feed`)
 
@@ -59,6 +70,12 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
 
 - https://en.wikipedia.org/wiki/Severn_Bridge_Junction and https://en.wikipedia.org/wiki/Shrewsbury_railway_station, read 2026-10-27. Only facts are used (box names, operational status, lever counts); no text is copied.
 - The two articles **disagree** on when Crewe Bank and Harlescott Crossing boxes closed: 8 December 2012 vs October 2013. Recorded in [DATA_GAPS.md](DATA_GAPS.md).
+
+## UK bank holidays (`govuk-bank-holidays`)
+
+- **URL:** https://www.gov.uk/bank-holidays.json (public JSON, no account). Snapshot: `data/raw/govuk/bank-holidays-2026-10-27.json`, retrieved 2026-10-27, covering 2019-01-01 to 2028-12-26 for England and Wales, Scotland and Northern Ireland.
+- **Licence:** Open Government Licence v3.0. The GOV.UK terms page footer states v3.0, while its body links OGL v1; v3.0 is used. Attribution: "Contains public sector information licensed under the Open Government Licence v3.0." (the OGL default; GOV.UK gives no specific wording).
+- **Use:** only to decide whether a timetable snapshot window contains a bank holiday (D-026). It does not say how a CIF bank-holiday running flag applies to a train.
 
 ## Manual downloads
 

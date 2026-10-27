@@ -4,6 +4,8 @@ import { z } from "zod";
 import {
   Control,
   Infrastructure,
+  PlayableArea,
+  SignalEvidenceFile,
   Signalling,
   SourceRegistry,
   TimetableSnapshot,
@@ -13,7 +15,8 @@ import type { Issue, ValidationInput } from "../validation/validate.ts";
 
 /**
  * Loads a dataset directory (data/datasets/<id>/). Each layer lives in its own file:
- * infrastructure.json, signalling.json, control.json, timing-points.json, timetables/*.json.
+ * infrastructure.json, signalling.json, control.json, timing-points.json, timetables/*.json,
+ * plus optional signal-evidence.json and playable-area.json.
  * Schema failures are returned as issues rather than thrown, so validation can report them all.
  */
 export function loadDataset(
@@ -68,9 +71,12 @@ export function loadDataset(
   const signalling = load("signalling.json", Signalling, false);
   const control = load("control.json", Control, false);
   const timingPointsFile = load("timing-points.json", TimingPointsFile, false);
+  const signalEvidence = load("signal-evidence.json", SignalEvidenceFile, false);
+  const playableArea = load("playable-area.json", PlayableArea, false);
   const timingPoints = timingPointsFile?.mappings ?? [];
   const areaTiplocs = timingPointsFile?.areaTiplocs.map((t) => t.tiploc);
   const timingPointPositions = timingPointsFile?.inferredPositions ?? [];
+  const deferredTiplocs = timingPointsFile?.deferredTiplocs.map((t) => t.tiploc) ?? [];
   const ttDir = join(dir, "timetables");
   const timetables = existsSync(ttDir)
     ? readdirSync(ttDir)
@@ -90,7 +96,10 @@ export function loadDataset(
       timingPoints,
       timingPointPositions,
       timetables,
+      ...(signalEvidence ? { signalEvidence } : {}),
+      ...(playableArea ? { playableArea } : {}),
       ...(areaTiplocs && areaTiplocs.length > 0 ? { areaTiplocs } : {}),
+      ...(deferredTiplocs.length > 0 ? { deferredTiplocs } : {}),
     },
     schemaIssues,
   };

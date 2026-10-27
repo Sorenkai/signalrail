@@ -1,5 +1,7 @@
 import type {
   Control,
+  PlayableArea,
+  SignalEvidenceFile,
   EvidenceLevel,
   Infrastructure,
   Provenance,
@@ -11,7 +13,10 @@ import type {
   LatLon,
 } from "../model/index.ts";
 import { EVIDENCE_LEVELS } from "../model/index.ts";
-import { TrackGraph } from "./graph.ts";
+import { TrackGraph } from "../graph/trackGraph.ts";
+import { assessInterlocking } from "./interlocking.ts";
+import { validateTimetables } from "./timetable.ts";
+import { validateControl } from "./control.ts";
 
 export type Severity = "error" | "warning" | "info";
 
@@ -35,7 +40,13 @@ export interface ValidationInput {
    * (the rest of each journey) are summarised as info. If omitted, every TIPLOC is in scope.
    */
   areaTiplocs?: string[];
+  /** TIPLOCs of areas outside the playable scope (timing-points.json deferredTiplocs). */
+  deferredTiplocs?: string[];
   timetables?: TimetableSnapshot[];
+  /** Per-claim signal evidence (signal-evidence.json), if the dataset has one. */
+  signalEvidence?: SignalEvidenceFile;
+  /** Proposed playable geography (playable-area.json), if the dataset has one. */
+  playableArea?: PlayableArea;
   /** Synthetic sources are only legitimate in test fixtures. */
   allowSynthetic?: boolean;
 }
@@ -64,7 +75,13 @@ function* provenances(value: unknown, path: string, ownerId?: string): Generator
   if (value === null || typeof value !== "object") return;
   const obj = value as Record<string, unknown>;
   const id =
-    typeof obj.id === "string" ? obj.id : typeof obj.tiploc === "string" ? obj.tiploc : ownerId;
+    typeof obj.id === "string"
+      ? obj.id
+      : typeof obj.tiploc === "string"
+        ? obj.tiploc
+        : typeof obj.signalId === "string"
+          ? obj.signalId
+          : ownerId;
   for (const [k, v] of Object.entries(obj)) {
     if ((k === "provenance" || k === "membershipProvenance") && v && typeof v === "object") {
       yield { path: `${path}.${k}`, ownerId: id, provenance: v as Provenance };
@@ -86,6 +103,8 @@ export function summariseEvidence(input: Omit<ValidationInput, "sources">): Evid
     timingPoints: input.timingPoints,
     timingPointPositions: input.timingPointPositions,
     timetables: input.timetables,
+    signalEvidence: input.signalEvidence,
+    playableArea: input.playableArea,
   };
   for (const [name, layer] of Object.entries(layers)) {
     for (const p of provenances(layer, name)) {
@@ -112,12 +131,6 @@ const inGreatBritain = (p: LatLon) =>
 const ALIGN_TOLERANCE_M = 1;
 /** All anchors of one timing point should lie within this distance of its position. */
 const TIMING_POINT_SPREAD_M = 60;
-
-function toMinutes(t: string | null): number | null {
-  if (!t) return null;
-  const [h, m, s] = t.split(":");
-  return Number(h) * 60 + Number(m) + (s ? 0.5 : 0);
-}
 
 export function validateDataset(input: ValidationInput): Issue[] {
   const issues: Issue[] = [];
@@ -190,6 +203,14 @@ export function validateDataset(input: ValidationInput): Issue[] {
       "areaBoundaries",
       control.boundaries.map((b) => b.id),
     );
+    register(
+      "controlCentres",
+      (control.controlCentres ?? []).map((c) => c.id),
+    );
+    register(
+      "externalAreas",
+      (control.externalAreas ?? []).map((x) => x.id),
+    );
   }
   for (const t of timetables) {
     const svc = new Set<string>();
@@ -205,6 +226,7 @@ export function validateDataset(input: ValidationInput): Issue[] {
     node: new Set(infra.nodes.map((n) => n.id)),
     edge: new Set(infra.edges.map((e) => e.id)),
     location: new Set(infra.locations.map((l) => l.id)),
+    platform: new Set(infra.platforms.map((p) => p.id)),
     signal: new Set(infra.signals.map((s) => s.id)),
     points: new Set(infra.points.map((p) => p.id)),
     route: new Set(signalling?.routes.map((r) => r.id) ?? []),
@@ -264,16 +286,95 @@ export function validateDataset(input: ValidationInput): Issue[] {
     for (const s of a.signalIds) ref("signal", s, a.id, "signalIds");
     for (const p of a.pointsIds) ref("points", p, a.id, "pointsIds");
   }
-  for (const b of control?.boundaries ?? []) {
-    ref("area", b.fromAreaId, b.id, "fromAreaId");
-    ref("area", b.toAreaId, b.id, "toAreaId");
-    ref("edge", b.edgeId, b.id, "edgeId");
-  }
+  // Boundary area references (control or external areas) are checked in control.ts.
+  for (const b of control?.boundaries ?? []) ref("edge", b.edgeId, b.id, "edgeId");
   for (const m of timingPoints)
     ref("location", m.locationId, `timingPoint:${m.tiploc}`, "locationId");
   for (const t of timingPointPositions) {
     for (const n of t.trackNodeIds)
       ref("node", n, `timingPointPosition:${t.tiploc}`, "trackNodeIds");
+  }
+
+  const evidence = input.signalEvidence;
+  for (const r of evidence?.signals ?? []) {
+    ref("signal", r.signalId, `signalEvidence:${r.signalId}`, "signalId");
+    for (const run of [r.trackContext.value?.ahead, r.trackContext.value?.behind])
+      ref("node", run?.nodeId, `signalEvidence:${r.signalId}`, "trackContext");
+  }
+  for (const st of evidence?.steps ?? []) {
+    ref("signal", st.fromSignalId, `signalEvidenceStep:${st.id}`, "fromSignalId");
+    ref("signal", st.toSignalId, `signalEvidenceStep:${st.id}`, "toSignalId");
+    for (const n of st.keyNodeIds) ref("node", n, `signalEvidenceStep:${st.id}`, "keyNodeIds");
+  }
+  const playable = input.playableArea;
+  const edgeById = new Map(infra.edges.map((e) => [e.id, e]));
+  for (const c of playable?.cuts ?? []) {
+    ref("edge", c.edgeId, c.id, "edgeId");
+    ref("node", c.insideNodeId, c.id, "insideNodeId");
+    ref("node", c.outsideNodeId, c.id, "outsideNodeId");
+    const e = edgeById.get(c.edgeId);
+    const ends = e ? [e.from, e.to].sort().join("|") : null;
+    if (e && ends !== [c.insideNodeId, c.outsideNodeId].sort().join("|"))
+      add(
+        "error",
+        "PLAYABLE_AREA_CUT",
+        `cut ${c.id}: edge ${c.edgeId} does not join its inside and outside nodes`,
+        [c.id],
+      );
+    if (
+      c.kind === "extract_boundary" &&
+      infra.nodes.find((n) => n.id === c.outsideNodeId)?.kind !== "area_boundary"
+    )
+      add(
+        "error",
+        "PLAYABLE_AREA_CUT",
+        `cut ${c.id} is an extract_boundary but ${c.outsideNodeId} is not an area_boundary node`,
+        [c.id],
+      );
+  }
+  for (const l of playable?.includedLocationIds ?? [])
+    ref("location", l, "playableArea", "includedLocationIds");
+  for (const p of playable?.platformIds ?? []) ref("platform", p, "playableArea", "platformIds");
+  for (const o of playable?.optionalAreas ?? [])
+    for (const l of o.locationIds) ref("location", l, `playableArea:${o.id}`, "locationIds");
+  for (const g of playable?.gameplayCorrections ?? [])
+    for (const t of g.targetIds) {
+      if (!has.node.has(t) && !has.edge.has(t) && !has.signal.has(t))
+        add("error", "MISSING_REFERENCE", `${g.id}.targetIds -> unknown element "${t}"`, [g.id, t]);
+    }
+  const applied = playable?.gameplayCorrections.filter((g) => g.status === "applied") ?? [];
+  if (applied.length > 0)
+    add(
+      "warning",
+      "GAMEPLAY_CORRECTION",
+      `${applied.length} gameplay correction(s) applied on top of source data`,
+      applied.map((g) => g.id),
+    );
+
+  // --- signal evidence: contradicted or disputed claims are surfaced, never hidden ---
+  if (evidence) {
+    const claims = evidence.signals.flatMap((r) => [
+      ...(["identity", "position", "direction", "trackContext"] as const).map((k) => ({
+        id: r.signalId,
+        k,
+        c: r[k],
+      })),
+      ...r.berths.map((b) => ({ id: r.signalId, k: `berth ${b.berth}`, c: b.claim })),
+    ]);
+    for (const c of claims.filter(
+      (x) => x.c.assessment === "contradicted" || x.c.assessment === "disputed",
+    ))
+      add("warning", "SIGNAL_EVIDENCE_CONFLICT", `${c.id} ${c.k} is ${c.c.assessment}`, [c.id]);
+    const weak = claims.filter((x) =>
+      ["unresolved", "ambiguous", "consistent_with_reversal"].includes(x.c.assessment),
+    );
+    if (weak.length > 0)
+      add(
+        "info",
+        "SIGNAL_EVIDENCE_OPEN",
+        `${weak.length} signal claim(s) unresolved, ambiguous or consistent only with reversal`,
+        [...new Set(weak.map((x) => x.id))],
+      );
   }
 
   // --- provenance: registered sources; synthetic data kept out of real datasets ---
@@ -284,6 +385,8 @@ export function validateDataset(input: ValidationInput): Issue[] {
     timingPoints,
     timingPointPositions,
     timetables,
+    signalEvidence: evidence,
+    playableArea: playable,
   };
   const unknownSources = new Map<string, number>();
   const syntheticOwners: string[] = [];
@@ -359,6 +462,89 @@ export function validateDataset(input: ValidationInput): Issue[] {
     if (kind && kind !== "switch")
       add("error", "POINTS_NOT_ON_SWITCH", `points ${p.id} sit on a ${kind} node`, [p.id]);
   }
+  // A stated lie must name two different nodes adjacent to the points' node.
+  for (const p of infra.points) {
+    const legs = [p.normalTowardsNodeId.value, p.reverseTowardsNodeId.value];
+    const bad = legs.filter((n) => n !== null && !graph.adjacent(p.trackNodeId, n));
+    if (bad.length > 0 || (legs[0] !== null && legs[0] === legs[1])) {
+      add(
+        "error",
+        "POINTS_LIE_INVALID",
+        `points ${p.id}: ${bad.length > 0 ? `lie names ${bad.join(", ")}, not adjacent to ${p.trackNodeId}` : "normal and reverse name the same node"}`,
+        [p.id],
+      );
+    }
+  }
+
+  // --- slips: the type is sourced from OSM; a single slip's diagonal is not ---
+  const pointsAt = new Map(infra.points.map((p) => [p.trackNodeId, p]));
+  for (const p of infra.points) {
+    const slip = p.switchType === "single_slip" || p.switchType === "double_slip";
+    const d = graph.degree(p.trackNodeId);
+    if (slip && d !== 4)
+      add(
+        "warning",
+        "SLIP_TOPOLOGY",
+        `${p.switchType} ${p.trackNodeId} has ${d} connected edges (a slip needs 4)`,
+        [p.trackNodeId],
+      );
+  }
+  const unknownFourWay = infra.nodes
+    .filter((n) => n.kind === "switch" && graph.degree(n.id) === 4)
+    .filter((n) => {
+      const t = pointsAt.get(n.id)?.switchType;
+      return t !== "single_slip" && t !== "double_slip";
+    })
+    .map((n) => n.id);
+  if (unknownFourWay.length > 0)
+    add(
+      "warning",
+      "SWITCH_ARRANGEMENT_UNKNOWN",
+      `${unknownFourWay.length} four-edge switch node(s) have no slip type; which legs connect is unknown`,
+      unknownFourWay,
+    );
+  const singleSlips = infra.points
+    .filter((p) => p.switchType === "single_slip" && graph.degree(p.trackNodeId) === 4)
+    .map((p) => p.trackNodeId);
+  if (singleSlips.length > 0)
+    add(
+      "info",
+      "SINGLE_SLIP_DIAGONAL_UNKNOWN",
+      `${singleSlips.length} single slip(s): straight routes known; which diagonal each provides is not recorded, so diagonal movements are unresolved`,
+      singleSlips,
+    );
+
+  // --- platform to track associations (when an importer attempted them) ---
+  for (const p of infra.platforms) {
+    const a = p.trackAssociation;
+    if (!a) continue;
+    for (const s of a.stopNodeIds) ref("node", s, p.id, "trackAssociation.stopNodeIds");
+    for (const e of a.adjacentEdges) ref("edge", e.edgeId, p.id, "trackAssociation.adjacentEdges");
+    if (a.status === "mapped" && !p.edgeIds.value?.length)
+      add("error", "PLATFORM_TRACK_INCONSISTENT", `platform ${p.id} is mapped but has no edges`, [
+        p.id,
+      ]);
+    if (a.status !== "mapped" && p.edgeIds.value !== null)
+      add("error", "PLATFORM_TRACK_INCONSISTENT", `platform ${p.id} is ${a.status} but has edges`, [
+        p.id,
+      ]);
+  }
+  const platformStatus = (st: string) =>
+    infra.platforms.filter((p) => p.trackAssociation?.status === st).map((p) => p.id);
+  if (platformStatus("unresolved").length > 0)
+    add(
+      "warning",
+      "PLATFORM_TRACK_UNRESOLVED",
+      `${platformStatus("unresolved").length} platform(s) have no track association (no stop position or adjacent track)`,
+      platformStatus("unresolved"),
+    );
+  if (platformStatus("ambiguous").length > 0)
+    add(
+      "warning",
+      "PLATFORM_TRACK_AMBIGUOUS",
+      `${platformStatus("ambiguous").length} platform(s) have conflicting track evidence`,
+      platformStatus("ambiguous"),
+    );
 
   // --- coordinate plausibility and track alignment ---
   const nodePos = new Map(infra.nodes.filter((n) => n.position).map((n) => [n.id, n.position!]));
@@ -474,91 +660,30 @@ export function validateDataset(input: ValidationInput): Issue[] {
       noDirection,
     );
   }
-
-  // --- routes & overlaps: impossible paths ---
-  const signalById = new Map(infra.signals.map((s) => [s.id, s]));
-  const pointsById = new Map(infra.points.map((p) => [p.id, p]));
-  for (const r of signalling?.routes ?? []) {
-    const entry = signalById.get(r.entrySignalId);
-    const exit = signalById.get(r.exitSignalId);
-    if (!entry?.trackNodeId || !exit?.trackNodeId) {
-      add(
-        "error",
-        "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: entry or exit signal is not on the track graph`,
-        [r.id],
-      );
-      continue;
-    }
-    const walk = graph.walk(entry.trackNodeId, r.edgeIds);
-    if (!walk.ok) {
-      add("error", "IMPOSSIBLE_ROUTE", `route ${r.id}: ${walk.reason}`, [r.id]);
-      continue;
-    }
-    if (walk.nodes.at(-1) !== exit.trackNodeId) {
-      add(
-        "error",
-        "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: path ends at ${walk.nodes.at(-1)}, not at exit signal ${exit.id}`,
-        [r.id],
-      );
-    }
-    if (
-      entry.facingTowardsNodeId.value !== null &&
-      entry.facingTowardsNodeId.value !== walk.nodes[1]
-    ) {
-      add(
-        "error",
-        "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: entry signal ${entry.id} faces the other way`,
-        [r.id],
-      );
-    }
-    const pathNodes = new Set(walk.nodes);
-    for (const req of r.pointsRequired) {
-      const p = pointsById.get(req.pointsId);
-      if (p && !pathNodes.has(p.trackNodeId)) {
-        add(
-          "error",
-          "IMPOSSIBLE_ROUTE",
-          `route ${r.id}: requires points ${p.id}, which are not on its path`,
-          [r.id],
-        );
-      }
-    }
-    const required = new Set(r.pointsRequired.map((q) => pointsById.get(q.pointsId)?.trackNodeId));
-    for (const n of walk.nodes.slice(1, -1)) {
-      if (graph.node(n)?.kind === "switch" && !required.has(n)) {
-        add(
-          "warning",
-          "ROUTE_POINTS_UNSPECIFIED",
-          `route ${r.id} passes switch ${n} without a required position`,
-          [r.id, n],
-        );
-      }
-    }
-    if (r.overlapId) {
-      const o = signalling!.overlaps.find((x) => x.id === r.overlapId);
-      if (o && o.signalId !== r.exitSignalId) {
-        add(
-          "error",
-          "IMPOSSIBLE_ROUTE",
-          `route ${r.id}: overlap ${o.id} belongs to ${o.signalId}, not exit signal`,
-          [r.id],
-        );
-      }
-    }
+  const unclassified = infra.signals.filter((s) => s.function === "unknown").map((s) => s.id);
+  if (unclassified.length > 0) {
+    add(
+      "info",
+      "SIGNAL_CLASS_UNKNOWN",
+      `${unclassified.length} signal(s) have no source-stated category; type and function unknown`,
+      unclassified,
+    );
   }
-  for (const o of signalling?.overlaps ?? []) {
-    const s = signalById.get(o.signalId);
-    if (s?.trackNodeId && !graph.walk(s.trackNodeId, o.edgeIds).ok) {
-      add(
-        "error",
-        "IMPOSSIBLE_OVERLAP",
-        `overlap ${o.id} is not a contiguous path from signal ${s.id}`,
-        [o.id],
-      );
-    }
+
+  // --- routes, overlaps and conflicts (src/validation/interlocking.ts; DATA_MODEL, D-024) ---
+  const interlocking = assessInterlocking(infra, signalling, input.sources, graph);
+  issues.push(...interlocking.issues);
+  if (interlocking.assessments.length > 0) {
+    const counts: Record<string, number> = {};
+    for (const a of interlocking.assessments)
+      counts[`${a.kind} ${a.status}`] = (counts[`${a.kind} ${a.status}`] ?? 0) + 1;
+    add(
+      "info",
+      "INTERLOCKING_STATUS",
+      `interlocking data: ${Object.entries(counts)
+        .map(([k, n]) => `${n} ${k}`)
+        .join(", ")} (data checks only; not a safety case)`,
+    );
   }
 
   // --- control areas ---
@@ -583,35 +708,19 @@ export function validateDataset(input: ValidationInput): Issue[] {
     }
   }
 
+  issues.push(...validateControl(control, infra, graph, input.playableArea));
+
   // --- timetables ---
   const mapped = new Set([...timingPoints, ...timingPointPositions].map((m) => m.tiploc));
   const unmapped = new Map<string, number>();
-  for (const t of timetables) {
-    for (const s of t.services) {
-      let prev: number | null = null;
-      let wrapped = false;
-      for (const c of s.calls) {
+  for (const t of timetables)
+    for (const s of t.services)
+      for (const c of s.calls)
         if (!mapped.has(c.tiploc)) unmapped.set(c.tiploc, (unmapped.get(c.tiploc) ?? 0) + 1);
-        for (const time of [c.arrival, c.pass, c.departure]) {
-          const m = toMinutes(time);
-          if (m === null) continue;
-          if (prev !== null && m < prev) {
-            if (!wrapped && prev - m > 12 * 60)
-              wrapped = true; // crosses midnight
-            else
-              add(
-                "error",
-                "TIMETABLE_TIME_ORDER",
-                `service ${s.id}: time ${time} at ${c.tiploc} goes backwards`,
-                [s.id],
-              );
-          }
-          prev = m;
-        }
-      }
-    }
-  }
   const area = input.areaTiplocs ? new Set(input.areaTiplocs) : null;
+  issues.push(
+    ...validateTimetables(timetables, { area, deferred: new Set(input.deferredTiplocs ?? []) }),
+  );
   const inArea = [...unmapped.entries()].filter(([t]) => !area || area.has(t));
   if (inArea.length > 0) {
     const list = inArea.sort((a, b) => b[1] - a[1]);
@@ -637,14 +746,15 @@ export function validateDataset(input: ValidationInput): Issue[] {
   }
 
   // --- unsupported assumptions: everything not sourced/verified is surfaced ---
-  const weak: Record<"inferred" | "placeholder", Map<string, string[]>> = {
+  const weak: Record<"inferred" | "placeholder" | "simplified", Map<string, string[]>> = {
     inferred: new Map(),
     placeholder: new Map(),
+    simplified: new Map(),
   };
   for (const [name, layer] of Object.entries(layers)) {
     for (const p of provenances(layer, name)) {
       const ev = p.provenance.evidence;
-      if (ev !== "inferred" && ev !== "placeholder") continue;
+      if (ev !== "inferred" && ev !== "placeholder" && ev !== "simplified") continue;
       const key = p.path.replace(/\[\]/g, "").replace(/\.provenance$/, "");
       const list = weak[ev].get(key) ?? [];
       if (p.ownerId) list.push(p.ownerId);
@@ -659,12 +769,35 @@ export function validateDataset(input: ValidationInput): Issue[] {
       ids,
     );
   }
+  // Source-derived layers describe the real railway; a game simplification never belongs there.
+  // Occupancy sections are left to R2 (audit M3), which decides how simulated sections are held.
+  const sourceLayer = (path: string) =>
+    /^(infrastructure|timingPoints|timingPointPositions|timetables|signalEvidence)\b/.test(path) &&
+    !path.startsWith("infrastructure.occupancySections");
+  for (const [path, ids] of weak.simplified) {
+    if (sourceLayer(path)) {
+      add(
+        "error",
+        "SIMPLIFIED_IN_SOURCE_LAYER",
+        `${ids.length} simplified value(s) at ${path}: source-derived layers hold real-world data only`,
+        ids,
+      );
+    } else {
+      add(
+        "warning",
+        "SIMPLIFIED_DATA",
+        `${ids.length} deliberate game simplification(s) at ${path} (not real-world behaviour)`,
+        ids,
+      );
+    }
+  }
   for (const [path, ids] of weak.inferred) {
-    const interlocking = path.startsWith("signalling") || path.startsWith("control");
+    const interlocking = path.startsWith("signalling");
+    const control = path.startsWith("control");
     add(
-      interlocking ? "warning" : "info",
+      interlocking || control ? "warning" : "info",
       "INFERRED_DATA",
-      `${ids.length} inferred value(s) at ${path}${interlocking ? " (simulated interlocking, not real)" : ""}`,
+      `${ids.length} inferred value(s) at ${path}${interlocking ? " (simulated interlocking, not real)" : control ? " (control configuration, not a sourced fact)" : ""}`,
       ids,
     );
   }
