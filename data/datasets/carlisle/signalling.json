@@ -1,0 +1,399 @@
+{
+  "$comment": "Carlisle MVP route set (P1, DECISION_LOG D-030), plus the Caldew Jn goods-line route (P6, D-036). Hand-authored GAME routes, every one labelled simplified: a playable model, not Carlisle Power Signal Box's real routes or interlocking (no control table is available). Points passages rely on data/datasets/carlisle/game-rules.json.",
+  "datasetId": "carlisle",
+  "routes": [
+    {
+      "id": "rt-dm-fringe-ce264",
+      "ref": null,
+      "entrySignalId": null,
+      "entryFringeId": "fr-wcml-south-down",
+      "exitSignalId": "osm-sig13956027901",
+      "edgeIds": ["osm-w342066398-0"],
+      "pointsRequired": [],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Down trains from Penrith (WCML south) enter play on the Down Main and run to CE264, the first northbound main signal inside the cut. Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-dm-ce264-ce272",
+      "ref": null,
+      "entrySignalId": "osm-sig13956027901",
+      "exitSignalId": "osm-sig13956027902",
+      "edgeIds": ["osm-w342066398-1", "osm-w38865150-0", "osm-w38865151-0"],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts10288162",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Down Main plain running between consecutive northbound main signals. Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-dm-ce272-ce286",
+      "ref": null,
+      "entrySignalId": "osm-sig13956027902",
+      "exitSignalId": "osm-sig13956027906",
+      "edgeIds": [
+        "osm-w38865151-1",
+        "osm-w778039230-0",
+        "osm-w778039230-1",
+        "osm-w368228615-0",
+        "osm-w368228615-1",
+        "osm-w368228615-2",
+        "osm-w126243844-0",
+        "osm-w126243846-0"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts13520521846",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts7261456040",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Down Main plain running between consecutive northbound main signals. Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-dm-ce286-ce323",
+      "ref": null,
+      "entrySignalId": "osm-sig13956027906",
+      "exitSignalId": "osm-sig10288174",
+      "edgeIds": [
+        "osm-w126243846-1",
+        "osm-w126243846-2",
+        "osm-w126243846-3",
+        "osm-w126243846-4",
+        "osm-w126243846-5",
+        "osm-w238574862-0",
+        "osm-w238574862-1",
+        "osm-w28658022-0",
+        "osm-w28658022-1",
+        "osm-w28658022-2",
+        "osm-w28658022-3"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts1460504014",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts3057659452",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts3057659457",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts10288170",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts7185463926",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Down Main through Carlisle South Jn (straight across single slip osm-n10288170) and through platform 3 to CE323 at its north end. Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-dm-ce323-fringe",
+      "ref": null,
+      "entrySignalId": "osm-sig10288174",
+      "exitSignalId": null,
+      "exitFringeId": "fr-north-down-main",
+      "edgeIds": [
+        "osm-w28658022-4",
+        "osm-w28658022-5",
+        "osm-w132760242-0",
+        "osm-w1466123775-0",
+        "osm-w238611581-0",
+        "osm-w1473734744-0",
+        "osm-w777360531-0",
+        "osm-w777360531-1",
+        "osm-w238611579-0",
+        "osm-w1473731678-0",
+        "osm-w361018917-0",
+        "osm-w361018917-1",
+        "osm-w206315238-0",
+        "osm-w1473731677-0",
+        "osm-w238611570-0"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts10288175",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts7253833743",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts3720819849",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts13520580930",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246583",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246608",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246628",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": ["rt-dg-ce323-fringe"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Down Main from platform 3 through Carlisle North Jn (straight across single slip osm-n7253833743) to the north gameplay cut; OSM maps no further northbound main signal before the cut. Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-dg-ce323-fringe",
+      "ref": null,
+      "entrySignalId": "osm-sig10288174",
+      "exitSignalId": null,
+      "exitFringeId": "fr-north-down-goods",
+      "edgeIds": [
+        "osm-w28658022-4",
+        "osm-w28658022-5",
+        "osm-w132760242-0",
+        "osm-w1466123775-0",
+        "osm-w238611581-0",
+        "osm-w1473734744-0",
+        "osm-w777360531-0",
+        "osm-w777360531-1",
+        "osm-w238611579-0",
+        "osm-w1473731678-0",
+        "osm-w238611576-0",
+        "osm-w238611568-0",
+        "osm-w1466123773-1",
+        "osm-w1466123773-0",
+        "osm-w238611573-0"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts10288175",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts7253833743",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts3720819849",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts13520580930",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246583",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246608",
+          "position": "reverse",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246595",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": ["rt-dm-ce323-fringe"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle game route (P6, D-036), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. From CE323 (platform 3) along the Down Main through Carlisle North Jn, as rt-dm-ce323-fringe, then on the reverse leg of osm-n2464246608 onto the bidirectional Up & Down Goods (OSM way 238611576) and the normal leg of osm-n2464246595 onto the Down Goods to the north gameplay cut. OSM maps no signal facing northbound between CE323 and the cut on this path. Track, signal positions and directions, and the Down Goods' northward preferred direction are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap or flank protection is modelled. Conflicts with rt-dm-ce323-fringe: both start at CE323 and share ten edges and six points, and need osm-pts2464246608 in opposite positions."
+      }
+    },
+    {
+      "id": "rt-um-fringe-ce336",
+      "ref": null,
+      "entrySignalId": null,
+      "entryFringeId": "fr-north-up-main",
+      "exitSignalId": "osm-sig11954024797",
+      "edgeIds": [
+        "osm-w238611571-0",
+        "osm-w238611571-1",
+        "osm-w777360532-0",
+        "osm-w238611574-0",
+        "osm-w238611567-0",
+        "osm-w238611567-1",
+        "osm-w1466120258-0"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts2464246609",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464246616",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Up trains from the north enter play on the Up Main and run to CE336, the first southbound main-category signal (CE438 at the cut has no OSM category). Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    },
+    {
+      "id": "rt-um-ce336-ce304",
+      "ref": null,
+      "entrySignalId": "osm-sig11954024797",
+      "exitSignalId": "osm-sig12587515316",
+      "edgeIds": [
+        "osm-w1466120258-1",
+        "osm-w1473734745-0",
+        "osm-w368228866-0",
+        "osm-w426718113-0",
+        "osm-w228736993-0",
+        "osm-w262069383-0",
+        "osm-w262069383-1",
+        "osm-w262069383-2"
+      ],
+      "pointsRequired": [
+        {
+          "pointsId": "osm-pts13520580929",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts1460409471",
+          "position": "normal",
+          "role": "path"
+        },
+        {
+          "pointsId": "osm-pts2464251373",
+          "position": "normal",
+          "role": "path"
+        }
+      ],
+      "overlapId": null,
+      "conflictsWith": [],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Carlisle MVP game route (P1, D-030), not a real route: no control table is available, so this is not Carlisle Power Signal Box's route or its interlocking. Up Main through platform 4 to CE304 at its south end; the Up Main south of CE304 is blocked (untyped junctions and a diamond). Track and signal positions and directions are OSM (sourced); every points passage relies on a game rule in game-rules.json; no overlap is modelled."
+      }
+    }
+  ],
+  "overlaps": []
+}

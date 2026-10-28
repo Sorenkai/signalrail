@@ -1,10 +1,12 @@
 import type {
   Control,
+  GameRules,
   PlayableArea,
   SignalEvidenceFile,
   EvidenceLevel,
   Infrastructure,
   Provenance,
+  ServicePatternsFile,
   Signalling,
   SourceRegistry,
   TimetableSnapshot,
@@ -17,6 +19,8 @@ import { TrackGraph } from "../graph/trackGraph.ts";
 import { assessInterlocking } from "./interlocking.ts";
 import { validateTimetables } from "./timetable.ts";
 import { validateControl } from "./control.ts";
+import { resolveGameRules } from "./gameRules.ts";
+import { deferredAreaCuts, validateServicePatterns } from "./servicePatterns.ts";
 
 export type Severity = "error" | "warning" | "info";
 
@@ -47,6 +51,10 @@ export interface ValidationInput {
   signalEvidence?: SignalEvidenceFile;
   /** Proposed playable geography (playable-area.json), if the dataset has one. */
   playableArea?: PlayableArea;
+  /** Hand-authored game rules (game-rules.json, D-029), if the dataset has them. */
+  gameRules?: GameRules;
+  /** Hand-authored timetable-to-route mapping (service-patterns.json, D-035), if any. */
+  servicePatterns?: ServicePatternsFile;
   /** Synthetic sources are only legitimate in test fixtures. */
   allowSynthetic?: boolean;
 }
@@ -81,7 +89,10 @@ function* provenances(value: unknown, path: string, ownerId?: string): Generator
         ? obj.tiploc
         : typeof obj.signalId === "string"
           ? obj.signalId
-          : ownerId;
+          : // Game-rule points configurations (D-029) are keyed by the Points they configure.
+            typeof obj.pointsId === "string" && "provenance" in obj
+            ? obj.pointsId
+            : ownerId;
   for (const [k, v] of Object.entries(obj)) {
     if ((k === "provenance" || k === "membershipProvenance") && v && typeof v === "object") {
       yield { path: `${path}.${k}`, ownerId: id, provenance: v as Provenance };
@@ -105,6 +116,8 @@ export function summariseEvidence(input: Omit<ValidationInput, "sources">): Evid
     timetables: input.timetables,
     signalEvidence: input.signalEvidence,
     playableArea: input.playableArea,
+    gameRules: input.gameRules,
+    servicePatterns: input.servicePatterns,
   };
   for (const [name, layer] of Object.entries(layers)) {
     for (const p of provenances(layer, name)) {
@@ -194,6 +207,11 @@ export function validateDataset(input: ValidationInput): Issue[] {
       signalling.overlaps.map((o) => o.id),
     );
   }
+  if (input.gameRules)
+    register(
+      "fringeEndpoints",
+      input.gameRules.fringeEndpoints.map((f) => f.id),
+    );
   if (control) {
     register(
       "controlAreas",
@@ -387,6 +405,8 @@ export function validateDataset(input: ValidationInput): Issue[] {
     timetables,
     signalEvidence: evidence,
     playableArea: playable,
+    gameRules: input.gameRules,
+    servicePatterns: input.servicePatterns,
   };
   const unknownSources = new Map<string, number>();
   const syntheticOwners: string[] = [];
@@ -670,8 +690,25 @@ export function validateDataset(input: ValidationInput): Issue[] {
     );
   }
 
+  // --- game rules (src/validation/gameRules.ts; DATA_MODEL "Game rules", D-029) ---
+  const gameRules = resolveGameRules(infra, graph, input.gameRules, input.playableArea);
+  issues.push(...gameRules.issues);
+
   // --- routes, overlaps and conflicts (src/validation/interlocking.ts; DATA_MODEL, D-024) ---
-  const interlocking = assessInterlocking(infra, signalling, input.sources, graph);
+  if (!signalling) {
+    add(
+      "info",
+      "SIGNALLING_ABSENT",
+      "no signalling configuration loaded (signalling.json absent or unparsed): the dataset defines no routes or overlaps, so nothing can be cleared. This records a gap, not that the area needs none",
+    );
+  }
+  const interlocking = assessInterlocking(
+    infra,
+    signalling,
+    input.sources,
+    graph,
+    gameRules.context,
+  );
   issues.push(...interlocking.issues);
   if (interlocking.assessments.length > 0) {
     const counts: Record<string, number> = {};
@@ -709,6 +746,20 @@ export function validateDataset(input: ValidationInput): Issue[] {
   }
 
   issues.push(...validateControl(control, infra, graph, input.playableArea));
+
+  // --- service patterns (src/validation/servicePatterns.ts; D-035) ---
+  issues.push(
+    ...validateServicePatterns(
+      input.servicePatterns,
+      signalling,
+      gameRules.context.fringes,
+      {
+        area: input.areaTiplocs ? new Set(input.areaTiplocs) : null,
+        deferred: new Set(input.deferredTiplocs ?? []),
+      },
+      deferredAreaCuts(input.control),
+    ).issues,
+  );
 
   // --- timetables ---
   const mapped = new Set([...timingPoints, ...timingPointPositions].map((m) => m.tiploc));

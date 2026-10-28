@@ -28,7 +28,9 @@
     "data:smart-coverage": "tsx tools/smart-coverage.ts",
     "data:reconcile-signals": "tsx tools/reconcile-signals.ts",
     "data:assess-geography": "tsx tools/assess-geography.ts",
-    "data:control-membership": "tsx tools/control-membership.ts"
+    "data:control-membership": "tsx tools/control-membership.ts",
+    "sim:timetable": "tsx tools/timetable-session.ts",
+    "data:coverage": "tsx tools/coverage-audit.ts"
   },
   "dependencies": {
     "react": "^19.3.1",

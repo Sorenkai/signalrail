@@ -126,6 +126,15 @@ export class DirectedTrack {
     )[0]!;
   }
 
+  /**
+   * Whether this heuristic lets a train arriving at `node` from adjacent `from` leave towards
+   * adjacent `to`, judged at that node only. Like every result here, a heuristic, not evidence.
+   */
+  passes(from: string, node: string, to: string): boolean {
+    const via = (this.out.get(node) ?? []).find((x) => x.to === from);
+    return !!via && this.exits(node, via.edge).some((x) => x.to === to);
+  }
+
   /** Single-slip nodes on `route` where it takes a diagonal rather than going straight across. */
   singleSlipDiagonalsUsed(route: TrackRoute): string[] {
     const used: string[] = [];

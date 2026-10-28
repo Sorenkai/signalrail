@@ -132,9 +132,98 @@ Notes:
   - Not verified against a map or signalling plan.
   - `CARL437` (signal CE437) lies between Caldew Jn and Kingmoor Jn, and its side of the north gameplay cut is unknown. Every train using it also passes Caldew Jn, so its classification changes no snapshot.
 
+## I-012: Switch toes and slip straight pairings used to orient the Carlisle MVP game rules
+
+- **Where:** `data/datasets/carlisle/game-rules.json` (P1, D-030), checked by `tests/carlisleRoutes.test.ts`.
+- **What is inferred, and what is not:** each points rule is a `simplified` game rule. Its lie is not a real-world claim, and the real lie stays `unknown` in `infrastructure.json`. Only the _orientation_ of each rule rests on inference:
+  - **Simple points (18):** OSM gives neither a toe nor a switch type. The toe is taken from the I-004 `legs` heuristic: the two edges with the closest departure bearings are the diverging legs, and the third edge is the toe. Each MVP route passes toe-to-leg under this heuristic, never leg-to-leg (`DirectedTrack.passes`, tested in both directions). Normal = the Main line leg and reverse = the other leg is a game convention.
+  - **Single slips (2; the slip type is sourced):**
+    - Carlisle South Jn `osm-n10288170`: the Down Main straight `osm-n3057659457 ↔ osm-n2374086076` is one continuous OSM way (`way/126243846`) through the node, with edges 180° apart.
+    - Carlisle North Jn `osm-n7253833743`: the Down Main straight `osm-n1460409473 ↔ osm-n3720819849`. Both edges are tagged `Down Main` and lie 178° apart, and the node's other two edges form one continuous way (`way/777360528`), which is the other straight.
+    - Only these straight movements are permitted. No diagonal is inferred (D-021).
+- **Limits:**
+  - Bearings come from mapped geometry. A short, oddly drawn edge could mislead the heuristic.
+  - The real switch could be a three-way or some other arrangement that OSM does not tag.
+  - The convention that normal is the Main line leg is not a statement about Carlisle's interlocking.
+- **Reverse:** remove the rules (and the routes that need them) from `game-rules.json` and `signalling.json`.
+
+## I-013: Which Carlisle timetable services run on the Down Main game routes
+
+- **Where:** `data/datasets/carlisle/service-patterns.json`, pattern `pat-down-wcml-through-p3` (P5, D-035), checked by `tests/carlisleTimetable.test.ts`.
+- **Sourced (CIF DFROC1F, 2026-11-04 snapshot):**
+  - the timing points PNTH > CARLILE > CARLCJN > KGMRJCN > FLORSTN, and their times;
+  - CARLILE platform `3` and line `DML`;
+  - CARLCJN's line code: blank on 51 services, `GL` on 4.
+- **Sourced (OSM):** the WCML south cut leads towards Penrith, and the Down Main runs through platform 3 to the north gameplay cut towards Kingmoor.
+- **Inferred:**
+  - that CIF line `DML` at CARLILE is the Down Main the game routes follow;
+  - that a blank line code at Caldew Jn keeps the train on the Down Main to the north cut, while `GL` takes the goods line (those 4 services are excluded);
+  - that CIF platform 3 is the OSM track the routes use (the platform association is itself inferred, I-007).
+- **Not inferred:**
+  - the real route, signal or path of any train;
+  - where a train is between Penrith and the cut;
+  - whether a train passing Kingmoor Jn uses the Down Main beyond the cut.
+
+  Platform 1 Down trains (21) are not mapped onto platform 3.
+
+- **Limits:**
+  - Not verified against a signalling plan, a Sectional Appendix line diagram or TRUST berth data.
+  - The routes themselves are `simplified` game routes (D-030).
+- **Reverse:** delete the pattern; every service becomes unsupported (`NO_PATTERN`).
+
+## I-014: Which Carlisle timetable services take the Caldew Jn goods line, and that they leave on the Down Goods
+
+- **Where:** `data/datasets/carlisle/service-patterns.json` pattern `pat-down-wcml-p3-caldew-goods`, route `rt-dg-ce323-fringe` and points rule `osm-pts2464246595` (P6, D-036). Checked by `tests/carlisleGoods.test.ts`.
+- **Sourced (CIF DFROC1F, 2026-11-04):** the timing points PNTH > CARLILE > CARLCJN > KGMRJCN > FLORSTN, CARLILE platform 3 and line DML, and CARLCJN line `GL`, on 4 services with no Kingmoor yard call.
+- **Sourced (OSM):**
+  - Between platform 3 and the north cut, the only connection from the Down Main onto a goods line is switch `osm-n2464246608` (`railway=switch`), facing for a northbound train, onto way 238611576 (`railway:track_ref=Up & Down Goods`, `railway:bidirectional=regular`).
+  - That line ends at switch `osm-n2464246595`, whose two legs are the Down Goods (way 238611573, `preferred_direction=forward`, running north from the switch) and the Up Goods (way 238613009, `forward`, running south into it).
+- **Inferred:**
+  - that CIF `GL` at Caldew Jn (CARLCJN, which has no OSM location) is this Up & Down Goods;
+  - that a northbound train takes the Down Goods leg, its sourced preferred direction;
+  - the toe of the new points rule, by the I-004 heuristic (as I-012);
+  - platform 3's track association (I-007), as for I-013.
+- **Not inferred:**
+  - the real route, signal aspects or interlocking;
+  - the real lie of either switch;
+  - what happens beyond the cut;
+  - which line Kingmoor-yard workings use beyond it. Those 10 services stay unsupported.
+- **Reverse:** delete the pattern; its 4 services return to `PATTERN_FIELD_MISMATCH`.
+
+## I-015: Kingmoor-yard goods workings leave play on the Down Goods, and may end beyond it
+
+- **Where:** the four `pat-down-wcml-p3-goods-kgmr-*` patterns in `data/datasets/carlisle/service-patterns.json` (P7, D-037), checked by `tests/carlisleP7.test.ts`. Evidence matrix: `docs/pilots/CARLISLE_P7_EVIDENCE.md`, section C.
+- **Sourced (CIF DFROC1F, 2026-11-04):** 10 services run PNTH > CARLILE (platform 3, line DML) > CARLCJN (line GL) > KGMRJCN (line UA or DA) > Kingmoor yard TIPLOCs (deferred, I-011). 6 end there (CARLILY, CARLAME), and 4 continue via KGMR490 to FLORSTN.
+- **Sourced (OSM, mapped topology):**
+  - Beyond `cut-north-down-goods`, the Down Goods connects onward into the Kingmoor yard tracks without re-entering play.
+  - Beyond `cut-north-down-main`, the Down Main runs only to the extract edge.
+- **Sourced (control.json, game design):** all four north cuts lead into `ext-kingmoor`, a `deferred_play_area`.
+- **Inferred:**
+  - In play, the same as I-014: GL is the Up & Down Goods, and a northbound train takes the Down Goods.
+  - That the Down Goods cut is where these trains leave play. The yards are reachable from play only through it, by the I-004 heuristic for the switch passages beyond the cut, which no source states. This agrees independently with GL at Caldew Jn.
+- **Game simplification (not inference):** the train leaves play at the fringe. For the 6 schedules that end in the yard, the journey's end lies beyond play (`after: null`). Nothing at Kingmoor is simulated.
+- **Not inferred:**
+  - which track or line (CIF UA/DA) the train uses beyond the cut;
+  - how the yard receives it;
+  - any signal, route or lie at Kingmoor;
+  - any formation or onward working.
+- **Reverse:** delete the four patterns; their 10 services return to `NO_PATTERN`.
+
 ## Not yet inferred (deliberately)
 
+- **P7 (D-037), not inferred:** that points still exist at the platform 1 two-edge switch `osm-n1460504022`, or that they do not. OSM history shows its third leg (Siding A) was removed in February 2026, and the GIS (2024) still shows a junction. The node stays incomplete, and its points are refused by `move_points`. Not inferred either: switch types for the untyped Up Main junctions; the functions of CE438, CE263 or CE268 from their SMART berths or positions; diamond passages; and TIPLOC positions from CORPUS name matches (possible by the I-002 method, not done).
+- **P6 game policy (D-036), not inference:**
+  - **Planned routing:** a service train takes only routes of its planned chain (`serviceRouting: "planned_chain_only"`).
+  - **Traversable chains:** a chain with a facing stop or unknown-function signal inside a route is unsupported (`ROUTE_CHAIN_BLOCKED`).
+  - Neither claims how a real driver, signaller or train describer handles a wrong route. An unknown signal function is never upgraded to passable to make a chain run (CE438, CE263, CE268).
+
 - **Box membership from signal ref prefixes** (e.g. `SBJ` → Severn Bridge Junction): plausible, but not adopted. See DECISION_LOG D-008.
-- **Routes, overlaps and locking:** none exist yet. When simulated interlocking is authored, each rule gets an entry here. The validator does not derive routes, normal/reverse lies, switch leg pairings or flank protection (D-024).
+- **Routes, overlaps and locking:** no real route, overlap or locking is inferred. The Carlisle MVP routes (D-030) are `simplified` game routes, not inferences; only the orientation of their points rules is inferred (I-012). Any future inferred interlocking rule gets an entry here. Train movement and occupancy (D-032, D-033) infer nothing about the real railway either: replacement on passing, the three signal movement roles, instant stopping and whole-edge occupancy are `simplified` simulation policy (ADR 0001), not claims about Carlisle or any other real interlocking. The roles rest only on what a function means in general, not on any location: a distant or repeater signal has no stop indication, so it is not a stop signal. A signal with no source-stated function is kept as a stop, and is never given a function. Approach locking and route release (P4, D-034) infer nothing either. The one-edge approach zone, the 120 s release time, whole-route release on train clearance, and the rule that an onward route does not conflict with the previous route's overlap are `simplified` game policy. No approach-locking distance, release time, track circuit, overlap or control-table entry is known for Carlisle or any other dataset, and none is derived from geometry, signal positions, train movements or the Network Rail GIS layers. The validator does not derive routes, normal/reverse lies, switch leg pairings or flank protection (D-024).
 - **Signal positions for berths with no OSM signal** (Carlisle `0301`, `0305`, `0306`, `0315`, `0316`, `0321`, `0365`, `0431`): not placed. They are listed in the survey backlog (CARLISLE_PILOT.md).
 - **Which diagonal each single slip provides:** not inferred from SMART steps or geometry (D-021).
+- **P5 timetable simplifications (D-035): game policy, not inference.** None of these claims how a real train runs or how a real signaller accepts one:
+  - **Due time:** a service is due at its entry fringe from its time at the timing point before play (at Carlisle, Penrith). No timing exists at the cut.
+  - **Train length and speed:** session game settings (default 200 m, 20 m/s) for every train. The snapshot holds no train length, and CIF speed and timing load are not imported.
+  - **Entry:** a train enters only when the signaller has set its entry fringe route on proven-clear track. Its rear appears at the cut's outside node.
+  - **Exit:** a train leaves play once it stands wholly on the exit cut edge, head at the outside node.
+  - **Station calls:** timetabled stops in play are not enacted. Trains stop only at signals.

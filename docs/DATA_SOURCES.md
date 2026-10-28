@@ -24,6 +24,13 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
 - **Attribution (required wherever the data or derived maps are shown):** "© OpenStreetMap contributors. Data available under the Open Database License (https://www.openstreetmap.org/copyright)." The client page footer and the SVG preview display this. It is generated from the registry by `src/data/attribution.ts`.
 - **Share-alike:** `data/datasets/*/infrastructure.json` is a _derived database_. If it is distributed publicly or used in a public service, it must be offered under ODbL. The game's own code does not need to be. Keep derived data in separate files from authored game data (it already is), so the ODbL obligation stays limited to it.
 - **Quality caveat:** OSM is crowd-sourced. It records what contributors mapped, not Network Rail records. All OSM-derived elements are labelled `sourced` (attributable), not `verified`.
+- **Tags read directly from the raw snapshot (P6, D-036):** `railway:preferred_direction` and `railway:bidirectional` on the Carlisle goods-line ways 238611573, 238613009 and 238611576 (`carlisle-20261027T184451Z.json`). The importer does not carry them into `infrastructure.json`. They are cited in the provenance of `pat-down-wcml-p3-caldew-goods` and `osm-pts2464246595`, and checked in `tests/carlisleGoods.test.ts`. A preferred direction is what contributors mapped, not a statement of how the line is signalled. No new source and no new retrieval were used in P6, and the Network Rail GIS data (licence terms unclear, see NETWORK_RAIL_GIS_ASSESSMENT.md) was not used.
+- **P7 reads (D-037), 2026-10-28:**
+  - **What was read:** current elements and element histories for the Carlisle blocker nodes and ways, and changeset metadata (comments, stated sources, imagery used), from the OSM API v0.6 (`https://api.openstreetmap.org/api/0.6/`, public, ODbL). Also the OSM wiki page `Tag:railway=railway_crossing` (wiki text CC BY-SA 2.0; facts only).
+  - **What was found:** the live elements were unchanged from the committed snapshot.
+  - **How it was used:** the histories explain the platform 1 two-edge switch (Siding A removed in changeset 178027337). They are cited by element and changeset id in `docs/pilots/CARLISLE_P7_EVIDENCE.md`, the P7 movement-group table and DATA_GAPS.
+  - **What was not done:** nothing was stored, no new snapshot was made, no raw file changed, and no dataset value comes from these reads.
+  - **Limit:** a changeset's stated source (for example the National Electronic Sectional Appendix) is the mapper's claim, not a source this project has read.
 - **Retrievals:** 2026-10-27, `data/raw/osm/shrewsbury-2026-10-27.json`, OSM base timestamp `2026-10-27T16:38:36Z`, from overpass-api.de, bbox 52.695–52.745 N, 2.770–2.725 W. It includes named junctions, yards and level crossings. It supersedes an earlier same-day extract (base `16:01:40Z`, smaller bbox). A mirror (overpass.private.coffee) returned a stale base (`2026-05-31`), so we discarded it and did not use it.
 - **Carlisle retrievals (all 2026-10-27, overpass-api.de, bbox 54.870–54.940 N, 2.985–2.895 W):**
   - Pilot extract `data/raw/osm/carlisle-2026-10-27.json`, base `16:59:21Z`, sha256 `7cbdd90e…a77c94`. Kept unchanged.
@@ -44,13 +51,24 @@ Status as of **2026-10-27** (updated after the owner supplied SCHEDULE and CORPU
   - **BPLAN:** timing points and running times. Not yet assessed.
 - **Attribution used:** "Contains public sector information licensed under the Open Government Licence v3.0." This is the OGL default, because Network Rail gives no specific wording (DECISION_LOG D-009).
 - **Retrieved:** `data/private/toc-full.CIF` (SCHEDULE full extract, header `DFROC1F`, extracted 2026-10-23 20:01, valid 2026-10-23 to 2027-10-23, 721,875 schedules) and `data/private/CORPUSExtract.json` (55,981 rows). Both were downloaded by the project owner. The recorded retrieval date, 2026-10-27, is **derived from the local file timestamps**, not from a download record. Correct it only if reliable evidence shows a different date.
-- **Committed derivatives:** `data/datasets/shrewsbury/timetables/2026-11-04.json` and the CORPUS fields in `timing-points.json`. The raw files are never committed.
+- **Committed derivatives:** `data/datasets/shrewsbury/timetables/2026-11-04.json`, `data/datasets/carlisle/timetables/2026-11-04.json` (DFROC1F, operating-day convention D-026) and the CORPUS fields in `timing-points.json`. The raw files are never committed.
+- **Use in play (P5, D-035):** sessions run services from the Carlisle snapshot only through the hand-authored `service-patterns.json` mapping, which cites DFROC1F and OSM and is labelled `inferred` (I-013). No timetable record is altered or added: unmatched services are reported as unsupported. The licence caveat above applies to any published build that shows timetable data.
 - **SMART: inspected 2026-10-27.** `data/private/SMARTExtract.json` (34,298 berth rows, supplied by the owner; retrieval date from the file timestamp). `npm run data:smart-coverage` reports coverage per study-area TIPLOC. Findings are in FEASIBILITY_REPORT. In short: of the 15 study-area TIPLOCs, only Harlescott Crossing (TD area C3) has berth data. An earlier attempt to fetch SMART without a login returned HTTP 401; the project tools still hold no credentials.
 - **SMART-derived files: kept local, restricted pending licence review (owner decision, D-016 and D-019).** While Network Rail's SMART licence and redistribution terms are unconfirmed (`confirmed: false`), these are not committed or published. This is pending confirmation, not a finding that redistribution is prohibited.
   - **Git-ignored bulk data:** `data/datasets/carlisle/signal-evidence.json` (raw berth step rows), `docs/pilots/carlisle-pilot-results.json` and `docs/pilots/carlisle-phase1-geography.json`.
   - **Excluded locally** (`.git/info/exclude`, so formatting checks still apply): `docs/pilots/CARLISLE_PILOT.md` and `tests/carlisleEvidence.test.ts`.
   - **Notices:** `data/datasets/carlisle/RESTRICTED-SMART.md` and `docs/pilots/RESTRICTED-SMART.md`.
   - **Tracked docs quoting a few berth ids or steps in uncommitted changes:** DATA_GAPS (Carlisle), INFERRED_BEHAVIOUR (I-003, I-004) and DECISION_LOG (D-017, D-021). These need the same review before they are committed. The committed D-015 mentions two Harlescott berth records without quoting berth ids.
+
+- **P7 (D-037), local corroboration only:** the evidence matrix quotes the existence of two SMART berth numbers (438, 301) and nothing else. It is subject to the same licence review before it is committed.
+
+## Network Rail GIS network model (not registered)
+
+- Assessed in [NETWORK_RAIL_GIS_ASSESSMENT.md](NETWORK_RAIL_GIS_ASSESSMENT.md); stored locally in git-ignored `data/private/network-rail-gis/`.
+- **Licence:** unresolved. The source metadata says "internal Network Rail use only", while the repository README states OGL. Permission to publish GIS-derived values is **not** established.
+- **P7 (D-037):** used only to corroborate physical findings: a three-way node 1.1 m from `osm-n1460504022`, and four-way nodes near both diamonds. Only distances and link counts are quoted, as the assessment does.
+- **Not done:** no GIS value enters a dataset, a pattern, a rule or a test, and the source stays unregistered.
+- **Before any published or distributed use:** confirm the terms with Network Rail or the Rail Data Marketplace, including the Ordnance Survey attribution.
 
 ## RDG timetable feed (`rdg-timetable-feed`)
 

@@ -1,0 +1,354 @@
+{
+  "$comment": "Carlisle service patterns (P5, DECISION_LOG D-035, D-036, D-037; INFERRED_BEHAVIOUR I-013, I-014, I-015). Hand-authored game-design mapping from timetable journeys in timetables/<date>.json onto the simplified game routes of signalling.json (D-030; the goods-line route since P6, D-036). Adds no service, time, call, platform or line. A service that matches no pattern exactly is reported unsupported, never forced onto a route.",
+  "datasetId": "carlisle",
+  "patterns": [
+    {
+      "id": "pat-down-wcml-through-p3",
+      "description": "Down WCML through trains from Penrith via Carlisle platform 3 and Caldew Jn to Kingmoor Jn and Floriston (WCML north), on the Down Main",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": [null]
+        },
+        {
+          "tiploc": "KGMRJCN"
+        }
+      ],
+      "after": {
+        "tiploc": "FLORSTN"
+      },
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-main",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dm-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-013). Sourced (CIF DFROC1F): the timing points PNTH > CARLILE > CARLCJN > KGMRJCN > FLORSTN, CARLILE platform 3 and line DML, and no CARLCJN line code (services with CARLCJN line GL take the goods line and are excluded). Sourced (OSM): the WCML south cut leads towards Penrith, and the Down Main runs through platform 3 to the north cut towards Kingmoor. Inferred: that line DML is the Down Main the game routes follow, that a blank CARLCJN line keeps the train on the Down Main to the north cut, and that platform 3 is the OSM track the routes use (platform association inferred, I-007). The routes are simplified game routes (D-030), not Carlisle PSB's routes."
+      }
+    },
+    {
+      "id": "pat-down-wcml-p3-caldew-goods",
+      "description": "Down WCML trains from Penrith via Carlisle platform 3, taking the goods line at Caldew Jn to Kingmoor Jn and Floriston (WCML north), leaving play on the Down Goods",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": ["GL"]
+        },
+        {
+          "tiploc": "KGMRJCN"
+        }
+      ],
+      "after": {
+        "tiploc": "FLORSTN"
+      },
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-goods",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dg-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-014, P6 D-036). Sourced (CIF DFROC1F): the timing points PNTH > CARLILE > CARLCJN > KGMRJCN > FLORSTN, CARLILE platform 3 and line DML, and CARLCJN line GL, with no call at any Kingmoor yard TIPLOC. Sourced (OSM): between platform 3 and the north cut the only connection from the Down Main onto a goods line is switch osm-n2464246608, facing for a northbound train, onto the bidirectional Up & Down Goods (way 238611576), which ends at switch osm-n2464246595; of its two legs only the Down Goods (way 238611573) has a northward preferred direction. Inferred: that CIF line GL at Caldew Jn is that Up & Down Goods (Caldew Jn has no OSM location), and that a northbound train continues onto the Down Goods; platform 3 as in I-013. Services that call at a Kingmoor yard TIPLOC are not matched (their handover beyond the cut is unaudited). The routes are simplified game routes (D-030, D-036), not Carlisle PSB's routes."
+      }
+    },
+    {
+      "id": "pat-down-wcml-p3-goods-kgmr-up-yard-ends",
+      "description": "Down WCML goods-line trains from Penrith via Carlisle platform 3 and the Caldew Jn goods line to the Kingmoor Up yard (Kingmoor Jn line UA), terminating there beyond play; they leave play on the Down Goods",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": ["GL"]
+        },
+        {
+          "tiploc": "KGMRJCN",
+          "lines": ["UA"]
+        },
+        {
+          "tiploc": "KGMRUDS"
+        },
+        {
+          "tiploc": "CARLILY"
+        }
+      ],
+      "after": null,
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-goods",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dg-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-015, P7 D-037). In play, identical to pat-down-wcml-p3-caldew-goods (I-014): sourced (CIF DFROC1F) PNTH > CARLILE platform 3 line DML > CARLCJN line GL; inferred that GL is the Up & Down Goods and that a northbound train takes the Down Goods to cut-north-down-goods. Beyond play (CIF, sourced; not simulated): KGMRJCN line UA > KGMRUDS (Kingmoor Up Departures) > CARLILY (NY (DBS)), where the schedule ends. Sourced (OSM, mapped topology): beyond cut-north-down-goods the Down Goods runs on into the Kingmoor yard tracks without re-entering play, while beyond cut-north-down-main the Down Main runs only to the extract edge; which leg each switch beyond the cut gives is the I-004 geometric heuristic, so the path beyond is not established and the game claims none. The journey ends in the deferred Kingmoor area (after: null): cut-north-down-goods' boundary bd-north-down-goods leads into ext-kingmoor (deferred_play_area), which the validator requires. The routes are simplified game routes (D-030, D-036). Kingmoor (D-018, deferred) is not simulated: the train leaves play at the fringe, and nothing is claimed about the Kingmoor Jn lines (CIF UA/DA), the yard, its signals or how the train is received."
+      }
+    },
+    {
+      "id": "pat-down-wcml-p3-goods-kgmr-down-yard-ends",
+      "description": "Down WCML goods-line trains from Penrith via Carlisle platform 3 and the Caldew Jn goods line to the Kingmoor Down yard (Kingmoor Jn line DA), terminating at Carlisle Yard beyond play; they leave play on the Down Goods",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": ["GL"]
+        },
+        {
+          "tiploc": "KGMRJCN",
+          "lines": ["DA"]
+        },
+        {
+          "tiploc": "KGMRDSB"
+        },
+        {
+          "tiploc": "KGMRDSG"
+        },
+        {
+          "tiploc": "KGMRSGF"
+        },
+        {
+          "tiploc": "CARLAME"
+        }
+      ],
+      "after": null,
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-goods",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dg-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-015, P7 D-037). In play, identical to pat-down-wcml-p3-caldew-goods (I-014): sourced (CIF DFROC1F) PNTH > CARLILE platform 3 line DML > CARLCJN line GL; inferred that GL is the Up & Down Goods and that a northbound train takes the Down Goods to cut-north-down-goods. Beyond play (CIF, sourced; not simulated): KGMRJCN line DA > KGMRDSB (Kingmoor Dn Arr Stop Board) > KGMRDSG > KGMRSGF > CARLAME (Carlisle Yard), where the schedule ends. Sourced (OSM, mapped topology): beyond cut-north-down-goods the Down Goods runs on into the Kingmoor yard tracks without re-entering play, while beyond cut-north-down-main the Down Main runs only to the extract edge; which leg each switch beyond the cut gives is the I-004 geometric heuristic, so the path beyond is not established and the game claims none. The journey ends in the deferred Kingmoor area (after: null): cut-north-down-goods' boundary bd-north-down-goods leads into ext-kingmoor (deferred_play_area), which the validator requires. The routes are simplified game routes (D-030, D-036). Kingmoor (D-018, deferred) is not simulated: the train leaves play at the fringe, and nothing is claimed about the Kingmoor Jn lines (CIF UA/DA), the yard, its signals or how the train is received."
+      }
+    },
+    {
+      "id": "pat-down-wcml-p3-goods-kgmr-down-yard-florstn",
+      "description": "Down WCML goods-line trains from Penrith via Carlisle platform 3 and the Caldew Jn goods line through the Kingmoor Down yard (Kingmoor Jn line DA) to Floriston; they leave play on the Down Goods",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": ["GL"]
+        },
+        {
+          "tiploc": "KGMRJCN",
+          "lines": ["DA"]
+        },
+        {
+          "tiploc": "KGMRDSB"
+        },
+        {
+          "tiploc": "KGMRDSG"
+        },
+        {
+          "tiploc": "KGMRSGF"
+        },
+        {
+          "tiploc": "KGMR490"
+        }
+      ],
+      "after": {
+        "tiploc": "FLORSTN"
+      },
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-goods",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dg-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-015, P7 D-037). In play, identical to pat-down-wcml-p3-caldew-goods (I-014): sourced (CIF DFROC1F) PNTH > CARLILE platform 3 line DML > CARLCJN line GL; inferred that GL is the Up & Down Goods and that a northbound train takes the Down Goods to cut-north-down-goods. Beyond play (CIF, sourced; not simulated): KGMRJCN line DA > KGMRDSB > KGMRDSG > KGMRSGF > KGMR490 (signal CE490) > FLORSTN. Sourced (OSM, mapped topology): beyond cut-north-down-goods the Down Goods runs on into the Kingmoor yard tracks without re-entering play, while beyond cut-north-down-main the Down Main runs only to the extract edge; which leg each switch beyond the cut gives is the I-004 geometric heuristic, so the path beyond is not established and the game claims none. The service has a call after the area (FLORSTN), as the P5 and P6 patterns do. The routes are simplified game routes (D-030, D-036). Kingmoor (D-018, deferred) is not simulated: the train leaves play at the fringe, and nothing is claimed about the Kingmoor Jn lines (CIF UA/DA), the yard, its signals or how the train is received."
+      }
+    },
+    {
+      "id": "pat-down-wcml-p3-goods-kgmr-up-yard-florstn",
+      "description": "Down WCML goods-line trains from Penrith via Carlisle platform 3 and the Caldew Jn goods line through the Kingmoor Up yard (Kingmoor Jn line UA) to Floriston; they leave play on the Down Goods",
+      "before": {
+        "tiploc": "PNTH"
+      },
+      "through": [
+        {
+          "tiploc": "CARLILE",
+          "platform": "3",
+          "lines": ["DML"]
+        },
+        {
+          "tiploc": "CARLCJN",
+          "lines": ["GL"]
+        },
+        {
+          "tiploc": "KGMRJCN",
+          "lines": ["UA"]
+        },
+        {
+          "tiploc": "KGMRUDS"
+        },
+        {
+          "tiploc": "CARLILY"
+        },
+        {
+          "tiploc": "KGMRSGF"
+        },
+        {
+          "tiploc": "KGMR490"
+        }
+      ],
+      "after": {
+        "tiploc": "FLORSTN"
+      },
+      "entryFringeId": "fr-wcml-south-down",
+      "exitFringeId": "fr-north-down-goods",
+      "routeIds": [
+        "rt-dm-fringe-ce264",
+        "rt-dm-ce264-ce272",
+        "rt-dm-ce272-ce286",
+        "rt-dm-ce286-ce323",
+        "rt-dg-ce323-fringe"
+      ],
+      "provenance": {
+        "evidence": "inferred",
+        "sources": [
+          {
+            "sourceId": "nr-open-data-feeds",
+            "recordId": "DFROC1F",
+            "version": "DFROC1F",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "data/raw/osm/carlisle-20261027T184451Z.json",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Inferred mapping (I-015, P7 D-037). In play, identical to pat-down-wcml-p3-caldew-goods (I-014): sourced (CIF DFROC1F) PNTH > CARLILE platform 3 line DML > CARLCJN line GL; inferred that GL is the Up & Down Goods and that a northbound train takes the Down Goods to cut-north-down-goods. Beyond play (CIF, sourced; not simulated): KGMRJCN line UA > KGMRUDS > CARLILY > KGMRSGF > KGMR490 (signal CE490) > FLORSTN. Sourced (OSM, mapped topology): beyond cut-north-down-goods the Down Goods runs on into the Kingmoor yard tracks without re-entering play, while beyond cut-north-down-main the Down Main runs only to the extract edge; which leg each switch beyond the cut gives is the I-004 geometric heuristic, so the path beyond is not established and the game claims none. The service has a call after the area (FLORSTN), as the P5 and P6 patterns do. The routes are simplified game routes (D-030, D-036). Kingmoor (D-018, deferred) is not simulated: the train leaves play at the fringe, and nothing is claimed about the Kingmoor Jn lines (CIF UA/DA), the yard, its signals or how the train is received."
+      }
+    }
+  ]
+}

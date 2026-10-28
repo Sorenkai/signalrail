@@ -290,7 +290,7 @@ describe("human and AI commands receive equivalent validation", () => {
     const ai = operatorHandle(store, { kind: "ai", id: "op-2" });
     expect(human.submit("area-1", "h-1", setR("r1")).outcome).toBe("accepted");
     expect(ai.submit("area-1", "a-1", move("reverse"))).toMatchObject({ code: "POINTS_LOCKED" });
-    expect(store.log().map((e) => [e.operator?.kind, e.outcome])).toEqual([
+    expect(store.log().map((e) => [e.kind === "command" && e.operator?.kind, e.outcome])).toEqual([
       ["human", "accepted"],
       ["ai", "rejected"],
     ]);

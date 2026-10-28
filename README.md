@@ -2,10 +2,12 @@
 
 A multiplayer, browser-based UK railway signalling and dispatching game, built on real, attributed infrastructure and timetable data. Players will operate neighbouring signalling areas on a traditional schematic diagram and hand trains to one another.
 
-> **Status: data foundation.** No gameplay, simulation or interlocking yet.
+> **Status: headless simulation on the Carlisle pilot.** No playable client, multiplayer or AI signallers yet.
 >
 > - Phase 0 built the data model, importers, validation and a geographic preview of the first study area (Shrewsbury).
-> - A Carlisle dataset is under investigation: signal/berth reconciliation, a proposed playable area, and platform-to-track mapping. It is not playable. See [docs/pilots/CARLISLE_PILOT.md](docs/pilots/CARLISLE_PILOT.md).
+> - Carlisle has signal/berth reconciliation, a proposed playable area, platform-to-track mapping and a small set of `simplified` game routes (Down Main, Caldew Jn goods line, part of the Up Main). See [docs/pilots/CARLISLE_PILOT.md](docs/pilots/CARLISLE_PILOT.md).
+> - The authoritative simulation (`src/sim/`, [ADR 0001](docs/adr/0001-authoritative-command-pipeline.md)) sets routes, moves trains and runs real dated timetable services through fringes, headless only. On 2026-11-04, 55 of 381 Carlisle services can run (P6); the rest are unsupported for reasons listed in [docs/pilots/CARLISLE_P6_COVERAGE.md](docs/pilots/CARLISLE_P6_COVERAGE.md).
+> - The routes are game routes, not Carlisle Power Signal Box's interlocking; nothing here is a certified or operationally safe replica.
 >
 > See [docs/FEASIBILITY_REPORT.md](docs/FEASIBILITY_REPORT.md) for what the data can credibly support.
 
@@ -38,6 +40,8 @@ npm run server         # read-only dataset API at http://localhost:3001/api/data
 | `npm run data:smart-coverage`           | Report SMART berth steps per study-area TIPLOC (read-only)           |
 | `npm run data:reconcile-signals`        | Build `signal-evidence.json` (needs private SMART/CORPUS files)      |
 | `npm run data:assess-geography`         | Assess a dataset's `playable-area.json` (read-only on the dataset)   |
+| `npm run sim:timetable`                 | Service plan for a dated timetable; optionally a headless session    |
+| `npm run data:coverage`                 | Group a timetable's services by movement and blocker (read-only)     |
 
 Details: [docs/IMPORTING.md](docs/IMPORTING.md).
 
@@ -48,16 +52,16 @@ src/model/        zod schemas: evidence, sources, infrastructure, signalling, co
 src/import/       OSM (Overpass), CIF, CORPUS and SMART importers
 src/graph/        shared track graph: topology primitives and the geometric junction heuristic
 src/validation/   dataset and interlocking validation
-src/reconcile/    signal/berth evidence and playable-area assessment
+src/reconcile/    signal/berth evidence, playable-area assessment and the timetable coverage audit (P6)
 src/pilot/        pilot identifier matching (signal refs and berths)
 src/schematic/    SVG preview model and renderer
-src/sim/          authoritative command pipeline and runtime state (docs/adr/0001); no train movement yet
+src/sim/          authoritative command pipeline and runtime state (docs/adr/0001); explicitly placed trains move (P3); dated timetable services enter and leave at fringes (P5) on their own planned route chain (P6)
 src/server/       read-only HTTP API (multiplayer comes later)
 src/client/       React data preview
 tools/            CLI entry points
 data/sources.json source registry
 data/raw/         dated raw snapshots (OSM, ODbL)
-data/datasets/    per-area data, one file per layer (shrewsbury; carlisle under investigation)
+data/datasets/    per-area data, one file per layer (shrewsbury; carlisle pilot)
 fixtures/synthetic/ synthetic test data (never real)
 docs/             data sources, model, decisions, feasibility, gaps; docs/pilots/ area investigations
 ```

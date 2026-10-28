@@ -135,11 +135,21 @@ export function validateTimetables(
           `${s.id}: id must be "${s.uid}:${s.runDate}"`,
           [s.id],
         );
-      for (const c of s.calls)
+      for (const c of s.calls) {
         if (!TIPLOC.test(c.tiploc))
           add("error", "TIMETABLE_TIPLOC_INVALID", `${s.id}: "${c.tiploc}" is not a valid TIPLOC`, [
             s.id,
           ]);
+        // The schema checks the shape only; a time of day must also be in range (P5, D-035).
+        for (const time of [c.arrival, c.pass, c.departure, c.publicArrival, c.publicDeparture])
+          if (time && (Number(time.slice(0, 2)) > 23 || Number(time.slice(3, 5)) > 59))
+            add(
+              "error",
+              "TIMETABLE_TIME_INVALID",
+              `${s.id}: ${time} at ${c.tiploc} is not a time of day`,
+              [s.id],
+            );
+      }
 
       // --- journey shape ---
       const first = s.calls[0]!;

@@ -1,4 +1,11 @@
-import type { Infrastructure, Points, Provenance, TrackEdge, TrackNode } from "../model/index.ts";
+import type {
+  Infrastructure,
+  Points,
+  PointsGameRule,
+  Provenance,
+  TrackEdge,
+  TrackNode,
+} from "../model/index.ts";
 
 /**
  * Core track-graph primitives shared by the importer, validator, reconciliation and pilot
@@ -58,10 +65,12 @@ export interface PointsLie {
 
 /**
  * Movement from `from` through `node` to `to`, judged only from mapped topology and evidenced
- * points lie:
+ * points lie, or from a valid game rule (game-rules.json, D-029) where the lie is unknown:
  * - through:    ordinary plain track;
- * - set:        simple points with an evidenced lie, entered or left via the toe;
- * - leg_to_leg: simple points with an evidenced lie, from one diverging leg to the other;
+ * - set:        simple points with an evidenced or game-rule lie, entered or left via the toe,
+ *               or a slip movement a game rule lists; `evidence` is `simplified` for a game rule;
+ * - leg_to_leg: simple points with an evidenced or game-rule lie, from one diverging leg to the
+ *               other;
  * - unresolved: the data cannot decide (`why` explains). Never a pass.
  */
 export type SwitchPassage =
@@ -87,12 +96,17 @@ const weakest = (a: Provenance["evidence"], b: Provenance["evidence"]) => {
   return order.indexOf(a) >= order.indexOf(b) ? a : b;
 };
 
-/** The points lie, or null when either leg is missing, unknown or the legs coincide. */
+/**
+ * The source-derived points lie, or null when either leg is missing, unknown or the legs
+ * coincide. A leg labelled `simplified` is not used: game simplifications belong in
+ * game-rules.json, and infrastructure holding one is an error (SIMPLIFIED_IN_SOURCE_LAYER).
+ */
 export function pointsLie(p: Points): PointsLie | null {
   const n = p.normalTowardsNodeId;
   const r = p.reverseTowardsNodeId;
   if (n.value === null || r.value === null) return null;
-  if (n.provenance.evidence === "unknown" || r.provenance.evidence === "unknown") return null;
+  const unusable = (e: Provenance["evidence"]) => e === "unknown" || e === "simplified";
+  if (unusable(n.provenance.evidence) || unusable(r.provenance.evidence)) return null;
   if (n.value === r.value) return null;
   return {
     normal: n.value,
@@ -263,8 +277,16 @@ export class TrackGraph {
     return { edges, nodes };
   }
 
-  /** See SwitchPassage. Uses the evidenced lie only; never geometry. */
-  switchPassage(from: string, node: string, to: string): SwitchPassage {
+  /**
+   * See SwitchPassage. Uses the evidenced lie, or else a game rule from `rules` (which must
+   * already be validated, see resolveGameRules); never geometry.
+   */
+  switchPassage(
+    from: string,
+    node: string,
+    to: string,
+    rules?: ReadonlyMap<string, PointsGameRule>,
+  ): SwitchPassage {
     const j = this.junction(node);
     if (j.kind === "crossing")
       return { status: "unresolved", why: "a crossing, whose leg pairing is not modelled" };
@@ -280,7 +302,30 @@ export class TrackGraph {
     }
     const p = j.points;
     if (!p) return { status: "unresolved", why: "a switch with no Points record" };
-    if (p.switchType !== "simple")
+    const rule = pointsLie(p) ? undefined : rules?.get(p.id);
+    if (rule && rule.switchType !== "simple") {
+      if (j.cls !== rule.switchType)
+        return {
+          status: "unresolved",
+          why: `${rule.switchType} rule on a ${j.cls} node`,
+          points: p,
+        };
+      const passage = rule.passages.find(
+        (q) =>
+          (q.between[0] === from && q.between[1] === to) ||
+          (q.between[0] === to && q.between[1] === from),
+      );
+      if (!passage)
+        return {
+          status: "unresolved",
+          why: `the game rule for ${rule.switchType} ${p.id} does not define the movement ${from} -> ${to}`,
+          points: p,
+        };
+      return { status: "set", points: p, position: passage.position, evidence: "simplified" };
+    }
+    if (rule && p.switchType !== "simple" && p.switchType !== "unknown")
+      return { status: "unresolved", why: `simple rule on ${p.switchType} points`, points: p };
+    if (!rule && p.switchType !== "simple")
       return { status: "unresolved", why: `${p.switchType} points`, points: p };
     if (j.degree !== 3)
       return {
@@ -288,7 +333,13 @@ export class TrackGraph {
         why: `simple points on a node with ${j.degree} edges`,
         points: p,
       };
-    const lie = pointsLie(p);
+    const lie: PointsLie | null = rule
+      ? {
+          normal: rule.normalTowardsNodeId,
+          reverse: rule.reverseTowardsNodeId,
+          evidence: "simplified",
+        }
+      : pointsLie(p);
     if (!lie)
       return {
         status: "unresolved",

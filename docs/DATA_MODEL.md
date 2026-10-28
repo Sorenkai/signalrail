@@ -12,6 +12,8 @@ The schemas are in `src/model/` (zod; TypeScript types are inferred from them). 
 | Timetable snapshots     | `timetables/<date>.json` | `TimetableSnapshot`       | A new dated snapshot is imported   |
 | Signal evidence         | `signal-evidence.json`   | `SignalEvidenceFile`      | Reconciliation is re-run (tool)    |
 | Playable area           | `playable-area.json`     | `PlayableArea`            | The game-design boundary changes   |
+| Game rules              | `game-rules.json`        | `GameRules`               | Game rules are authored (by hand)  |
+| Service patterns        | `service-patterns.json`  | `ServicePatternsFile`     | Timetable mappings are authored    |
 
 Runtime simulation state (train positions, occupancy, aspects, point positions, sessions) is **not** part of the dataset. It will live on the server only.
 
@@ -100,6 +102,7 @@ One shared module reads the mapped topology. Every importer, validator, reconcil
 
     The `incomplete` reasons are `two_edge_junction` (a switch, crossing or other non-plain node with two edges: a leg is missing from the data), `untyped_junction`, `slip_wrong_degree` and `crossing_wrong_degree`.
 
+  - An `incomplete` junction is never worked as points. `TrackGraph` passes nothing through it, game rules cannot configure it (G3), and since P7 (D-037) the simulation refuses `move_points` on Points standing on one (`POINTS_TOPOLOGY_INCOMPLETE`).
   - `plainRun(start, next)` and `plainRunFrom(edges)` follow only `plain` nodes. They therefore stop at every switch or crossing, including an incomplete two-edge one, and never choose a leg. Results carry `basis: "mapped_topology"`.
   - `switchPassage(from, node, to)` judges a movement through simple points only from an evidenced normal/reverse lie: `set` (with the position and the lie's evidence level, never promoted), `leg_to_leg`, or `unresolved`. Slips, crossings and incomplete junctions are always `unresolved`.
 - **`DirectedTrack`** (`directedTrack.ts`): the geometric junction heuristic (INFERRED_BEHAVIOUR I-004). Its routes carry `basis: "geometric_heuristic"`.
@@ -111,7 +114,7 @@ One shared module reads the mapped topology. Every importer, validator, reconcil
 
 Public map data does not prove how an interlocking behaves. Everything here defaults to `inferred` with reasoning, unless a control table or equivalent source exists.
 
-- **Route:** `entrySignalId`, `exitSignalId`, `edgeIds` (contiguous from the entry signal's node to the exit signal's node), `pointsRequired` (`{pointsId, position: normal|reverse, role: path|flank}`), `overlapId`, `conflictsWith`.
+- **Route:** `entrySignalId`, `exitSignalId`, `edgeIds` (contiguous from the entry signal's node to the exit signal's node; see "Game rules" for routes starting or ending at a fringe endpoint, which use `entryFringeId`/`exitFringeId` with a null signal), `pointsRequired` (`{pointsId, position: normal|reverse, role: path|flank}`), `overlapId`, `conflictsWith`.
 - **Overlap:** `signalId` (the exit signal it protects), `edgeIds` (contiguous from that signal's node, beyond it) and `pointsRequired`. Only add one where evidence exists.
 - **PointsRequirement `role`** (D-024; default `path`, so older files parse unchanged): `path` points lie on the route or overlap and set its course; `flank` points lie off the path and are held for flank protection. Flank requirements are checked for consistency only, never derived.
 
@@ -121,12 +124,12 @@ Implemented in `src/validation/interlocking.ts` (`assessInterlocking`). These ch
 
 **Outcome of each route and overlap.** Every route and overlap gets one status, worst first:
 
-| Status                  | Meaning                                                                                                                         | Validator severity                                   |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `invalid`               | The data contradicts the model: it cannot be right whatever the missing facts turn out to be                                    | error                                                |
-| `insufficient_evidence` | Nothing contradicts it, but a fact it depends on is `unknown`, `inferred` or `placeholder`, or the topology model cannot decide | warning                                              |
-| `game_rule`             | Consistent, and explicitly labelled `inferred` (reasoning) or `simplified` (deliberate game rule): not a real-world claim       | `INFERRED_DATA` / `SIMPLIFIED_DATA` warning (as now) |
-| `evidenced`             | Consistent, every fact it depends on is `sourced`/`verified`, and its own provenance cites a source able to establish it        | none                                                 |
+| Status                  | Meaning                                                                                                                                                                                                                                     | Validator severity                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `invalid`               | The data contradicts the model: it cannot be right whatever the missing facts turn out to be                                                                                                                                                | error                                                                    |
+| `insufficient_evidence` | Nothing contradicts it, but a fact it depends on is `unknown`, `inferred` or `placeholder`, or the topology model cannot decide                                                                                                             | warning                                                                  |
+| `game_rule`             | Consistent, and explicitly labelled `inferred` (reasoning) or `simplified` (deliberate game rule), or relying on a game rule (`game-rules.json` lie, slip passage or fringe endpoint, D-029) whatever its own label: not a real-world claim | `INFERRED_DATA` / `SIMPLIFIED_DATA` warning; `ROUTE_USES_GAME_RULE` info |
+| `evidenced`             | Consistent, every fact it depends on is `sourced`/`verified`, and its own provenance cites a source able to establish it                                                                                                                    | none                                                                     |
 
 Uncertainty never upgrades a status: an `unknown` fact gives `insufficient_evidence`, never `evidenced`, and nothing is relabelled `verified`. Statuses are computed by the validator. They are not stored in the dataset.
 
@@ -139,7 +142,7 @@ Uncertainty never upgrades a status: an `unknown` fact gives `insufficient_evide
 - **P5** (simple switch with an evidenced lie, i.e. both `normalTowardsNodeId` and `reverseTowardsNodeId` set, on a 3-edge node): the remaining neighbour is the toe.
   - Error `ROUTE_SWITCH_UNSUPPORTED`: the path goes leg to leg (normal ↔ reverse), not via the toe.
   - Error `ROUTE_POINTS_MISMATCH`: the required position differs from the leg the path takes.
-- **P6** (warning `ROUTE_SWITCH_UNRESOLVED`, insufficient evidence): the passage cannot be checked when:
+- **P6** (warning `ROUTE_SWITCH_UNRESOLVED`, insufficient evidence): the passage cannot be checked when (in each case, unless a valid game rule covers it; see "Game rules"):
   - the lie is unknown or half known;
   - the switch is a slip, three-way, `other` or `unknown` type;
   - the node has no Points record;
@@ -148,7 +151,7 @@ Uncertainty never upgrades a status: an `unknown` fact gives `insufficient_evide
 
   The validator never uses the geometric "legs" heuristic in `src/reconcile/`, which is an assessment aid and not evidence.
 
-- **P7** (warning `ROUTE_DEPENDS_ON_INFERRED`): a check passed only because of a lie or direction that is `inferred` or `placeholder`.
+- **P7** (warning `ROUTE_DEPENDS_ON_INFERRED`): a check passed only because of a lie or direction that is `inferred` or `placeholder`. A game-rule lie is not reported here: it is `simplified`, not inferred, and caps the status at `game_rule` instead (G5). A lie labelled `simplified` inside `infrastructure.json` is never used (it is an error, `SIMPLIFIED_IN_SOURCE_LAYER`).
 - **POINTS_LIE_INVALID** (error, infrastructure): a stated lie must name a node adjacent to the Points' node, and the normal and reverse nodes must differ.
 
 **Signals and direction.**
@@ -193,6 +196,89 @@ Uncertainty never upgrades a status: an `unknown` fact gives `insufficient_evide
 **Simulated occupancy.**
 
 - **M3** (schema): an `OccupancySection` of kind `simulated` must be `inferred`, `placeholder` or `simplified`. A `track_circuit` or `axle_counter` section may not be `simplified`, because it claims a real section.
+
+## Game rules (optional, `game-rules.json`, D-029)
+
+Hand-authored, deliberate game simplifications that let routes exist where the real interlocking is unknown. Kept apart from `infrastructure.json`, which is generated from source and never edited by hand. Implemented in `src/model/gameRules.ts` (schema) and `src/validation/gameRules.ts` (`resolveGameRules`); used by `TrackGraph.switchPassage`, `assessInterlocking` and the simulation's `createWorld`.
+
+**Points rules** (`points[]`): `pointsId`, `switchType` and provenance, plus:
+
+- `simple`: `normalTowardsNodeId`, `reverseTowardsNodeId`. The remaining neighbour is the toe.
+- `single_slip` / `double_slip`: `passages[]`, each `{between: [nodeA, nodeB], position}`: one movement through the slip (either way) and the points position it needs. Only listed movements exist. Neither straight-across nor diagonal passage is assumed (D-021).
+
+**Fringe endpoints** (`fringeEndpoints[]`): `id`, `cutId` (a playable-area cut), `use` (`entry`, `exit` or both). A route may start (`entryFringeId`, with `entrySignalId: null`) or end (`exitFringeId`, with `exitSignalId: null`) at one. This stands for "trains arrive from / leave to beyond the cut". It claims no real boundary signal, traffic direction or control limit.
+
+**Rules** (only a rule that passes all of them is used; an invalid rule is reported and then ignored, so its points stay unresolved):
+
+- **G1** (schema): every rule's provenance is `simplified`, with a note.
+- **G2** (error `GAME_RULE_CONFLICTS_WITH_SOURCE`): a rule may configure only points whose lie is unknown in the infrastructure. It never overrides or competes with a stated lie (sourced, verified, inferred or placeholder). An inferred lie therefore stays insufficient evidence (P7).
+- **G3** (error `GAME_RULE_POINTS_INVALID`; `MISSING_REFERENCE` for unknown points): the Points are on a `switch` node with no parallel edges, configured once.
+  - `simple` needs a three-edge node whose sourced type is `simple` or `unknown`, and two different adjacent nodes.
+  - A slip rule needs a four-edge node whose **sourced** type equals the rule's type (an untyped four-way node cannot be configured), and passages between two different adjacent nodes, each pair listed once, at most 3 (single slip) or 4 (double slip).
+- **G4** (passage): with a valid rule, `switchPassage` treats the points like an evidenced lie of level `simplified`. Leg-to-leg movement through simple points is still `ROUTE_SWITCH_UNSUPPORTED` (error), a required position that differs is still `ROUTE_POINTS_MISMATCH` (error), a missing path requirement is still `ROUTE_POINTS_UNSPECIFIED` (error), and a slip movement the rule does not list stays `ROUTE_SWITCH_UNRESOLVED`.
+- **G5** (status): a route or overlap relying on a game-rule lie, slip passage or fringe endpoint is at best `game_rule`, never `evidenced`, even if labelled `sourced`. `ROUTE_USES_GAME_RULE` (info) lists what it relies on.
+- **F1** (error `FRINGE_ENDPOINT_INVALID`): an endpoint needs a playable area, a known cut whose edge joins the cut's inside and outside nodes, at most one endpoint per cut, and no repeated `use`.
+- **F2** (schema): each route end is exactly one of a signal or a fringe endpoint; a route has at least one signal; a route ending at a fringe endpoint has no overlap.
+- **F3** (error): a route's fringe end must name a valid endpoint configured for that use (`FRINGE_ENDPOINT_INVALID`). A fringe entry starts at the cut's outside node and crosses the cut edge first; a fringe exit ends by crossing the cut edge to the outside node (`IMPOSSIBLE_ROUTE`). Signal-direction checks (S2/S3) apply only to signal ends.
+- All other checks (P1–P7, C1–C4, O1–O3, E1–E2) apply unchanged. Two routes meeting at a configured slip without sharing an edge are still `ROUTE_CONFLICT_UNDETERMINED` unless declared conflicting.
+
+**Simulation (ADR 0001):** `createWorld` uses only valid rules. An operator may set or cancel a route with a fringe end only if their control area has a boundary (`control.json`) at that cut with `fromAreaId` equal to the area (`NOT_AUTHORISED` otherwise). A route from a fringe endpoint clears no signal, because it has none.
+
+## Service patterns (optional, `service-patterns.json`, D-035)
+
+A hand-authored mapping from timetable journeys onto authored routes, used to run a dated snapshot in a session (P5). It is a mapping, never timetable data. It adds no service, time, call, platform or line, and a service that matches no pattern is unsupported, never forced onto a route. Implemented in `src/model/servicePatterns.ts` (schema), `src/validation/servicePatterns.ts` (`validateServicePatterns`) and `src/sim/servicePlan.ts` (`buildServicePlan`).
+
+**Pattern fields:**
+
+- `before`, `through[]`, `after`: each `{tiploc, platform?, lines?}`. `before` is the call immediately before the service's area calls, `through` is every area or deferred call in order, and `after` is the call immediately after.
+  - A service matches only if those calls are exactly these TIPLOCs (one contiguous visit to the area).
+  - (P7, D-037) `after: null` means the journey ends in a deferred area beyond the exit fringe. The service must have no call after its area block, and the validator requires the conditions below. The train leaves play at the fringe as usual; its last calls are outside play and not simulated. A service terminating inside play never matches, because no lifecycle exists.
+  - `platform` (null = blank) and `lines` (the accepted CIF line codes, null = blank) are checked where given.
+- `entryFringeId`, `exitFringeId`, `routeIds[]`: the route chain from the entry fringe, signal to signal, to the exit fringe.
+- `provenance`: `inferred` or `simplified` only (schema).
+
+**Checks** (an invalid pattern is reported and never used, so its services stay unsupported):
+
+- `SERVICE_PATTERN_INVALID` (error):
+  - a fringe that is not valid or not configured for that use;
+  - an unknown or repeated route;
+  - a first route not starting at the entry fringe, or a last route not ending at the exit fringe;
+  - consecutive routes not sharing the exit/entry signal;
+  - `before`/`after` that are area TIPLOCs, or `through` calls that are not;
+  - no area TIPLOC list in the dataset;
+  - (P7) a deferred call between two play-area calls in `through`: the service would leave and re-enter play, which one fringe-to-fringe chain cannot run;
+  - (P7) `after: null`, unless all of these hold: the last `through` call is a deferred TIPLOC; some `through` call is in play; and the exit fringe's cut has a `control.json` boundary into an external area of kind `deferred_play_area` (`deferredAreaCuts`). A caller that passes no such cuts refuses every `after: null` pattern.
+- `DUPLICATE_ID` (error): a repeated pattern id.
+- `SERVICE_PATTERN_OVERLAP` (error, P6, D-036; a pattern with `after: null` and one with an `after` call never overlap): two patterns over the same timing points where no position has a platform check, or line checks, that no call can satisfy for both. One service could match both, so both are refused (fail closed) rather than one being chosen. The planner's per-service `PATTERN_AMBIGUOUS` stays as a second guard.
+- `SERVICE_PATTERNS` (info): how many valid patterns there are.
+
+**Service plan classes** (`SERVICE_PLAN_CODES`):
+
+| Class           | Codes                                                                                                                                                                                                                  |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `invalid`       | `TIMETABLE_INVALID` (any timetable validation error naming the service), `DUPLICATE_SERVICE_ID`                                                                                                                        |
+| `unsupported`   | `BANK_HOLIDAY_UNRESOLVED`, `NO_PATTERN`, `PATTERN_FIELD_MISMATCH`, `PATTERN_AMBIGUOUS`, `TIME_NONEXISTENT`, `TIME_AMBIGUOUS`, `ROUTE_NOT_ESTABLISHED`, `ROUTE_CHAIN_BLOCKED` (P6), `ENTRY_PLACEMENT`, `EXIT_TOO_SHORT` |
+| `approximated`  | `STATION_CALL_NOT_SIMULATED`: a timetabled stop at a play-area TIPLOC that the game does not enact                                                                                                                     |
+| `representable` | none                                                                                                                                                                                                                   |
+
+**Session settings** (`TimetableSessionConfig`):
+
+- `operatingDate` must equal the snapshot date; `timeZone` is `Europe/London`.
+- `trainLengthMm` and `trainSpeedMmPerS` are game settings, applied to every service train and recorded as `characteristics: "session_default"`.
+- `entryTime: "previous_timing_point"` and `stationCalls: "not_simulated"` are literals.
+
+Simulation time 0 is the snapshot's window start (D-026) in Europe/London. Runtime service state is part of the runtime layer (ADR 0001 "Timetable services"), not of the dataset.
+
+`ROUTE_CHAIN_BLOCKED` (P6, D-036; `routeChainBlockers`): inside some route of the chain, a signal faces the direction of travel and would stop the train for good by its movement role (D-033). That is any `main` or `shunting` signal other than the route's own entry signal at its start node, and any `stop_board`, `other` or `unknown` signal; a signal of unknown facing counts as facing. Distant and repeater signals do not block. A chain that can be set but never run whole is therefore unsupported, never counted as runnable.
+
+### Timetable coverage audit (P6, D-036; `src/reconcile/timetableCoverage.ts`)
+
+A report, not a dataset layer. `auditCoverage(plan, snapshot, table)` reads a built plan and puts every service in the first group of a hand-authored, ordered movement-group table (Carlisle: `docs/pilots/carlisle-p6-movement-groups.json`, schema `MovementGroupsFile`) that it matches. It changes no classification.
+
+- **Blocker** `{id, kind, evidence, summary, records[], needed, proposedChange}`: one audit finding. `kind` is one of `unknown_signal_function`, `untyped_junction`, `incomplete_junction`, `crossing_not_configurable`, `slip_diagonal_unknown`, `no_signal_mapped`, `platform_too_short`, `lifecycle_not_modelled`, `beyond_cut`, `location_unmapped`, `not_audited`. `evidence` is the level of the blocking fact itself (for example `unknown` for a signal with no source-stated function).
+- **Group** `{id, family, label, match, blockers[], note?}`. `family` is `down_main`, `up_main`, `platform_1`, `goods_line`, `other_lines`, `kingmoor`, `internal_start_termination` or `unresolved`. `match` conditions, all of which must hold: `kind` (`through`, `starts`, `terminates`, `internal`), `pattern` (the plan's pattern id), `patterns` (any of several pattern ids, P7), `before`/`after` (TIPLOCs either side of the area calls), `has` (area calls with optional `platform`/`lines`), `hasAny`, `lacks`, `reenters`.
+- **Report:** counts by class, by family and by group, with distinct timing-point paths per group (the minimum number of exact patterns needed) and, for a blocked group, `estimateIfUnblocked`. That is an upper-bound estimate, never a result. `unmatched` lists services no group matches, and `inconsistent` lists groups mixing runnable services with blockers. `tests/carlisleCoverage.test.ts` requires both to be empty and the committed report to be current.
+- **Phases (P7, D-037):** each phase keeps its own table and report. The P6 report (`carlisle-p6-*`) is the reproducible baseline: the tool rebuilds it from today's files with `--patterns` set to the two P6 patterns. The P7 report (`carlisle-p7-*`) uses every pattern, with the P6 patterns as its `--baseline-patterns`. The evidence behind each P7 blocker is in `docs/pilots/CARLISLE_P7_EVIDENCE.md`.
 
 ## Control areas
 
@@ -284,6 +370,7 @@ Uncertainty never upgrades a status: an `unknown` fact gives `insufficient_evide
 | Code                                                                                   | Severity             | Meaning                                                                                                                                   |
 | -------------------------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `TIMETABLE_SERVICE_ID_INVALID`, `TIMETABLE_TIPLOC_INVALID`                             | error                | UID not a letter or space plus 5 digits; id not `uid:runDate`; TIPLOC not 1–7 capitals or digits                                          |
+| `TIMETABLE_TIME_INVALID`                                                               | error                | A working or public time whose hour exceeds 23 or minute exceeds 59 (the schema checks only the shape; D-035)                             |
 | `TIMETABLE_JOURNEY_INCOMPLETE`                                                         | error                | No origin with a departure, no destination with an arrival, an origin or destination mid-journey, or an intermediate call with no time    |
 | `TIMETABLE_TIME_ORDER`, `TIMETABLE_DAY_OFFSET`                                         | error                | Times go backwards once day offsets are applied; stored offsets disagree with the times (legacy snapshots: one midnight crossing allowed) |
 | `TIMETABLE_WINDOW`                                                                     | error                | No area time inside the window, or a wrong `window` flag                                                                                  |
@@ -337,52 +424,57 @@ A **game-design** definition (`basis: "game_design"`, `status: proposed | adopte
 
 `npm run data:validate` (`src/validation/validate.ts`) reports:
 
-| Code                                                                            | Severity        | Meaning                                                                                                                                                                    |
-| ------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SCHEMA`, `MISSING_FILE`                                                        | error           | File missing or not matching the schema                                                                                                                                    |
-| `DUPLICATE_ID`                                                                  | error           | Ids must be unique across all collections                                                                                                                                  |
-| `MISSING_REFERENCE`                                                             | error           | Reference to a non-existent node/edge/signal/etc.                                                                                                                          |
-| `UNKNOWN_SOURCE` / `SYNTHETIC_DATA`                                             | error           | Unregistered source / synthetic data in a real dataset                                                                                                                     |
-| `DISCONNECTED_TRACK`                                                            | warning         | More than one connected component                                                                                                                                          |
-| `DANGLING_TRACK_END`                                                            | warning         | `end_unknown` nodes                                                                                                                                                        |
-| `SWITCH_TOPOLOGY`, `CROSSING_TOPOLOGY`                                          | warning         | Wrong number of connected edges                                                                                                                                            |
-| `POINTS_NOT_ON_SWITCH`, `SELF_LOOP`                                             | error           | Structural impossibilities                                                                                                                                                 |
-| `SIGNAL_OFF_TRACK`, `SIGNAL_DIRECTION_UNKNOWN`                                  | warning         | Signal not usable for routing                                                                                                                                              |
-| `SIGNAL_DIRECTION_INVALID`                                                      | error           | Signal faces a non-adjacent node                                                                                                                                           |
-| `SIGNAL_CLASS_UNKNOWN`                                                          | info            | Signals with no source-stated category, so type and function are `unknown`                                                                                                 |
-| `IMPOSSIBLE_ROUTE`, `IMPOSSIBLE_OVERLAP`                                        | error           | Path not contiguous, revisits a node, wrong start or end, entry/exit/overlap faces the wrong way, path points off the path or flank points on it (P1, P3, S1–S4, O2)       |
-| `ROUTE_POINTS_UNSPECIFIED`                                                      | error           | Route or overlap passes points without a `path` requirement (P2; a warning before R2)                                                                                      |
-| `ROUTE_POINTS_MISMATCH`                                                         | error           | Required position disagrees with the leg taken, or points required both ways (P4, P5)                                                                                      |
-| `ROUTE_SWITCH_UNSUPPORTED`                                                      | error           | Path runs leg to leg through simple points with an evidenced lie (P5)                                                                                                      |
-| `ROUTE_SWITCH_UNRESOLVED`                                                       | warning         | Passage cannot be checked: lie unknown, slip/three-way/unknown type, crossing, no Points record, untyped junction (P6)                                                     |
-| `ROUTE_DIRECTION_UNKNOWN`                                                       | warning         | Entry, exit or overlap signal direction unknown (S2–S4)                                                                                                                    |
-| `ROUTE_DEPENDS_ON_INFERRED`                                                     | warning         | A check passed only on an inferred or placeholder lie or direction (P7)                                                                                                    |
-| `ROUTE_CONFLICT_INVALID`, `ROUTE_CONFLICT_ASYMMETRIC`, `ROUTE_CONFLICT_MISSING` | error           | Self-conflict; one-sided declaration; shared track or opposed points without a declared conflict (C1–C3)                                                                   |
-| `ROUTE_CONFLICT_UNDETERMINED`                                                   | warning         | Routes meet at a switch or crossing without shared track and are not declared conflicting (C4)                                                                             |
-| `INTERLOCKING_SOURCE_UNSUITABLE`                                                | error           | Sourced/verified route or overlap without enough `interlockingAuthority` sources (E1)                                                                                      |
-| `POINTS_LIE_INVALID`                                                            | error           | Normal/reverse lie names a non-adjacent node, or the same node twice                                                                                                       |
-| `INTERLOCKING_STATUS`                                                           | info            | Count of routes and overlaps per status (data checks only; not a safety case)                                                                                              |
-| `CONTROL_OVERLAP`                                                               | error           | Element controlled by two areas                                                                                                                                            |
-| `COORDINATE_IMPLAUSIBLE`                                                        | error           | Coordinate outside Great Britain                                                                                                                                           |
-| `TRACK_ALIGNMENT`                                                               | error / warning | Edge geometry or signal position does not meet its track node (more than 1 m); timing-point position not at its first anchor (error) or anchors spread over 60 m (warning) |
-| `TIMING_POINT_CONFLICT`                                                         | error           | TIPLOC has both a sourced mapping and an inferred position                                                                                                                 |
-| `TIMING_POINT_OUTSIDE_SCOPE`                                                    | warning         | Positioned TIPLOC not in `areaTiplocs`                                                                                                                                     |
-| `OUT_OF_AREA_LOCATIONS`                                                         | info            | Journey TIPLOCs outside the study area                                                                                                                                     |
-| `UNMAPPED_TIMETABLE_LOCATION`                                                   | warning         | TIPLOCs with no infrastructure mapping                                                                                                                                     |
-| `TIMETABLE_*`, `ASSOCIATION_*`, `BANK_HOLIDAY_*`, `TIMING_POINT_SCOPE_CONFLICT` | see above       | Timetable snapshot checks; see "Timetable validation" (D-026)                                                                                                              |
-| `UNSUPPORTED_ASSUMPTION`, `PLACEHOLDER_DATA`                                    | warning         | Real-box area with unevidenced membership; placeholders                                                                                                                    |
-| `INFERRED_DATA`                                                                 | info / warning  | Inferred values; a warning when they are interlocking/control                                                                                                              |
-| `SIMPLIFIED_DATA`                                                               | warning         | Deliberate game simplifications (`simplified`): reported so they are never read as real behaviour                                                                          |
-| `SIMPLIFIED_IN_SOURCE_LAYER`                                                    | error           | A `simplified` record in infrastructure (except occupancy sections), timing points, timetables or signal evidence                                                          |
-| `SIGNAL_EVIDENCE_CONFLICT`                                                      | warning         | A signal claim is `contradicted` or `disputed`                                                                                                                             |
-| `SIGNAL_EVIDENCE_OPEN`                                                          | info            | Signal claims that are `unresolved`, `ambiguous` or only `consistent_with_reversal`                                                                                        |
-| `PLAYABLE_AREA_CUT`                                                             | error           | A cut's edge does not join its nodes, or an `extract_boundary` cut does not end at an `area_boundary` node                                                                 |
-| `GAMEPLAY_CORRECTION`                                                           | warning         | Gameplay corrections marked `applied` on top of source data                                                                                                                |
-| `SLIP_TOPOLOGY`                                                                 | warning         | Points typed `single_slip`/`double_slip` on a node that does not have 4 edges                                                                                              |
-| `SWITCH_ARRANGEMENT_UNKNOWN`                                                    | warning         | A four-edge switch node with no slip type: which legs connect is unknown                                                                                                   |
-| `SINGLE_SLIP_DIAGONAL_UNKNOWN`                                                  | info            | Single slips: straight routes known, the one diagonal not recorded (diagonal movements unresolved)                                                                         |
-| `PLATFORM_TRACK_UNRESOLVED`                                                     | warning         | A platform with a `trackAssociation` but no stop position or adjacent track                                                                                                |
-| `PLATFORM_TRACK_AMBIGUOUS`                                                      | warning         | A platform whose stop positions and outline disagree, or whose outline touches several tracks                                                                              |
-| `PLATFORM_TRACK_INCONSISTENT`                                                   | error           | A platform whose `edgeIds` contradict its association status                                                                                                               |
+| Code                                                                            | Severity        | Meaning                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SCHEMA`, `MISSING_FILE`                                                        | error           | File missing or not matching the schema                                                                                                                                                                  |
+| `DUPLICATE_ID`                                                                  | error           | Ids must be unique across all collections                                                                                                                                                                |
+| `MISSING_REFERENCE`                                                             | error           | Reference to a non-existent node/edge/signal/etc.                                                                                                                                                        |
+| `UNKNOWN_SOURCE` / `SYNTHETIC_DATA`                                             | error           | Unregistered source / synthetic data in a real dataset                                                                                                                                                   |
+| `DISCONNECTED_TRACK`                                                            | warning         | More than one connected component                                                                                                                                                                        |
+| `DANGLING_TRACK_END`                                                            | warning         | `end_unknown` nodes                                                                                                                                                                                      |
+| `SWITCH_TOPOLOGY`, `CROSSING_TOPOLOGY`                                          | warning         | Wrong number of connected edges                                                                                                                                                                          |
+| `POINTS_NOT_ON_SWITCH`, `SELF_LOOP`                                             | error           | Structural impossibilities                                                                                                                                                                               |
+| `SIGNAL_OFF_TRACK`, `SIGNAL_DIRECTION_UNKNOWN`                                  | warning         | Signal not usable for routing                                                                                                                                                                            |
+| `SIGNAL_DIRECTION_INVALID`                                                      | error           | Signal faces a non-adjacent node                                                                                                                                                                         |
+| `SIGNAL_CLASS_UNKNOWN`                                                          | info            | Signals with no source-stated category, so type and function are `unknown`                                                                                                                               |
+| `IMPOSSIBLE_ROUTE`, `IMPOSSIBLE_OVERLAP`                                        | error           | Path not contiguous, revisits a node, wrong start or end, entry/exit/overlap faces the wrong way, path points off the path or flank points on it (P1, P3, S1–S4, O2)                                     |
+| `ROUTE_POINTS_UNSPECIFIED`                                                      | error           | Route or overlap passes points without a `path` requirement (P2; a warning before R2)                                                                                                                    |
+| `ROUTE_POINTS_MISMATCH`                                                         | error           | Required position disagrees with the leg taken, or points required both ways (P4, P5)                                                                                                                    |
+| `ROUTE_SWITCH_UNSUPPORTED`                                                      | error           | Path runs leg to leg through simple points with an evidenced or game-rule lie (P5, G4)                                                                                                                   |
+| `ROUTE_SWITCH_UNRESOLVED`                                                       | warning         | Passage cannot be checked: lie unknown, slip/three-way/unknown type, crossing, no Points record, untyped junction, each with no valid game rule; or a slip movement its game rule does not list (P6, G4) |
+| `ROUTE_DIRECTION_UNKNOWN`                                                       | warning         | Entry, exit or overlap signal direction unknown (S2–S4)                                                                                                                                                  |
+| `ROUTE_DEPENDS_ON_INFERRED`                                                     | warning         | A check passed only on an inferred or placeholder lie or direction (P7)                                                                                                                                  |
+| `ROUTE_CONFLICT_INVALID`, `ROUTE_CONFLICT_ASYMMETRIC`, `ROUTE_CONFLICT_MISSING` | error           | Self-conflict; one-sided declaration; shared track or opposed points without a declared conflict (C1–C3)                                                                                                 |
+| `ROUTE_CONFLICT_UNDETERMINED`                                                   | warning         | Routes meet at a switch or crossing without shared track and are not declared conflicting (C4)                                                                                                           |
+| `INTERLOCKING_SOURCE_UNSUITABLE`                                                | error           | Sourced/verified route or overlap without enough `interlockingAuthority` sources (E1)                                                                                                                    |
+| `POINTS_LIE_INVALID`                                                            | error           | Normal/reverse lie names a non-adjacent node, or the same node twice                                                                                                                                     |
+| `INTERLOCKING_STATUS`                                                           | info            | Count of routes and overlaps per status (data checks only; not a safety case)                                                                                                                            |
+| `SIGNALLING_ABSENT`                                                             | info            | No signalling layer loaded (`signalling.json` absent or unparsed): no routes or overlaps, so nothing can be cleared. Records a gap; not an error                                                         |
+| `GAME_RULE_POINTS_INVALID`                                                      | error           | Game-rule points configuration inconsistent with the track graph or the sourced switch type, or configured twice (G3)                                                                                    |
+| `GAME_RULE_CONFLICTS_WITH_SOURCE`                                               | error           | Game rule for points whose lie the infrastructure already states (G2)                                                                                                                                    |
+| `FRINGE_ENDPOINT_INVALID`                                                       | error           | Fringe endpoint without a playable area or valid cut, or a route naming an invalid endpoint or one not configured for that use (F1, F3)                                                                  |
+| `ROUTE_USES_GAME_RULE`                                                          | info            | A route or overlap relies on a game rule (lie, slip passage or fringe endpoint): a game rule, not a real-world claim (G5)                                                                                |
+| `CONTROL_OVERLAP`                                                               | error           | Element controlled by two areas                                                                                                                                                                          |
+| `COORDINATE_IMPLAUSIBLE`                                                        | error           | Coordinate outside Great Britain                                                                                                                                                                         |
+| `TRACK_ALIGNMENT`                                                               | error / warning | Edge geometry or signal position does not meet its track node (more than 1 m); timing-point position not at its first anchor (error) or anchors spread over 60 m (warning)                               |
+| `TIMING_POINT_CONFLICT`                                                         | error           | TIPLOC has both a sourced mapping and an inferred position                                                                                                                                               |
+| `TIMING_POINT_OUTSIDE_SCOPE`                                                    | warning         | Positioned TIPLOC not in `areaTiplocs`                                                                                                                                                                   |
+| `OUT_OF_AREA_LOCATIONS`                                                         | info            | Journey TIPLOCs outside the study area                                                                                                                                                                   |
+| `UNMAPPED_TIMETABLE_LOCATION`                                                   | warning         | TIPLOCs with no infrastructure mapping                                                                                                                                                                   |
+| `TIMETABLE_*`, `ASSOCIATION_*`, `BANK_HOLIDAY_*`, `TIMING_POINT_SCOPE_CONFLICT` | see above       | Timetable snapshot checks; see "Timetable validation" (D-026)                                                                                                                                            |
+| `UNSUPPORTED_ASSUMPTION`, `PLACEHOLDER_DATA`                                    | warning         | Real-box area with unevidenced membership; placeholders                                                                                                                                                  |
+| `INFERRED_DATA`                                                                 | info / warning  | Inferred values; a warning when they are interlocking/control                                                                                                                                            |
+| `SIMPLIFIED_DATA`                                                               | warning         | Deliberate game simplifications (`simplified`): reported so they are never read as real behaviour                                                                                                        |
+| `SIMPLIFIED_IN_SOURCE_LAYER`                                                    | error           | A `simplified` record in infrastructure (except occupancy sections), timing points, timetables or signal evidence                                                                                        |
+| `SIGNAL_EVIDENCE_CONFLICT`                                                      | warning         | A signal claim is `contradicted` or `disputed`                                                                                                                                                           |
+| `SIGNAL_EVIDENCE_OPEN`                                                          | info            | Signal claims that are `unresolved`, `ambiguous` or only `consistent_with_reversal`                                                                                                                      |
+| `PLAYABLE_AREA_CUT`                                                             | error           | A cut's edge does not join its nodes, or an `extract_boundary` cut does not end at an `area_boundary` node                                                                                               |
+| `GAMEPLAY_CORRECTION`                                                           | warning         | Gameplay corrections marked `applied` on top of source data                                                                                                                                              |
+| `SLIP_TOPOLOGY`                                                                 | warning         | Points typed `single_slip`/`double_slip` on a node that does not have 4 edges                                                                                                                            |
+| `SWITCH_ARRANGEMENT_UNKNOWN`                                                    | warning         | A four-edge switch node with no slip type: which legs connect is unknown                                                                                                                                 |
+| `SINGLE_SLIP_DIAGONAL_UNKNOWN`                                                  | info            | Single slips: straight routes known, the one diagonal not recorded (diagonal movements unresolved)                                                                                                       |
+| `PLATFORM_TRACK_UNRESOLVED`                                                     | warning         | A platform with a `trackAssociation` but no stop position or adjacent track                                                                                                                              |
+| `PLATFORM_TRACK_AMBIGUOUS`                                                      | warning         | A platform whose stop positions and outline disagree, or whose outline touches several tracks                                                                                                            |
+| `PLATFORM_TRACK_INCONSISTENT`                                                   | error           | A platform whose `edgeIds` contradict its association status                                                                                                                                             |
 
 The command exits non-zero on any error.

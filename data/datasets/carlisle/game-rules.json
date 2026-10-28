@@ -1,0 +1,446 @@
+{
+  "$comment": "Carlisle game rules (P1, DECISION_LOG D-030, extended in P6, D-036; schema D-029). Hand-authored, every record simplified: game choices that let the MVP routes in signalling.json run where OSM states no points lie. Not real-world facts; infrastructure.json is unchanged.",
+  "datasetId": "carlisle",
+  "points": [
+    {
+      "pointsId": "osm-pts10288162",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n13956027902",
+      "reverseTowardsNodeId": "osm-n7683158456",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/10288162",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce264-ce272: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts13520521846",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n3057659441",
+      "reverseTowardsNodeId": "osm-n13520521847",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/13520521846",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce272-ce286: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts7261456040",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n13520521839",
+      "reverseTowardsNodeId": "osm-n7261456039",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7261456040",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce272-ce286: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts1460504014",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n3057659452",
+      "reverseTowardsNodeId": "osm-n1460503992",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1460504014",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce286-ce323: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts3057659452",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n3057659457",
+      "reverseTowardsNodeId": "osm-n2464366011",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/3057659452",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce286-ce323: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts3057659457",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n3057659452",
+      "reverseTowardsNodeId": "osm-n3057659455",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/3057659457",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce286-ce323: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts10288170",
+      "switchType": "single_slip",
+      "passages": [
+        {
+          "between": ["osm-n3057659457", "osm-n2374086076"],
+          "position": "normal"
+        }
+      ],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/10288170",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce286-ce323: only the Down Main straight-across movement osm-n3057659457 <-> osm-n2374086076 is permitted, as 'normal' by game convention. The slip type is sourced (OSM); the straight pairing is inferred (I-012): both edges belong to one continuous OSM way through the node, 180 degrees apart. No diagonal is permitted; which diagonal the real slip has is unknown (D-021)."
+      }
+    },
+    {
+      "pointsId": "osm-pts7185463926",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2374086076",
+      "reverseTowardsNodeId": "osm-n7185463927",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7185463926",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce286-ce323: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts10288175",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n10288174",
+      "reverseTowardsNodeId": "osm-n2464424124",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/10288175",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts7253833743",
+      "switchType": "single_slip",
+      "passages": [
+        {
+          "between": ["osm-n1460409473", "osm-n3720819849"],
+          "position": "normal"
+        }
+      ],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/7253833743",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: only the Down Main straight-across movement osm-n1460409473 <-> osm-n3720819849 is permitted, as 'normal' by game convention. The slip type is sourced (OSM); the straight pairing is inferred (I-012): both edges are tagged Down Main and the node's other two edges form one continuous OSM way (the crossing straight), 178 degrees apart. No diagonal is permitted; which diagonal the real slip has is unknown (D-021)."
+      }
+    },
+    {
+      "pointsId": "osm-pts3720819849",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n7253833743",
+      "reverseTowardsNodeId": "osm-n7253833744",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/3720819849",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts13520580930",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246622",
+      "reverseTowardsNodeId": "osm-n13520580929",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/13520580930",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246583",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246548",
+      "reverseTowardsNodeId": "osm-n2464246616",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246583",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246608",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246628",
+      "reverseTowardsNodeId": "osm-n2464246630",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246608",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246628",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246544",
+      "reverseTowardsNodeId": "osm-n2464246609",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246628",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Down Main route rt-dm-ce323-fringe: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Down Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Down Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246609",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246616",
+      "reverseTowardsNodeId": "osm-n2464246628",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246609",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Up Main route rt-um-fringe-ce336: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Up Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Up Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246616",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246609",
+      "reverseTowardsNodeId": "osm-n2464246583",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246616",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Up Main route rt-um-fringe-ce336: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Up Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Up Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts13520580929",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n11954024797",
+      "reverseTowardsNodeId": "osm-n13520580930",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/13520580929",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Up Main route rt-um-ce336-ce304: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe trailing on the Up Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Up Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts1460409471",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464251373",
+      "reverseTowardsNodeId": "osm-n7253833743",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/1460409471",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Up Main route rt-um-ce336-ce304: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Up Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Up Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464251373",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2463960356",
+      "reverseTowardsNodeId": "osm-n2463969926",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464251373",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P1, D-030) for Up Main route rt-um-ce336-ce304: OSM states neither this switch's type nor its lie, so both are authored for play. Simple points; toe facing on the Up Main, oriented by the I-004 geometric heuristic (the two edges with the closest bearings are the diverging legs; INFERRED_BEHAVIOUR I-012). Normal = the Up Main leg, reverse = the other leg, by game convention. The real lie is unknown."
+      }
+    },
+    {
+      "pointsId": "osm-pts2464246595",
+      "switchType": "simple",
+      "normalTowardsNodeId": "osm-n2464246601",
+      "reverseTowardsNodeId": "osm-n2464246594",
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "node/2464246595",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/238611573",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          },
+          {
+            "sourceId": "openstreetmap",
+            "recordId": "way/238613009",
+            "version": "2026-10-27T18:47:20Z",
+            "retrieved": "2026-10-27"
+          }
+        ],
+        "note": "Game rule (P6, D-036) for goods-line route rt-dg-ce323-fringe: OSM tags this node railway=switch but states neither its type nor its lie, so both are authored for play. Simple points; toe facing for a northbound train on the Up & Down Goods (osm-n3655485894 side), oriented by the I-004 geometric heuristic (INFERRED_BEHAVIOUR I-012, I-014). Normal = the Down Goods leg, reverse = the Up Goods leg, by game convention. The real lie is unknown. Only the normal leg is used by any route: OSM gives the Down Goods (way 238611573) railway:preferred_direction=forward, running northwards from this node, and the Up Goods (way 238613009) forward running southwards into it."
+      }
+    }
+  ],
+  "fringeEndpoints": [
+    {
+      "id": "fr-wcml-south-down",
+      "cutId": "cut-wcml-south-down",
+      "use": ["entry"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game rule (P1, D-030): Down trains enter play here from beyond the WCML south cut. No real boundary signal, traffic direction or control limit is claimed (control.json boundary bd-wcml-south-down stays incomplete)."
+      }
+    },
+    {
+      "id": "fr-north-down-main",
+      "cutId": "cut-north-down-main",
+      "use": ["exit"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game rule (P1, D-030): Down trains leave play here towards Kingmoor (deferred). No real boundary signal, traffic direction or control limit is claimed."
+      }
+    },
+    {
+      "id": "fr-north-up-main",
+      "cutId": "cut-north-up-main",
+      "use": ["entry"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game rule (P1, D-030): Up trains enter play here from Kingmoor (deferred). No real boundary signal, traffic direction or control limit is claimed. CE438 stands at the cut but OSM gives it no category, so it is not used as a route signal."
+      }
+    },
+    {
+      "id": "fr-north-down-goods",
+      "cutId": "cut-north-down-goods",
+      "use": ["exit"],
+      "provenance": {
+        "evidence": "simplified",
+        "sources": [],
+        "note": "Game rule (P6, D-036): northbound goods-line trains leave play here towards Kingmoor (deferred). No real boundary signal, traffic direction or control limit is claimed (control.json boundary for this cut stays incomplete). The cut's inside node osm-n2464246595 is shared with cut-north-up-goods; only the Down Goods cut is configured, and only for exit."
+      }
+    }
+  ]
+}

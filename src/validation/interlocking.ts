@@ -10,6 +10,7 @@ import type {
 } from "../model/index.ts";
 import type { TrackGraph } from "../graph/trackGraph.ts";
 import type { Issue, Severity } from "./validate.ts";
+import { NO_GAME_RULES, type GameRuleContext } from "./gameRules.ts";
 
 /**
  * Interlocking data invariants (docs/DATA_MODEL.md "Interlocking validation", D-024).
@@ -18,6 +19,10 @@ import type { Issue, Severity } from "./validate.ts";
  * honestly evidenced. They do not show that a real interlocking is safe. Only evidenced facts
  * are used: an unknown points lie or signal direction gives `insufficient_evidence`, never a
  * pass, and the geometric switch-leg heuristic in src/reconcile/ is deliberately not used.
+ *
+ * Game rules (game-rules.json, D-029) may stand in for an unknown points lie and for a signal at
+ * the edge of play. A route or overlap that relies on one is at best `game_rule`, never
+ * `evidenced`, and only rules that passed resolveGameRules are used.
  */
 
 /** Worst first. See the status table in docs/DATA_MODEL.md. */
@@ -73,9 +78,14 @@ export function assessInterlocking(
   signalling: Signalling | undefined,
   sources: SourceRegistry,
   graph: TrackGraph,
+  rules: GameRuleContext = NO_GAME_RULES,
 ): { issues: Issue[]; assessments: InterlockingAssessment[] } {
   const issues: Issue[] = [];
   const findings = new Map<string, Issue[]>();
+  /** Game rules each route or overlap relies on (D-029): caps its status at game_rule. */
+  const gameRuleUse = new Map<string, string[]>();
+  const usesGameRule = (owner: string, what: string) =>
+    gameRuleUse.set(owner, [...(gameRuleUse.get(owner) ?? []), what]);
   const add = (severity: Severity, code: string, message: string, owner: string, ids: string[]) => {
     const issue: Issue = { severity, code, message, ids: [owner, ...ids] };
     issues.push(issue);
@@ -95,7 +105,7 @@ export function assessInterlocking(
   /** P5/P6/P7: passage through one interior node, from `from` to `to`. */
   function checkPassage(w: Walked, from: string, node: string, to: string) {
     const label = `${w.kind} ${w.id}`;
-    const passage = graph.switchPassage(from, node, to);
+    const passage = graph.switchPassage(from, node, to, rules.points);
     if (passage.status === "through") return;
     const p = passage.points;
     const req = p && w.pointsRequired.find((q) => q.pointsId === p.id && q.role === "path");
@@ -137,7 +147,9 @@ export function assessInterlocking(
         [passage.points.id],
       );
     }
-    if (passage.evidence !== "sourced" && passage.evidence !== "verified") {
+    if (passage.evidence === "simplified") {
+      usesGameRule(w.id, `game-rule lie of points ${passage.points.id} (simplified)`);
+    } else if (passage.evidence !== "sourced" && passage.evidence !== "verified") {
       add(
         "warning",
         "ROUTE_DEPENDS_ON_INFERRED",
@@ -279,10 +291,36 @@ export function assessInterlocking(
   const routePaths = new Map<string, Walked>();
   for (const r of signalling.routes) {
     checkProvenance("route", r.id, r.provenance);
-    const entry = signalById.get(r.entrySignalId);
-    const exit = signalById.get(r.exitSignalId);
-    if (!entry || !exit) continue; // MISSING_REFERENCE
-    if (!entry.trackNodeId || !exit.trackNodeId) {
+    const entry = r.entrySignalId === null ? null : signalById.get(r.entrySignalId);
+    const exit = r.exitSignalId === null ? null : signalById.get(r.exitSignalId);
+    if (entry === undefined || exit === undefined) continue; // MISSING_REFERENCE
+    // F1-F3: a fringe end must name a valid endpoint configured for that use (D-029).
+    const fringe = (end: "entry" | "exit", id: string | undefined) => {
+      if (id === undefined) return null;
+      const f = rules.fringes.get(id);
+      if (!f)
+        add(
+          "error",
+          "FRINGE_ENDPOINT_INVALID",
+          `route ${r.id}: ${end} fringe endpoint "${id}" is not a valid configured endpoint`,
+          r.id,
+          [id],
+        );
+      else if (!f.endpoint.use.includes(end))
+        add(
+          "error",
+          "FRINGE_ENDPOINT_INVALID",
+          `route ${r.id}: fringe endpoint ${id} is not configured for ${end}`,
+          r.id,
+          [id],
+        );
+      else return f;
+      return undefined;
+    };
+    const entryFringe = fringe("entry", r.entryFringeId);
+    const exitFringe = fringe("exit", r.exitFringeId);
+    if (entryFringe === undefined || exitFringe === undefined) continue;
+    if ((entry && !entry.trackNodeId) || (exit && !exit.trackNodeId)) {
       add(
         "error",
         "IMPOSSIBLE_ROUTE",
@@ -292,7 +330,7 @@ export function assessInterlocking(
       );
       continue;
     }
-    if (entry.id === exit.id) {
+    if (entry && exit && entry.id === exit.id) {
       add(
         "error",
         "IMPOSSIBLE_ROUTE",
@@ -302,74 +340,95 @@ export function assessInterlocking(
       );
       continue;
     }
-    const w = walkPath("route", r.id, entry.trackNodeId, r.edgeIds, r.pointsRequired);
+    // A fringe entry starts outside the cut and crosses the cut edge first.
+    const start = entry ? entry.trackNodeId! : entryFringe!.cut.outsideNodeId;
+    const w = walkPath("route", r.id, start, r.edgeIds, r.pointsRequired);
     if (!w) continue;
     const end = w.nodes.at(-1)!;
-    if (end !== exit.trackNodeId) {
+    if (entryFringe && r.edgeIds[0] !== entryFringe.cut.edgeId) {
       add(
         "error",
         "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: path ends at ${end}, not at exit signal ${exit.id}`,
+        `route ${r.id}: starts at fringe ${entryFringe.endpoint.id} but does not cross cut edge ${entryFringe.cut.edgeId} first`,
+        r.id,
+        [],
+      );
+      continue;
+    }
+    const target = exit ? exit.trackNodeId! : exitFringe!.cut.outsideNodeId;
+    if (end !== target || (exitFringe && r.edgeIds.at(-1) !== exitFringe.cut.edgeId)) {
+      add(
+        "error",
+        "IMPOSSIBLE_ROUTE",
+        exit
+          ? `route ${r.id}: path ends at ${end}, not at exit signal ${exit.id}`
+          : `route ${r.id}: path does not end by crossing cut edge ${exitFringe!.cut.edgeId} to ${target}`,
         r.id,
         [],
       );
       continue;
     }
     routePaths.set(r.id, w);
+    for (const f of [entryFringe, exitFringe])
+      if (f) usesGameRule(r.id, `fringe endpoint ${f.endpoint.id} at cut ${f.cut.id} (simplified)`);
 
-    // S2: the entry signal faces along the path.
-    const din = direction(entry);
-    if (din.towards === null) {
-      add(
-        "warning",
-        "ROUTE_DIRECTION_UNKNOWN",
-        `route ${r.id}: direction of entry signal ${entry.id} is unknown`,
-        r.id,
-        [entry.id],
-      );
-    } else if (din.towards !== w.nodes[1]) {
-      add(
-        "error",
-        "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: entry signal ${entry.id} faces the other way`,
-        r.id,
-        [entry.id],
-      );
-    } else if (din.weak) {
-      add(
-        "warning",
-        "ROUTE_DEPENDS_ON_INFERRED",
-        `route ${r.id} relies on an inferred direction of entry signal ${entry.id}`,
-        r.id,
-        [entry.id],
-      );
+    // S2: the entry signal faces along the path. A fringe entry has no signal to check.
+    if (entry) {
+      const din = direction(entry);
+      if (din.towards === null) {
+        add(
+          "warning",
+          "ROUTE_DIRECTION_UNKNOWN",
+          `route ${r.id}: direction of entry signal ${entry.id} is unknown`,
+          r.id,
+          [entry.id],
+        );
+      } else if (din.towards !== w.nodes[1]) {
+        add(
+          "error",
+          "IMPOSSIBLE_ROUTE",
+          `route ${r.id}: entry signal ${entry.id} faces the other way`,
+          r.id,
+          [entry.id],
+        );
+      } else if (din.weak) {
+        add(
+          "warning",
+          "ROUTE_DEPENDS_ON_INFERRED",
+          `route ${r.id} relies on an inferred direction of entry signal ${entry.id}`,
+          r.id,
+          [entry.id],
+        );
+      }
     }
-    // S3: the exit signal faces onward, not back along the route.
-    const dout = direction(exit);
-    if (dout.towards === null) {
-      add(
-        "warning",
-        "ROUTE_DIRECTION_UNKNOWN",
-        `route ${r.id}: direction of exit signal ${exit.id} is unknown`,
-        r.id,
-        [exit.id],
-      );
-    } else if (dout.towards === w.nodes.at(-2)) {
-      add(
-        "error",
-        "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: exit signal ${exit.id} faces back along the route`,
-        r.id,
-        [exit.id],
-      );
-    } else if (dout.weak) {
-      add(
-        "warning",
-        "ROUTE_DEPENDS_ON_INFERRED",
-        `route ${r.id} relies on an inferred direction of exit signal ${exit.id}`,
-        r.id,
-        [exit.id],
-      );
+    // S3: the exit signal faces onward, not back along the route. A fringe exit has none.
+    if (exit) {
+      const dout = direction(exit);
+      if (dout.towards === null) {
+        add(
+          "warning",
+          "ROUTE_DIRECTION_UNKNOWN",
+          `route ${r.id}: direction of exit signal ${exit.id} is unknown`,
+          r.id,
+          [exit.id],
+        );
+      } else if (dout.towards === w.nodes.at(-2)) {
+        add(
+          "error",
+          "IMPOSSIBLE_ROUTE",
+          `route ${r.id}: exit signal ${exit.id} faces back along the route`,
+          r.id,
+          [exit.id],
+        );
+      } else if (dout.weak) {
+        add(
+          "warning",
+          "ROUTE_DEPENDS_ON_INFERRED",
+          `route ${r.id} relies on an inferred direction of exit signal ${exit.id}`,
+          r.id,
+          [exit.id],
+        );
+      }
     }
 
     checkRequirements(w);
@@ -378,11 +437,11 @@ export function assessInterlocking(
 
     // O2: the overlap belongs to the exit signal and continues beyond it.
     const o = r.overlapId ? overlapById.get(r.overlapId) : undefined;
-    if (o && o.signalId !== r.exitSignalId) {
+    if (o && (!exit || o.signalId !== exit.id)) {
       add(
         "error",
         "IMPOSSIBLE_ROUTE",
-        `route ${r.id}: overlap ${o.id} belongs to ${o.signalId}, not exit signal ${exit.id}`,
+        `route ${r.id}: overlap ${o.id} belongs to ${o.signalId}, not exit signal ${exit?.id ?? "(none: fringe exit)"}`,
         r.id,
         [o.id],
       );
@@ -398,7 +457,7 @@ export function assessInterlocking(
       add(
         "warning",
         "ROUTE_SWITCH_UNRESOLVED",
-        `route ${r.id}: exit signal ${exit.id} stands on switch ${end}; the passage into overlap ${o.id} cannot be checked`,
+        `route ${r.id}: exit signal ${exit?.id} stands on switch ${end}; the passage into overlap ${o.id} cannot be checked`,
         r.id,
         [end],
       );
@@ -407,6 +466,15 @@ export function assessInterlocking(
 
   // --- conflicts ---
   checkConflicts(signalling.routes, routePaths, pointsById, graph, add);
+
+  for (const [owner, what] of gameRuleUse)
+    add(
+      "info",
+      "ROUTE_USES_GAME_RULE",
+      `${owner} relies on ${what.join(", ")}: a game rule, not a real-world claim`,
+      owner,
+      [],
+    );
 
   // --- statuses ---
   const statusOf = (
@@ -422,6 +490,15 @@ export function assessInterlocking(
     if (gaps.length > 0)
       return { kind, id, status: "insufficient_evidence", reasons: gaps.map((i) => i.message) };
     const ev = provenance.evidence;
+    const gameRules = gameRuleUse.get(id) ?? [];
+    // Relying on a game rule never yields evidenced, whatever the route's own label says.
+    if (gameRules.length > 0 && ev !== "placeholder" && ev !== "unknown")
+      return {
+        kind,
+        id,
+        status: "game_rule",
+        reasons: [`relies on ${gameRules.join(", ")}`, `labelled ${ev}`],
+      };
     if (ev === "inferred" || ev === "simplified")
       return { kind, id, status: "game_rule", reasons: [`labelled ${ev}: ${provenance.note}`] };
     if (ev === "placeholder" || ev === "unknown")

@@ -6,6 +6,7 @@ export * from "./timetable.ts";
 export * from "./control.ts";
 export * from "./signalEvidence.ts";
 export * from "./playableArea.ts";
+export * from "./gameRules.ts";
 
 import { z } from "zod";
 import { Infrastructure } from "./infrastructure.ts";
@@ -22,3 +23,4 @@ export const Dataset = z.object({
   timetables: z.array(TimetableSnapshot),
 });
 export type Dataset = z.infer<typeof Dataset>;
+export * from "./servicePatterns.ts";

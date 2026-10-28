@@ -3,8 +3,10 @@ import { join } from "node:path";
 import { z } from "zod";
 import {
   Control,
+  GameRules,
   Infrastructure,
   PlayableArea,
+  ServicePatternsFile,
   SignalEvidenceFile,
   Signalling,
   SourceRegistry,
@@ -16,7 +18,8 @@ import type { Issue, ValidationInput } from "../validation/validate.ts";
 /**
  * Loads a dataset directory (data/datasets/<id>/). Each layer lives in its own file:
  * infrastructure.json, signalling.json, control.json, timing-points.json, timetables/*.json,
- * plus optional signal-evidence.json and playable-area.json.
+ * plus optional signal-evidence.json, playable-area.json, game-rules.json and
+ * service-patterns.json (D-035).
  * Schema failures are returned as issues rather than thrown, so validation can report them all.
  */
 export function loadDataset(
@@ -73,6 +76,8 @@ export function loadDataset(
   const timingPointsFile = load("timing-points.json", TimingPointsFile, false);
   const signalEvidence = load("signal-evidence.json", SignalEvidenceFile, false);
   const playableArea = load("playable-area.json", PlayableArea, false);
+  const gameRules = load("game-rules.json", GameRules, false);
+  const servicePatterns = load("service-patterns.json", ServicePatternsFile, false);
   const timingPoints = timingPointsFile?.mappings ?? [];
   const areaTiplocs = timingPointsFile?.areaTiplocs.map((t) => t.tiploc);
   const timingPointPositions = timingPointsFile?.inferredPositions ?? [];
@@ -98,6 +103,8 @@ export function loadDataset(
       timetables,
       ...(signalEvidence ? { signalEvidence } : {}),
       ...(playableArea ? { playableArea } : {}),
+      ...(gameRules ? { gameRules } : {}),
+      ...(servicePatterns ? { servicePatterns } : {}),
       ...(areaTiplocs && areaTiplocs.length > 0 ? { areaTiplocs } : {}),
       ...(deferredTiplocs.length > 0 ? { deferredTiplocs } : {}),
     },

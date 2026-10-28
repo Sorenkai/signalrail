@@ -23,8 +23,17 @@ export function createApp(dataRoot: string): Server {
       if (!input)
         return send(500, { error: "dataset failed schema validation", issues: schemaIssues });
       const issues = [...schemaIssues, ...validateDataset(input)];
-      const { infrastructure, signalling, control, timingPoints, timetables } = input;
-      return send(200, { infrastructure, signalling, control, timingPoints, timetables, issues });
+      const { infrastructure, signalling, control, timingPoints, timetables, gameRules } = input;
+      // Game rules stay a separate key: simplified game data, never merged into infrastructure.
+      return send(200, {
+        infrastructure,
+        signalling,
+        control,
+        timingPoints,
+        timetables,
+        gameRules,
+        issues,
+      });
     }
     send(404, { error: "not found" });
   });

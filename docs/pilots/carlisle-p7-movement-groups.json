@@ -1,0 +1,667 @@
+{
+  "$comment": "Carlisle P7 coverage audit (DECISION_LOG D-037; evidence matrix docs/pilots/CARLISLE_P7_EVIDENCE.md): the P6 table (carlisle-p6-movement-groups.json, kept unchanged as the reproducible P6 baseline) with the P7 Kingmoor-yard goods group and blocker texts updated from the P7 evidence audit. Read by tools/coverage-audit.ts and src/reconcile/timetableCoverage.ts. Groups are ordered; a service belongs to the first group it matches. Blockers are audit findings; they change no data and no classification. Group sizes for blocked groups are upper-bound estimates, not results.",
+  "datasetId": "carlisle",
+  "blockers": [
+    {
+      "id": "B-CE438",
+      "kind": "unknown_signal_function",
+      "evidence": "unknown",
+      "summary": "CE438 stands at the inside node of cut-north-up-main, facing into play, and OSM gives it no railway:signal:<category> tag, so its function is unknown and movement never passes it (D-033). Every Up Main entry from the north (rt-um-fringe-ce336) stops there. P7: live OSM re-checked 2026-10-28 (node version 1, added 2024-06-03 in changeset 152204621 from Bing aerial imagery): still no category. The local SMART extract has a berth numbered 438 (a number match, I-005); a berth does not state a signal's function.",
+      "records": [
+        "osm-sig11954024796",
+        "rt-um-fringe-ce336",
+        "cut-north-up-main"
+      ],
+      "needed": "A source stating CE438's function: an OSM category tag from survey, or a signalling plan",
+      "proposedChange": "If CE438 is a main signal, split rt-um-fringe-ce336 at it (fringe -> CE438, CE438 -> CE336); if it is a repeater or distant, no route change. Neither is assumed."
+    },
+    {
+      "id": "B-CE263",
+      "kind": "unknown_signal_function",
+      "evidence": "unknown",
+      "summary": "CE263 stands at the inside node of cut-wcml-south-up, facing out of play towards Penrith, with no OSM category: any Up Main exit to the south would have to pass it, so none can be run. P7: live OSM re-checked 2026-10-28 (version 1, changeset 152235404, 2024-06-04, Bing aerial imagery): unchanged, no category. Not in the SMART reconciliation scope.",
+      "records": [
+        "osm-sig11955498422",
+        "cut-wcml-south-up"
+      ],
+      "needed": "A source stating CE263's function (OSM category tag from survey, or a signalling plan)",
+      "proposedChange": "If main: an exit route CE263 -> fringe on cut-wcml-south-up; if a repeater/distant: the exit route may start at the previous Up main signal. Both also need B-CE268, B-UPMAIN-UNTYPED and B-UPMAIN-DIAMOND."
+    },
+    {
+      "id": "B-CE268",
+      "kind": "unknown_signal_function",
+      "evidence": "unknown",
+      "summary": "CE268 on the Up Main south of CE278 faces southbound trains and has no OSM category, so no Up route can pass it. P7: live OSM re-checked 2026-10-28 (version 1, changeset 152235404, Bing aerial imagery): unchanged, no category; no SMART berth numbered 268.",
+      "records": [
+        "osm-sig11955498421"
+      ],
+      "needed": "A source stating CE268's function",
+      "proposedChange": "Split or end the Up Main exit routes at CE268 once its function is sourced."
+    },
+    {
+      "id": "B-UPMAIN-UNTYPED",
+      "kind": "untyped_junction",
+      "evidence": "unknown",
+      "summary": "South of CE304 the Up Main passes osm-n2464365978 and osm-n13915496837: nodes with three edges and no railway=switch tag, so the importer creates no Points record and no game rule can configure them (D-029). P7: the physical connection is sourced (each is shared by the Up Main way 238574861 and a service=crossover way, 1526862397 and 1526862396, both added 2026-06-06 in changeset 183757649 from Bing aerial imagery; live OSM unchanged on 2026-10-28). A shared node shows a connection, not a switch type, toe or lie, and the local Network Rail GIS (licence unresolved) cannot say which parallel track each crossover joins. Typing them as switches would still be an inference, and would enable no service while B-CE438, B-CE268, B-CE263 and B-UPMAIN-DIAMOND remain.",
+      "records": [
+        "osm-n2464365978",
+        "osm-n13915496837"
+      ],
+      "needed": "OSM railway=switch tagging of the two nodes (survey or imagery) and a re-import, or a signalling diagram",
+      "proposedChange": "After re-tagging and re-import: simple game rules for the two switches (Up Main leg normal, by convention, I-012 method) and Up Main routes CE304 -> CE285 -> CE278 -> ...; no change while the other four Up Main blockers remain."
+    },
+    {
+      "id": "B-UPMAIN-DIAMOND",
+      "kind": "crossing_not_configurable",
+      "evidence": "sourced",
+      "summary": "The Up Main south of CE304 crosses diamond osm-n3057659458 (OSM railway=railway_crossing; the OSM wiki, read 2026-10-28, defines it as two tracks crossing where trains cannot move from one to the other, and warns that slips look similar and may need a track diagram to tell apart, so the tag is a mapper's statement, not a survey). P7: the straight-across pairing is sourced by way continuity (the Up Main way 238574861 and crossover way 301674944 each pass through the node), and the local GIS shows a four-way node 7.4 m away (corroboration only). The game-rule model still cannot route over a crossing (D-029); a crossing-passage design is proposed in D-037 but not implemented, because no service would gain while the other Up Main blockers remain.",
+      "records": [
+        "osm-n3057659458"
+      ],
+      "needed": "Implementation of the D-037 crossing-passage proposal (graph passage from way continuity, conflicts at the crossing node), once a movement over the crossing is otherwise supported",
+      "proposedChange": "TrackGraph.switchPassage: straight across a four-edge crossing only between the two edges of one source way passing through it; every route over the crossing conflicts with every route over the other pair (C3, error) and in the simulation. Never a diagonal."
+    },
+    {
+      "id": "B-PETTERIL-DIAMOND",
+      "kind": "crossing_not_configurable",
+      "evidence": "sourced",
+      "summary": "Diamond osm-n1051241139 at Petteril Bridge Jn is crossed by the Down Newcastle (way 276843194, from cut-newcastle-down, just past CE379) and the Up Midland (way 365270402, to cut-midland-up). P7: both ways pass through the node, so the straight-across pairing is sourced and no connection between the two lines is mapped there; the local GIS has a four-way node 2.3 m away. Tyne Valley arrivals (Down Newcastle) and Settle-Carlisle departures (Up Midland) cross it; crossings cannot be configured (D-029). Every affected service also needs an origin or termination lifecycle or an unmapped TIPLOC, so the proposed crossing design would enable none on its own.",
+      "records": [
+        "osm-n1051241139",
+        "osm-sig13915496846",
+        "cut-newcastle-down",
+        "cut-midland-up"
+      ],
+      "needed": "As B-UPMAIN-DIAMOND, plus the other blockers of each group",
+      "proposedChange": "As B-UPMAIN-DIAMOND."
+    },
+    {
+      "id": "B-P1-INCOMPLETE",
+      "kind": "incomplete_junction",
+      "evidence": "sourced",
+      "summary": "Platform 1's only southern connection passes osm-n1460504022, tagged railway=switch but mapped with two edges (D-025), so movements through it are unresolved. P7, from the OSM element histories (api.openstreetmap.org, read 2026-10-28): the missing third leg was Siding A (way 132760240), which ended at this node from 2011 until version 12 (2025-07-26). Changeset 178027337 (2026-02-02, citing the National Electronic Sectional Appendix as its source) cut Siding A back to the double slip osm-n1460504024, and changeset 178027702 extended it to the dead end osm-n13520580940. The railway=switch tag dates from a 2020 bulk edit that tagged nodes with three or more ways (changeset 84719872). So the two mapped legs are the platform 1 track and the toe towards osm-n1460504059, which do connect; whether points still exist there conflicts between sources (OSM 2026: the siding connection removed; the local Network Rail GIS, 2024 geometry, licence unresolved: a three-way node 1.1 m away). No OSM signal is mapped on platform 1, and the local SMART extract has a station berth numbered 301 with no OSM signal.",
+      "records": [
+        "osm-n1460504022",
+        "osm-w132761142-1",
+        "osm-n1460504024"
+      ],
+      "needed": "Confirmation of whether points remain at osm-n1460504022 (survey, current imagery or a signalling plan), an OSM correction and re-import; and a source for platform 1's signals",
+      "proposedChange": "If the points are gone: retag the node in OSM (removing railway=switch) and re-import, which makes it plain track. If they remain: an OSM correction restoring the leg. Either way a platform 1 route also needs its platform signals sourced; none is authored on an incomplete junction or past a probably unmapped signal."
+    },
+    {
+      "id": "B-NO-SIGNAL-BAYS-5-6",
+      "kind": "no_signal_mapped",
+      "evidence": "unknown",
+      "summary": "OSM maps no signal on the platform 5 and 6 bay tracks (D-020), so no route can start there. Absence in OSM does not show that no real signal exists.",
+      "records": [
+        "osm-plat-w132753329",
+        "osm-plat-w132752066"
+      ],
+      "needed": "Survey or a signalling plan locating the bay starting signals",
+      "proposedChange": "Add the signals to OSM (survey) and re-import; then starting routes from bays 5 and 6."
+    },
+    {
+      "id": "B-BAY-LENGTH",
+      "kind": "platform_too_short",
+      "evidence": "simplified",
+      "summary": "From buffer stop to first signal or junction the bays measure: platform 2 133.7 m (CE302), 7 151.3 m (CE327), 8 151.1 m (CE328), 6 181.9 m. The session's game train is 200 m; real formations are unknown (CIF timing load and length are not imported), so no train can be placed in these bays at the default setting.",
+      "records": [
+        "CE302",
+        "CE327",
+        "CE328",
+        "osm-plat-w132752066"
+      ],
+      "needed": "Train length per service (CIF BS timing load import plus a formation source), or an owner decision on a shorter game length",
+      "proposedChange": "Import CIF timing load/length data; never shorten a train to fit a bay without a source or an explicit game setting."
+    },
+    {
+      "id": "B-LIFECYCLE-ORIGIN",
+      "kind": "lifecycle_not_modelled",
+      "evidence": "simplified",
+      "summary": "A service whose first call is in play has no call before play, so the planner cannot give it an entry (P5 requires a call either side of the area block). Placing a train at its origin platform would need where its stock comes from (associations, empty workings), which is not modelled.",
+      "records": [
+        "src/sim/servicePlan.ts"
+      ],
+      "needed": "A design for in-area origins: placement on proven-clear platform track, formation from an association or a stabled train, and the starting signal's route",
+      "proposedChange": "A later phase: an origin placement mode in the plan and service-entry stage, with associations; not done in P6."
+    },
+    {
+      "id": "B-LIFECYCLE-TERMINATE",
+      "kind": "lifecycle_not_modelled",
+      "evidence": "simplified",
+      "summary": "A service whose last call is in play has no exit fringe: it must stop and remain at a platform, form another service, or be shunted away. Routes ending at a buffer stop or platform, train stabling and reversal are not modelled.",
+      "records": [
+        "src/sim/services.ts"
+      ],
+      "needed": "A design for terminating trains: stopping positions, stabling, associations (next workings) and reversal",
+      "proposedChange": "A later phase; never remove a terminating train from play to make it count as complete."
+    },
+    {
+      "id": "B-KINGMOOR-HANDOVER",
+      "kind": "beyond_cut",
+      "evidence": "unknown",
+      "summary": "The service calls at a Kingmoor yard TIPLOC (deferred area, D-018). P7 resolved the handover for the 10 Down workings that reach play from Penrith via platform 3 and the Caldew Jn goods line (group kingmoor-yard-goods, D-037): beyond cut-north-down-goods the mapped Down Goods runs into the Kingmoor yard tracks without re-entering play, and they leave play there. The remaining Kingmoor workings are blocked by their in-play paths (platform 1, the Up Main, the east, CIF platforms B/C), not by the handover alone; entries from Kingmoor need the Up Main or Up Goods entry, and the Up Goods entry route is not authored.",
+      "records": [
+        "cut-north-down-goods",
+        "cut-north-up-goods",
+        "KGMRJCN"
+      ],
+      "needed": "The in-play blockers of each remaining service; for entries from Kingmoor, an Up Goods entry route and its signals",
+      "proposedChange": "Patterns per remaining path once its in-play blockers are resolved; still no Kingmoor yard simulation."
+    },
+    {
+      "id": "B-REENTRY",
+      "kind": "lifecycle_not_modelled",
+      "evidence": "simplified",
+      "summary": "The service passes through the area more than once; the planner maps one contiguous block of area calls only.",
+      "records": [
+        "src/sim/servicePlan.ts"
+      ],
+      "needed": "A design for repeated visits (and the reversals they imply)",
+      "proposedChange": "A later phase."
+    },
+    {
+      "id": "B-EAST-TIPLOCS-UNMAPPED",
+      "kind": "location_unmapped",
+      "evidence": "unknown",
+      "summary": "London Road Jn (CARLLRJ) and Petteril Bridge Jn (PETLBGJ) have no infrastructure mapping, and which east cut each eastern TIPLOC uses rests on the cuts' inferred destinations (CORPUS: WETHERL Wetheral, WETHCOR Corby Gates (Tyne Valley); HOWEACS Cumwhinton (Settle-Carlisle))",
+      "records": [
+        "CARLLRJ",
+        "PETLBGJ",
+        "cut-newcastle-down",
+        "cut-newcastle-up",
+        "cut-midland-down",
+        "cut-midland-up"
+      ],
+      "needed": "Sourced TIPLOC-to-infrastructure mappings (I-002 method) or a line diagram",
+      "proposedChange": "Inferred timing-point positions for CARLLRJ and PETLBGJ, then east patterns."
+    },
+    {
+      "id": "B-CUMBRIAN",
+      "kind": "not_audited",
+      "evidence": "unknown",
+      "summary": "The Cumbrian Coast cuts (A and B) have no track ref or traffic direction in the dataset (both OSM ways carry preferred_direction=forward, not assessed in P6), Currock Jn (CARLCUR) is unmapped, and the two-edge switches at Bog Jn (osm-n314950822 and others) leave its connection to the south and east unresolved.",
+      "records": [
+        "cut-cumbrian-coast-a",
+        "cut-cumbrian-coast-b",
+        "CARLCUR",
+        "osm-n314950822"
+      ],
+      "needed": "Track identity and direction for the two Cumbrian Coast tracks; the Bog Jn survey item",
+      "proposedChange": "Assess the preferred_direction tags and way order of the two cut edges; then fringes and routes to platform 2 and through."
+    },
+    {
+      "id": "B-UPPERBY-NOT-AUDITED",
+      "kind": "not_audited",
+      "evidence": "unknown",
+      "summary": "Goods lines avoiding the station via Upperby (CARLUBJ, CARLUJN, CARLUTG, CARLLSL, CARLUES) were not traced in P6; their TIPLOCs are unmapped.",
+      "records": [
+        "CARLUBJ",
+        "CARLUJN",
+        "CARLUTG"
+      ],
+      "needed": "A topology audit of the Upperby goods lines and their signals, and TIPLOC mappings",
+      "proposedChange": "A later audit; few services (3 through, 3 starting or terminating)."
+    },
+    {
+      "id": "B-UNCLASSIFIED",
+      "kind": "not_audited",
+      "evidence": "unknown",
+      "summary": "The service matches no movement group in this table, so its movement has not been audited.",
+      "records": [],
+      "needed": "A movement group for it in this table",
+      "proposedChange": "Extend the table; the coverage test requires this group to stay empty."
+    },
+    {
+      "id": "B-CIF-PLATFORM-UNKNOWN",
+      "kind": "location_unmapped",
+      "evidence": "unknown",
+      "summary": "CIF platform codes A, B and C at CARLILE match no OSM platform ref (OSM has platforms 1-8 and one unnumbered outline); what they denote is unknown.",
+      "records": [
+        "CARLILE"
+      ],
+      "needed": "A source for Carlisle's CIF platform codes (e.g. the Sectional Appendix or a station plan)",
+      "proposedChange": "Map the codes only once sourced; never guess a platform."
+    }
+  ],
+  "groups": [
+    {
+      "id": "down-main-p3",
+      "family": "down_main",
+      "label": "Down WCML via platform 3 on the Down Main (P5 pattern)",
+      "match": {
+        "pattern": "pat-down-wcml-through-p3"
+      },
+      "blockers": []
+    },
+    {
+      "id": "goods-caldew",
+      "family": "goods_line",
+      "label": "Down WCML via platform 3 and the Caldew Jn goods line to the Down Goods (P6 pattern)",
+      "match": {
+        "pattern": "pat-down-wcml-p3-caldew-goods"
+      },
+      "blockers": []
+    },
+    {
+      "id": "kingmoor-yard-goods",
+      "family": "kingmoor",
+      "label": "Down WCML via platform 3 and the Caldew Jn goods line into the Kingmoor yards, leaving play on the Down Goods (P7 patterns)",
+      "match": {
+        "patterns": [
+          "pat-down-wcml-p3-goods-kgmr-up-yard-ends",
+          "pat-down-wcml-p3-goods-kgmr-down-yard-ends",
+          "pat-down-wcml-p3-goods-kgmr-down-yard-florstn",
+          "pat-down-wcml-p3-goods-kgmr-up-yard-florstn"
+        ]
+      },
+      "blockers": [],
+      "note": "In play identical to goods-caldew (rt-dg-ce323-fringe). Kingmoor is not simulated: the train leaves play at fr-north-down-goods; 6 of the 10 schedules end in the deferred area (pattern after: null)."
+    },
+    {
+      "id": "reentering",
+      "family": "unresolved",
+      "label": "Leaves and re-enters the area",
+      "match": {
+        "reenters": true
+      },
+      "blockers": [
+        "B-REENTRY"
+      ]
+    },
+    {
+      "id": "kingmoor-via-p3-goods",
+      "family": "kingmoor",
+      "label": "From Penrith via platform 3 and the Caldew Jn goods line to a Kingmoor yard",
+      "match": {
+        "before": [
+          "PNTH"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "3"
+            ],
+            "lines": [
+              "DML"
+            ]
+          },
+          {
+            "tiploc": "CARLCJN",
+            "lines": [
+              "GL"
+            ]
+          }
+        ],
+        "hasAny": [
+          "CARL464",
+          "CARL465",
+          "CARL467",
+          "CARLAME",
+          "CARLBGS",
+          "CARLBRU",
+          "CARLCLR",
+          "CARLILY",
+          "CARLYDL",
+          "CARLYDR",
+          "KGMR486",
+          "KGMR487",
+          "KGMR490",
+          "KGMRBBJ",
+          "KGMRDRS",
+          "KGMRDSB",
+          "KGMRDSG",
+          "KGMRLIP",
+          "KGMRSGF",
+          "KGMRSRR",
+          "KGMRUDS",
+          "KGMRULP",
+          "KGMRURS",
+          "KGMRUTS",
+          "KGMRVQ",
+          "KGMRVWR"
+        ]
+      },
+      "blockers": [
+        "B-KINGMOOR-HANDOVER"
+      ],
+      "note": "P7: every service of the P6 group is matched earlier by kingmoor-yard-goods; a service left here has a path no P7 pattern lists, and stays blocked."
+    },
+    {
+      "id": "kingmoor-other",
+      "family": "kingmoor",
+      "label": "Other workings to, from or via the Kingmoor yards",
+      "match": {
+        "hasAny": [
+          "CARL464",
+          "CARL465",
+          "CARL467",
+          "CARLAME",
+          "CARLBGS",
+          "CARLBRU",
+          "CARLCLR",
+          "CARLILY",
+          "CARLYDL",
+          "CARLYDR",
+          "KGMR486",
+          "KGMR487",
+          "KGMR490",
+          "KGMRBBJ",
+          "KGMRDRS",
+          "KGMRDSB",
+          "KGMRDSG",
+          "KGMRLIP",
+          "KGMRSGF",
+          "KGMRSRR",
+          "KGMRUDS",
+          "KGMRULP",
+          "KGMRURS",
+          "KGMRUTS",
+          "KGMRVQ",
+          "KGMRVWR"
+        ]
+      },
+      "blockers": [
+        "B-KINGMOOR-HANDOVER"
+      ],
+      "note": "Each also needs its in-play path: platform 1 (B-P1-INCOMPLETE), the Up Main (B-CE438, B-CE263...), the east (B-PETTERIL-DIAMOND, B-EAST-TIPLOCS-UNMAPPED) or CIF platforms B/C (B-CIF-PLATFORM-UNKNOWN), by service."
+    },
+    {
+      "id": "up-main-north-to-south",
+      "family": "up_main",
+      "label": "Up WCML from Gretna Jn via the Up Main and the station to Penrith",
+      "match": {
+        "kind": [
+          "through"
+        ],
+        "after": [
+          "PNTH"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLCJN",
+            "lines": [
+              "UML"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-CE438",
+        "B-UPMAIN-UNTYPED",
+        "B-UPMAIN-DIAMOND",
+        "B-CE268",
+        "B-CE263"
+      ],
+      "note": "Most use platform 4 (the Up Main route rt-um-ce336-ce304 exists); those booked to platforms 3 or 1 would also need crossovers that no route authors. P7: the five blockers are independent; resolving any subset short of all five enables no service."
+    },
+    {
+      "id": "platform-1-down",
+      "family": "platform_1",
+      "label": "Down WCML from Penrith via platform 1 to Kingmoor Jn and Floriston",
+      "match": {
+        "kind": [
+          "through"
+        ],
+        "before": [
+          "PNTH"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "1"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-P1-INCOMPLETE"
+      ]
+    },
+    {
+      "id": "terminates-north-bays",
+      "family": "internal_start_termination",
+      "label": "Terminates in bay 7 or 8 from the north (Up Main)",
+      "match": {
+        "kind": [
+          "terminates"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "7",
+              "8"
+            ]
+          },
+          {
+            "tiploc": "CARLCJN",
+            "lines": [
+              "UML"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-CE438",
+        "B-LIFECYCLE-TERMINATE",
+        "B-BAY-LENGTH"
+      ]
+    },
+    {
+      "id": "starts-north-bays",
+      "family": "internal_start_termination",
+      "label": "Starts in bay 7 or 8 (or CIF platform A) and runs north on the Down Main",
+      "match": {
+        "kind": [
+          "starts"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "7",
+              "8",
+              "A"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-ORIGIN",
+        "B-BAY-LENGTH",
+        "B-CIF-PLATFORM-UNKNOWN"
+      ],
+      "note": "Bays 7 and 8 have sourced starting signals (CE327, CE328); B-CIF-PLATFORM-UNKNOWN applies only to the platform A service."
+    },
+    {
+      "id": "starts-west-p2",
+      "family": "internal_start_termination",
+      "label": "Starts in bay 2 for the Cumbrian Coast",
+      "match": {
+        "kind": [
+          "starts"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "2"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-ORIGIN",
+        "B-BAY-LENGTH",
+        "B-CUMBRIAN"
+      ]
+    },
+    {
+      "id": "terminates-west-p2",
+      "family": "internal_start_termination",
+      "label": "Terminates in bay 2 from the Cumbrian Coast or the east",
+      "match": {
+        "kind": [
+          "terminates"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "2"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-TERMINATE",
+        "B-BAY-LENGTH",
+        "B-CUMBRIAN"
+      ]
+    },
+    {
+      "id": "starts-east-bays",
+      "family": "internal_start_termination",
+      "label": "Starts in bay 5 or 6 for the Tyne Valley or Settle-Carlisle",
+      "match": {
+        "kind": [
+          "starts"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "5",
+              "6"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-ORIGIN",
+        "B-NO-SIGNAL-BAYS-5-6",
+        "B-EAST-TIPLOCS-UNMAPPED",
+        "B-PETTERIL-DIAMOND"
+      ],
+      "note": "B-PETTERIL-DIAMOND applies to Settle-Carlisle departures (Up Midland) only."
+    },
+    {
+      "id": "terminates-east-bays",
+      "family": "internal_start_termination",
+      "label": "Terminates in bay 5 or 6 from the Tyne Valley or Settle-Carlisle",
+      "match": {
+        "kind": [
+          "terminates"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLILE",
+            "platform": [
+              "5",
+              "6"
+            ]
+          }
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-TERMINATE",
+        "B-EAST-TIPLOCS-UNMAPPED",
+        "B-PETTERIL-DIAMOND"
+      ],
+      "note": "B-PETTERIL-DIAMOND applies to Tyne Valley arrivals (Down Newcastle) only. Bay 6 is also shorter than the game train (B-BAY-LENGTH)."
+    },
+    {
+      "id": "starts-other",
+      "family": "internal_start_termination",
+      "label": "Other services starting in the area (through platforms, or no CARLILE call)",
+      "match": {
+        "kind": [
+          "starts"
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-ORIGIN"
+      ],
+      "note": "Their onward paths add the blockers of the group they would join (Up Main, east, Upperby)."
+    },
+    {
+      "id": "terminates-other",
+      "family": "internal_start_termination",
+      "label": "Other services terminating in the area (through platforms, or no CARLILE call)",
+      "match": {
+        "kind": [
+          "terminates"
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-TERMINATE"
+      ],
+      "note": "Their approach paths add the blockers of the group they come from."
+    },
+    {
+      "id": "internal-only",
+      "family": "internal_start_termination",
+      "label": "Starts and ends inside the area (platform-to-platform movements)",
+      "match": {
+        "kind": [
+          "internal"
+        ]
+      },
+      "blockers": [
+        "B-LIFECYCLE-ORIGIN",
+        "B-LIFECYCLE-TERMINATE"
+      ],
+      "note": "Via CARL291 (signal CE291) or CARLNEC (Carlisle Shunt Neck): both unmapped, and the movements need reversal."
+    },
+    {
+      "id": "upperby-goods",
+      "family": "other_lines",
+      "label": "Through the Upperby goods lines, avoiding the station",
+      "match": {
+        "kind": [
+          "through"
+        ],
+        "hasAny": [
+          "CARLUBJ",
+          "CARLUJN",
+          "CARLUTG"
+        ]
+      },
+      "blockers": [
+        "B-UPPERBY-NOT-AUDITED"
+      ]
+    },
+    {
+      "id": "cumbrian-through",
+      "family": "other_lines",
+      "label": "Through between the Cumbrian Coast and the WCML north",
+      "match": {
+        "kind": [
+          "through"
+        ],
+        "has": [
+          {
+            "tiploc": "CARLCUR"
+          }
+        ]
+      },
+      "blockers": [
+        "B-CUMBRIAN",
+        "B-P1-INCOMPLETE"
+      ]
+    },
+    {
+      "id": "unclassified",
+      "family": "unresolved",
+      "label": "Not classified by this table",
+      "match": {},
+      "blockers": [
+        "B-UNCLASSIFIED"
+      ],
+      "note": "Catch-all; must stay empty (tests/carlisleCoverage.test.ts)."
+    }
+  ]
+}
